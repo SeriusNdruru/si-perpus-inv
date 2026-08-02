@@ -1,0 +1,103 @@
+LAPORAN UJI AKSES DAN ALUR SISTEM
+==================================
+Dibuat: 01/08/2026 20:59:36
+Status: Masih ada pemeriksaan yang gagal
+Skor: 83/100
+Ringkasan: 11 lulus, 1 peringatan, 2 gagal
+
+AKSES PORTAL PUBLIK
+-------------------
+[LULUS] Route portal publik tersedia
+Hasil: 12 route publik utama tersedia.
+
+[LULUS] Portal publik tidak meminta login
+Hasil: Portal perpustakaan, inventaris umum, audit, dan form publik dapat dibuka tanpa autentikasi.
+
+PEMISAHAN AKSES SETIAP ROLE
+---------------------------
+[LULUS] Route dashboard dan modul role tersedia
+Hasil: 30 route role penting tersedia.
+
+[LULUS] Route internal wajib login
+Hasil: Semua route internal memakai middleware auth.
+
+[LULUS] Sesi lama diperiksa setelah password berubah
+Hasil: Semua route internal memakai password.session.
+
+[LULUS] Matriks akses role sesuai
+Hasil: Super Admin, Admin Inventaris, Admin Perpustakaan, Pimpinan, dan Siswa memiliki batas akses yang sesuai.
+
+KEAMANAN AUTENTIKASI DAN ROUTE
+------------------------------
+[LULUS] Pembatasan route sensitif
+Hasil: Login, pendaftaran, verifikasi email, reset password, kontak, dan laporan kerusakan memakai method serta pembatasan yang sesuai.
+
+[LULUS] Login siswa dan pengguna internal terpisah
+Hasil: Form admin dan siswa memakai controller serta URL yang berbeda.
+
+AKUN DAN IDENTITAS SISWA
+------------------------
+[LULUS] Pengguna memiliki role
+Hasil: Semua pengguna memiliki role.
+
+[GAGAL] Pemeriksaan integritas akun
+Hasil: Pemeriksaan akun tidak dapat dijalankan: SQLSTATE[42000]: Syntax error or access violation: 1055 'db_perpustakaan_inventaris.users.full_name' isn't in GROUP BY (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: db_perpustakaan_inventaris, SQL: select count(*) as aggregate from (select * from `users` inner join `user_roles` on `user_roles`.`user_id` = `users`.`id` inner join `roles` on `roles`.`id` = `user_roles`.`role_id` group by `users`.`id` having SUM(CASE WHEN roles.role_code = 'MEMBER' THEN 1 ELSE 0 END) > 0
+                    AND SUM(CASE WHEN roles.role_code IN ('SUPER_ADMIN','INVENTORY_ADMIN','LIBRARY_ADMIN','LIBRARY_OFFICER','MANAGER') THEN 1 ELSE 0 END) > 0) as `temp_table`)
+Tindakan: Periksa struktur tabel dan koneksi database.
+
+ALUR TRANSAKSI UTAMA
+--------------------
+[GAGAL] Pemeriksaan alur transaksi
+Hasil: Pemeriksaan alur tidak dapat dijalankan: SQLSTATE[42000]: Syntax error or access violation: 1055 'db_perpustakaan_inventaris.loan_requests.request_code' isn't in GROUP BY (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: db_perpustakaan_inventaris, SQL: select count(*) as aggregate from (select * from `loan_requests` left join `loan_request_items` on `loan_request_items`.`loan_request_id` = `loan_requests`.`id` group by `loan_requests`.`id` having COUNT(loan_request_items.id) = 0) as `temp_table`)
+Tindakan: Periksa struktur tabel dan data transaksi.
+
+NOTIFIKASI DAN EMAIL
+--------------------
+[LULUS] Sumber badge notifikasi admin
+Hasil: Pengajuan baru: 1. Laporan kerusakan baru: 1.
+
+[LULUS] Pengiriman email 24 jam terakhir
+Hasil: Tidak ada pengiriman email gagal dalam 24 jam terakhir.
+
+[PERINGATAN] Mode pengiriman email
+Hasil: Mailer masih menggunakan log. Email tidak masuk ke kotak masuk.
+Tindakan: Atur SMTP pada .env sebelum pengujian email sungguhan.
+
+CHECKLIST UJI MANUAL
+--------------------
+
+Akses tanpa login
+[ ] 1. Buka portal perpustakaan, katalog, inventaris umum, audit inventaris, dan form laporan kerusakan menggunakan jendela Incognito.
+[ ] 2. Pastikan portal publik tidak mengarahkan pengguna ke halaman login.
+[ ] 3. Pastikan halaman admin dan siswa tetap menggunakan URL login yang berbeda.
+
+Super Admin
+[ ] 1. Login melalui /admin/login dan buka Pengguna Sistem, Pengaturan, Email & Notifikasi, Riwayat Aktivitas, Backup, Kesiapan Sistem, dan Uji Akses & Alur.
+[ ] 2. Pastikan Super Admin dapat membuka dashboard inventaris dan perpustakaan.
+[ ] 3. Uji pembuatan akun percobaan, lalu hapus atau nonaktifkan data percobaan.
+
+Admin Inventaris
+[ ] 1. Pastikan dapat membuka data barang, stock opname, pemeliharaan, penghapusan aset, dan laporan kerusakan.
+[ ] 2. Pastikan tidak dapat membuka Pengguna Sistem atau modul transaksi perpustakaan.
+[ ] 3. Kirim laporan kerusakan publik dan pastikan badge jumlah laporan baru muncul.
+
+Admin Perpustakaan
+[ ] 1. Pastikan dapat membuka katalog, rak, anggota, peminjaman, pengembalian, denda, reservasi, pengajuan online, dan pesan kontak.
+[ ] 2. Pastikan tidak dapat membuka master inventaris atau Pengguna Sistem.
+[ ] 3. Kirim pengajuan dari akun siswa dan pastikan badge Pengajuan Online muncul.
+
+Pimpinan
+[ ] 1. Pastikan hanya dashboard pimpinan dan Laporan Terpadu yang dapat dibuka.
+[ ] 2. Pastikan menu pengelolaan inventaris, perpustakaan, dan Super Admin tidak tersedia.
+
+Siswa
+[ ] 1. Daftar akun siswa menggunakan email aktif, NIS, dan pilihan Kelas 1 sampai Kelas 6.
+[ ] 2. Verifikasi email, login, buka profil melalui pojok kanan, cari buku, kirim pengajuan, dan lihat notifikasi.
+[ ] 3. Pastikan akun siswa tidak dapat membuka /admin/dashboard atau modul internal.
+[ ] 4. Uji lupa password siswa dan login kembali menggunakan password baru.
+
+Alur transaksi
+[ ] 1. Setujui pengajuan siswa, tandai siap diambil, lalu konfirmasi pengambilan.
+[ ] 2. Kembalikan buku, hitung denda bila terlambat, dan pastikan status aset kembali sesuai.
+[ ] 3. Jalankan php artisan library:send-due-reminders dan periksa notifikasi siswa.
+[ ] 4. Buat backup database setelah seluruh pengujian berhasil.
