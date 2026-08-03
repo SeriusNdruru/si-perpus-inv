@@ -12,6 +12,7 @@ use App\Models\Location;
 use App\Models\StockBalance;
 use App\Models\Supplier;
 use App\Models\Unit;
+use App\Services\Inventory\ItemCodeGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,11 @@ use Throwable;
 
 class ItemController extends Controller
 {
+    public function __construct(
+        private readonly ItemCodeGenerator $itemCodeGenerator
+    ) {
+    }
+
     /**
      * @var array<string, string>
      */
@@ -102,7 +108,10 @@ class ItemController extends Controller
 
     public function create(): View
     {
-        return view('inventory.items.create', $this->formOptions());
+        return view('inventory.items.create', array_merge(
+            $this->formOptions(),
+            ['nextItemCodes' => $this->itemCodeGenerator->nextForTypes(array_keys(self::ITEM_TYPES))]
+        ));
     }
 
     public function store(StoreItemRequest $request): RedirectResponse
@@ -114,8 +123,10 @@ class ItemController extends Controller
 
         try {
             $itemId = DB::transaction(function () use ($data, $userId, $assetCodeSeparator, $imagePath): int {
+                $itemCode = $this->itemCodeGenerator->next($data['item_type'], true);
+
                 $item = Item::query()->create([
-                    'item_code' => $data['item_code'],
+                    'item_code' => $itemCode,
                     'item_name' => $data['item_name'],
                     'item_type' => $data['item_type'],
                     'tracking_type' => $data['tracking_type'],
@@ -149,7 +160,7 @@ class ItemController extends Controller
                     $quantity = (int) $data['quantity'];
 
                     for ($sequence = 1; $sequence <= $quantity; $sequence++) {
-                        $assetCode = $data['item_code'].$assetCodeSeparator.str_pad((string) $sequence, 3, '0', STR_PAD_LEFT);
+                        $assetCode = $itemCode.$assetCodeSeparator.str_pad((string) $sequence, 3, '0', STR_PAD_LEFT);
 
                         $asset = Asset::query()->create([
                             'item_id' => $item->id,

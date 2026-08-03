@@ -17,7 +17,6 @@ class StoreItemRequest extends FormRequest
         $itemType = (string) $this->input('item_type');
 
         $this->merge([
-            'item_code' => strtoupper(trim((string) $this->input('item_code'))),
             'item_name' => trim((string) $this->input('item_name')),
             'contract_number' => $this->filled('contract_number')
                 ? trim((string) $this->input('contract_number'))
@@ -42,7 +41,6 @@ class StoreItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'item_code' => ['required', 'string', 'max:60', 'regex:/^[A-Z0-9][A-Z0-9._\/-]*$/', 'unique:items,item_code'],
             'item_name' => ['required', 'string', 'max:220'],
             'item_type' => ['required', Rule::in(['book', 'equipment', 'electronic', 'furniture', 'consumable', 'other'])],
             'tracking_type' => ['required', Rule::in(['asset', 'quantity'])],
@@ -88,8 +86,6 @@ class StoreItemRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'item_code.regex' => 'Kode barang hanya boleh berisi huruf kapital, angka, titik, garis miring, garis bawah, atau tanda hubung.',
-            'item_code.unique' => 'Kode barang sudah digunakan.',
             'quantity.gt' => 'Jumlah awal harus lebih besar dari nol.',
             'item_image.required' => 'Foto barang atau cover buku wajib ditambahkan.',
             'item_image.image' => 'File foto harus berupa gambar.',

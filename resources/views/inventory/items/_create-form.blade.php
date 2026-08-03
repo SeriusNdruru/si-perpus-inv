@@ -23,15 +23,15 @@
             <label for="item_code">Kode barang <span>*</span></label>
             <input
                 id="item_code"
-                name="item_code"
                 type="text"
                 maxlength="60"
-                value="{{ old('item_code') }}"
-                placeholder="Contoh: BK-0001"
-                autocomplete="off"
-                required
+                value="{{ old('item_type') ? ($nextItemCodes[old('item_type')] ?? '') : '' }}"
+                placeholder="Pilih jenis barang terlebih dahulu"
+                data-code-map='@json($nextItemCodes)'
+                readonly
+                aria-describedby="item-code-help"
             >
-            <small>Kode menjadi dasar pembuatan kode setiap aset atau eksemplar.</small>
+            <small id="item-code-help">Kode dibuat otomatis sesuai jenis barang dan tidak dapat diubah manual.</small>
         </div>
 
         <div class="form-field">

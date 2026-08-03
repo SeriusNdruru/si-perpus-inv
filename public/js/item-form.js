@@ -8,16 +8,30 @@
     }
 
     const itemType = document.getElementById('item_type');
+    const itemCode = document.getElementById('item_code');
     const trackingType = document.getElementById('tracking_type');
     const quantity = document.getElementById('quantity');
     const trackingHelp = document.getElementById('tracking-help');
     const quantityHelp = document.getElementById('quantity-help');
     const bookNotice = document.getElementById('book-notice');
+    let nextItemCodes = {};
+
+    if (itemCode?.dataset.codeMap) {
+        try {
+            nextItemCodes = JSON.parse(itemCode.dataset.codeMap);
+        } catch (error) {
+            nextItemCodes = {};
+        }
+    }
 
     const syncFields = () => {
         const isBook = itemType.value === 'book';
         const isAsset = isBook || trackingType.value === 'asset';
         const quantityOption = trackingType.querySelector('option[value="quantity"]');
+
+        if (itemCode) {
+            itemCode.value = nextItemCodes[itemType.value] ?? '';
+        }
 
         if (isBook) {
             trackingType.value = 'asset';
