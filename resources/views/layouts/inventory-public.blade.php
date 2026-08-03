@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Inventaris Umum') | {{ $systemBrand['institution.name'] ?? config('app.name') }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=59">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=61">
 </head>
 <body class="portal-page inventory-public-page inventory-general-page">
     <header class="portal-header inventory-public-header">
@@ -108,7 +108,7 @@
         </div>
     </footer>
     @include('shared.photo-preview-modal')
-    <script src="{{ asset('js/portal-menu.js') }}?v=59" defer></script>
+    <script src="{{ asset('js/portal-menu.js') }}?v=61" defer></script>
     <script src="{{ asset('js/portal-photo-preview.js') }}?v=48" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
 </body>

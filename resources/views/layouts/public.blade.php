@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Portal') | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=59">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=61">
 </head>
 <body class="portal-page">
     <header class="portal-header">
@@ -93,7 +93,7 @@
             <span>Layanan perpustakaan untuk siswa dan masyarakat sekolah</span>
         </div>
     </footer>
-    <script src="{{ asset('js/portal-menu.js') }}?v=59" defer></script>
+    <script src="{{ asset('js/portal-menu.js') }}?v=61" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
 </body>
 </html>
