@@ -67,8 +67,6 @@ class UpdateBookCatalogRequest extends FormRequest
             'edition' => ['nullable', 'string', 'max:80'],
             'language' => ['required', 'string', 'max:50'],
             'page_count' => ['nullable', 'integer', 'min:1', 'max:100000'],
-            'classification_code' => ['nullable', 'string', 'max:50'],
-            'call_number' => ['nullable', 'string', 'max:80'],
             'catalog_notes' => ['nullable', 'string', 'max:5000'],
             'authors_text' => ['nullable', 'string', 'max:4000'],
             'authors' => ['array', 'max:20'],

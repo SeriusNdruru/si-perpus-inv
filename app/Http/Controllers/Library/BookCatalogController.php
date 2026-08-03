@@ -9,6 +9,7 @@ use App\Models\Author;
 use App\Models\BookDetail;
 use App\Models\Item;
 use App\Models\Publisher;
+use App\Services\Library\BookCatalogCodeGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -165,12 +166,12 @@ class BookCatalogController extends Controller
         ]);
     }
 
-    public function edit(Item $book): View
+    public function edit(Item $book, BookCatalogCodeGenerator $codeGenerator): View
     {
         $this->ensureBook($book);
 
         $book->load([
-            'category:id,category_code,category_name',
+            'category:id,category_code,category_name,description',
             'bookDetail.publisher:id,publisher_name',
             'authors:id,author_name',
         ]);
@@ -179,13 +180,21 @@ class BookCatalogController extends Controller
             'book' => $book,
             'publishers' => Publisher::query()->orderBy('publisher_name')->get(['id', 'publisher_name', 'city']),
             'gradeLevels' => BookDetail::GRADE_LEVELS,
+            'automaticCodes' => $codeGenerator->generate(
+                $book,
+                $book->authors->pluck('author_name')->all()
+            ),
         ]);
     }
 
-    public function update(UpdateBookCatalogRequest $request, Item $book): RedirectResponse
+    public function update(
+        UpdateBookCatalogRequest $request,
+        Item $book,
+        BookCatalogCodeGenerator $codeGenerator
+    ): RedirectResponse
     {
         $this->ensureBook($book);
-        $book->loadMissing('bookDetail');
+        $book->loadMissing(['bookDetail', 'category']);
 
         $data = $request->validated();
         $userId = (int) $request->user()->id;
@@ -205,7 +214,8 @@ class BookCatalogController extends Controller
                 $data,
                 $userId,
                 $coverChanged,
-                $newCoverPath
+                $newCoverPath,
+                $codeGenerator
             ): void {
                 $publisherId = $data['publisher_id'] ?? null;
 
@@ -241,6 +251,8 @@ class BookCatalogController extends Controller
                     )
                     ->delete();
 
+                $automaticCodes = $codeGenerator->generate($book, $data['authors'] ?? []);
+
                 $completionStatus = $this->catalogIsComplete($data, $publisherId, $authorIds)
                     ? 'complete'
                     : 'incomplete';
@@ -260,8 +272,8 @@ class BookCatalogController extends Controller
                     'edition' => $data['edition'] ?? null,
                     'language' => $data['language'],
                     'page_count' => $data['page_count'] ?? null,
-                    'classification_code' => $data['classification_code'] ?? null,
-                    'call_number' => $data['call_number'] ?? null,
+                    'classification_code' => $automaticCodes['classification_code'],
+                    'call_number' => $automaticCodes['call_number'],
                     'catalog_notes' => $data['catalog_notes'] ?? null,
                     'completion_status' => $completionStatus,
                     'updated_by' => $userId,
@@ -330,13 +342,11 @@ class BookCatalogController extends Controller
      */
     private function catalogIsComplete(array $data, mixed $publisherId, array $authorIds): bool
     {
-        return ! empty($data['isbn_10'] ?? $data['isbn_13'] ?? null)
+        return (! empty($data['isbn_10']) || ! empty($data['isbn_13']))
             && ! empty($publisherId)
             && ! empty($data['publication_year'])
             && ! empty($data['grade_level'])
-            && $authorIds !== []
-            && ! empty($data['classification_code'])
-            && ! empty($data['call_number']);
+            && $authorIds !== [];
     }
 
     private function databaseMessage(Throwable $exception): string

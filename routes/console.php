@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Item;
+use App\Services\Library\BookCatalogCodeGenerator;
 use App\Services\Library\DueReminderService;
 use App\Services\Library\LoanRequestService;
 use App\Services\SystemReadinessService;
@@ -264,6 +266,70 @@ Artisan::command('app:system-check', function (SystemReadinessService $service):
         ? Command::FAILURE
         : Command::SUCCESS;
 })->purpose('Memeriksa kesiapan aplikasi, database, keamanan, dan hosting');
+
+
+Artisan::command('library:refresh-catalog-codes', function (
+    BookCatalogCodeGenerator $codeGenerator
+): int {
+    $updated = 0;
+    $completed = 0;
+
+    Item::query()
+        ->where('item_type', 'book')
+        ->with([
+            'category:id,category_code,category_name,description',
+            'bookDetail',
+            'authors:id,author_name',
+        ])
+        ->orderBy('id')
+        ->chunkById(100, function ($books) use ($codeGenerator, &$updated, &$completed): void {
+            foreach ($books as $book) {
+                $detail = $book->bookDetail;
+
+                if ($detail === null) {
+                    continue;
+                }
+
+                $authors = $book->authors->pluck('author_name')->all();
+                $automaticCodes = $codeGenerator->generate($book, $authors);
+                $values = [
+                    'classification_code' => $automaticCodes['classification_code'],
+                    'call_number' => $automaticCodes['call_number'],
+                ];
+
+                $catalogHasRequiredData = (! empty($detail->isbn_10) || ! empty($detail->isbn_13))
+                    && ! empty($detail->publisher_id)
+                    && ! empty($detail->publication_year)
+                    && ! empty($detail->grade_level)
+                    && $authors !== [];
+
+                if ($detail->completion_status === 'incomplete' && $catalogHasRequiredData) {
+                    $values['completion_status'] = 'complete';
+                    $completed++;
+                }
+
+                $changed = false;
+                foreach ($values as $field => $value) {
+                    if ((string) $detail->{$field} !== (string) $value) {
+                        $changed = true;
+                        break;
+                    }
+                }
+
+                if (! $changed) {
+                    continue;
+                }
+
+                $detail->fill($values)->save();
+                $updated++;
+            }
+        });
+
+    $this->info("Kode katalog otomatis diperbarui pada {$updated} buku.");
+    $this->line("Katalog yang berubah menjadi lengkap: {$completed}.");
+
+    return Command::SUCCESS;
+})->purpose('Membuat ulang kode klasifikasi dan nomor panggil seluruh buku secara otomatis');
 
 
 Artisan::command('library:send-due-reminders', function (

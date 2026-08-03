@@ -13,6 +13,7 @@ use App\Models\StockBalance;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Services\Inventory\ItemCodeGenerator;
+use App\Services\Library\BookCatalogCodeGenerator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +25,8 @@ use Throwable;
 class ItemController extends Controller
 {
     public function __construct(
-        private readonly ItemCodeGenerator $itemCodeGenerator
+        private readonly ItemCodeGenerator $itemCodeGenerator,
+        private readonly BookCatalogCodeGenerator $bookCatalogCodeGenerator
     ) {
     }
 
@@ -147,9 +149,14 @@ class ItemController extends Controller
                 ]);
 
                 if ($item->item_type === 'book') {
+                    $item->load('category:id,category_code,category_name,description');
+                    $automaticCodes = $this->bookCatalogCodeGenerator->generate($item, []);
+
                     DB::table('book_details')
                         ->where('item_id', $item->id)
                         ->update([
+                            'classification_code' => $automaticCodes['classification_code'],
+                            'call_number' => $automaticCodes['call_number'],
                             'cover_path' => $imagePath,
                             'updated_by' => $userId,
                             'updated_at' => now(),
@@ -293,7 +300,7 @@ class ItemController extends Controller
                 ]);
         }
 
-        $item->loadMissing('bookDetail');
+        $item->loadMissing(['bookDetail', 'authors:id,author_name']);
         $oldItemImagePath = $item->image_path;
         $oldBookCoverPath = $item->bookDetail?->cover_path;
         $newImagePath = $request->hasFile('item_image')
@@ -324,14 +331,28 @@ class ItemController extends Controller
 
                 $item->update($values);
 
-                if ($newImagePath !== null && $item->item_type === 'book') {
+                if ($item->item_type === 'book') {
+                    $item->unsetRelation('category');
+                    $item->load('category:id,category_code,category_name,description');
+                    $automaticCodes = $this->bookCatalogCodeGenerator->generate(
+                        $item,
+                        $item->authors->pluck('author_name')->all()
+                    );
+
+                    $bookDetailValues = [
+                        'classification_code' => $automaticCodes['classification_code'],
+                        'call_number' => $automaticCodes['call_number'],
+                        'updated_by' => $request->user()->id,
+                        'updated_at' => now(),
+                    ];
+
+                    if ($newImagePath !== null) {
+                        $bookDetailValues['cover_path'] = $newImagePath;
+                    }
+
                     DB::table('book_details')
                         ->where('item_id', $item->id)
-                        ->update([
-                            'cover_path' => $newImagePath,
-                            'updated_by' => $request->user()->id,
-                            'updated_at' => now(),
-                        ]);
+                        ->update($bookDetailValues);
                 }
             }, 3);
         } catch (Throwable $exception) {

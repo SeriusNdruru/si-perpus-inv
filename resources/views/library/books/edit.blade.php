@@ -167,8 +167,8 @@
                 <div class="form-section-heading">
                     <span>2</span>
                     <div>
-                        <h3>Penulis dan klasifikasi</h3>
-                        <p>Tulis satu nama penulis pada setiap baris agar urutannya tersimpan dengan benar.</p>
+                        <h3>Penulis dan kode katalog otomatis</h3>
+                        <p>Tulis satu nama penulis pada setiap baris. Kode klasifikasi dan nomor panggil dibuat otomatis saat katalog disimpan.</p>
                     </div>
                 </div>
 
@@ -185,27 +185,27 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="classification_code">Kode klasifikasi</label>
+                        <label for="classification_code_preview">Kode klasifikasi otomatis</label>
                         <input
-                            id="classification_code"
-                            name="classification_code"
+                            id="classification_code_preview"
                             type="text"
-                            maxlength="50"
-                            value="{{ old('classification_code', $book->bookDetail?->classification_code) }}"
-                            placeholder="Contoh: 005.13"
+                            value="{{ $automaticCodes['classification_code'] }}"
+                            readonly
+                            aria-readonly="true"
                         >
+                        <small>Dibuat dari kategori, judul, dan deskripsi buku. Jika kode kategori berbentuk DDC, kode tersebut dipakai sebagai acuan utama. Jika topik tidak dikenali, sistem memakai kode 000.</small>
                     </div>
 
                     <div class="form-field">
-                        <label for="call_number">Nomor panggil</label>
+                        <label for="call_number_preview">Nomor panggil otomatis</label>
                         <input
-                            id="call_number"
-                            name="call_number"
+                            id="call_number_preview"
                             type="text"
-                            maxlength="80"
-                            value="{{ old('call_number', $book->bookDetail?->call_number) }}"
-                            placeholder="Contoh: 005.13 AND d"
+                            value="{{ $automaticCodes['call_number'] }}"
+                            readonly
+                            aria-readonly="true"
                         >
+                        <small>Dibuat dari kode klasifikasi, tiga huruf nama penulis pertama, dan huruf awal judul. Nilai diperbarui saat katalog disimpan.</small>
                     </div>
 
                     <div class="form-field form-field-full">
@@ -245,7 +245,7 @@
 
             <div class="inline-notice">
                 <strong>Status katalog dihitung otomatis.</strong>
-                <p>Katalog menjadi lengkap jika memiliki ISBN, penerbit, tahun terbit, kategori kelas, minimal satu penulis, kode klasifikasi, dan nomor panggil. Eksemplar tetap belum diproses sampai rak ditentukan.</p>
+                <p>Katalog menjadi lengkap jika memiliki ISBN, penerbit, tahun terbit, kategori kelas, dan minimal satu penulis. Kode klasifikasi serta nomor panggil dibuat otomatis saat disimpan. Eksemplar tetap belum diproses sampai rak ditentukan.</p>
             </div>
 
             <div class="form-actions">
