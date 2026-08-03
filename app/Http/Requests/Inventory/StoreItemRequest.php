@@ -7,6 +7,18 @@ use Illuminate\Validation\Rule;
 
 class StoreItemRequest extends FormRequest
 {
+    /**
+     * @var array<string, string>
+     */
+    private const TRACKING_TYPE_BY_ITEM_TYPE = [
+        'book' => 'asset',
+        'equipment' => 'asset',
+        'electronic' => 'asset',
+        'furniture' => 'asset',
+        'consumable' => 'quantity',
+        'other' => 'asset',
+    ];
+
     public function authorize(): bool
     {
         return $this->user()?->hasAnyRole(['SUPER_ADMIN', 'INVENTORY_ADMIN']) ?? false;
@@ -25,9 +37,7 @@ class StoreItemRequest extends FormRequest
                 ? trim((string) $this->input('asset_type_code'))
                 : null,
             'skpd_name' => trim((string) $this->input('skpd_name', 'SDN MEKARSARI 08')),
-            'tracking_type' => $itemType === 'book'
-                ? 'asset'
-                : (string) $this->input('tracking_type'),
+            'tracking_type' => self::TRACKING_TYPE_BY_ITEM_TYPE[$itemType] ?? null,
             'category_id' => $this->filled('category_id') ? $this->input('category_id') : null,
             'supplier_id' => $this->filled('supplier_id') ? $this->input('supplier_id') : null,
             'acquisition_price' => $this->filled('acquisition_price') ? $this->input('acquisition_price') : null,
@@ -99,10 +109,6 @@ class StoreItemRequest extends FormRequest
         $validator->after(function ($validator): void {
             $trackingType = (string) $this->input('tracking_type');
             $quantity = (float) $this->input('quantity');
-
-            if ($this->input('item_type') === 'book' && $trackingType !== 'asset') {
-                $validator->errors()->add('tracking_type', 'Buku wajib menggunakan pencatatan per aset atau eksemplar.');
-            }
 
             if ($trackingType === 'asset' && floor($quantity) !== $quantity) {
                 $validator->errors()->add('quantity', 'Jumlah barang berbasis aset harus berupa bilangan bulat.');

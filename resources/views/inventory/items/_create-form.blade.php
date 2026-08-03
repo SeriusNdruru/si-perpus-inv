@@ -59,13 +59,17 @@
         </div>
 
         <div class="form-field">
-            <label for="tracking_type">Metode pencatatan <span>*</span></label>
-            <select id="tracking_type" name="tracking_type" required>
-                @foreach ($trackingTypes as $value => $label)
-                    <option value="{{ $value }}" @selected(old('tracking_type', 'asset') === $value)>{{ $label }}</option>
-                @endforeach
-            </select>
-            <small id="tracking-help">Per aset digunakan jika setiap unit mempunyai kode inventaris sendiri.</small>
+            <label for="tracking_type_display">Metode pencatatan otomatis</label>
+            <input
+                id="tracking_type_display"
+                type="text"
+                value=""
+                placeholder="Pilih jenis barang terlebih dahulu"
+                readonly
+                aria-describedby="tracking-help"
+            >
+            <input id="tracking_type" name="tracking_type" type="hidden" value="{{ old('tracking_type') }}">
+            <small id="tracking-help">Metode pencatatan ditentukan otomatis berdasarkan jenis barang.</small>
         </div>
 
         <div class="form-field">
