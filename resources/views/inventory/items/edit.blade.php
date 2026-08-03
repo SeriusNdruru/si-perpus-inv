@@ -13,7 +13,7 @@
             <a href="{{ route('inventory.items.show', $item) }}" class="button-secondary">Lihat detail</a>
         </div>
 
-        <form method="POST" action="{{ route('inventory.items.update', $item) }}" class="data-form">
+        <form method="POST" action="{{ route('inventory.items.update', $item) }}" enctype="multipart/form-data" class="data-form">
             @csrf
             @method('PUT')
 
@@ -88,6 +88,33 @@
                     <small>Gunakan tombol Hapus pada Daftar Barang atau tombol Pulihkan pada Daftar Hapus untuk mengubah status.</small>
                 </div>
 
+                @php($currentImagePath = $item->image_path ?: $item->bookDetail?->cover_path)
+                <div class="form-field form-field-full">
+                    <label for="item_image">{{ $currentImagePath ? 'Ganti foto barang atau cover buku' : 'Foto barang atau cover buku' }} @if (! $currentImagePath)<span>*</span>@endif</label>
+                    <div class="item-photo-upload">
+                        <div class="item-photo-preview" data-image-preview>
+                            @if ($currentImagePath)
+                                <img src="{{ asset('storage/'.$currentImagePath) }}" data-image-element alt="Foto {{ $item->item_name }}">
+                                <span data-image-placeholder hidden>Pratinjau foto</span>
+                            @else
+                                <span data-image-placeholder>Pratinjau foto</span>
+                                <img data-image-element alt="Pratinjau foto barang" hidden>
+                            @endif
+                        </div>
+                        <div>
+                            <input
+                                id="item_image"
+                                name="item_image"
+                                type="file"
+                                accept="image/jpeg,image/png,image/webp"
+                                data-image-input
+                                @required(! $currentImagePath)
+                            >
+                            <small>{{ $currentImagePath ? 'Kosongkan bila foto tidak diganti.' : 'Foto wajib ditambahkan sebelum data dapat disimpan.' }} Format JPG, JPEG, PNG, atau WEBP. Maksimal 3 MB.</small>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-field form-field-full">
                     <label for="description">Deskripsi</label>
                     <textarea id="description" name="description" rows="5">{{ old('description', $item->description) }}</textarea>
@@ -100,4 +127,5 @@
             </div>
         </form>
     </section>
+    <script src="{{ asset('js/item-image-preview.js') }}" defer></script>
 @endsection

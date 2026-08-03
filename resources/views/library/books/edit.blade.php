@@ -216,24 +216,18 @@
 
                 <div class="catalog-cover-grid">
                     <div class="admin-cover-preview">
-                        @if ($book->bookDetail?->cover_path)
-                            <img src="{{ asset('storage/'.$book->bookDetail->cover_path) }}" alt="Cover {{ $book->item_name }}">
+                        @if ($book->bookDetail?->cover_path || $book->image_path)
+                            <img src="{{ asset('storage/'.($book->bookDetail?->cover_path ?: $book->image_path)) }}" alt="Cover {{ $book->item_name }}">
                         @else
                             <span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>
                         @endif
                     </div>
                     <div>
                         <div class="form-field">
-                            <label for="cover_image">Upload cover baru</label>
-                            <input id="cover_image" name="cover_image" type="file" accept=".jpg,.jpeg,.png,.webp">
-                            <small>Format JPG, PNG, atau WEBP. Maksimal 3 MB.</small>
+                            <label for="cover_image">{{ $book->bookDetail?->cover_path || $book->image_path ? 'Ganti cover buku' : 'Cover buku' }} @if (! ($book->bookDetail?->cover_path || $book->image_path))<span>*</span>@endif</label>
+                            <input id="cover_image" name="cover_image" type="file" accept=".jpg,.jpeg,.png,.webp" @required(! ($book->bookDetail?->cover_path || $book->image_path))>
+                            <small>Cover wajib tersedia. Format JPG, PNG, atau WEBP. Maksimal 3 MB.</small>
                         </div>
-                        @if ($book->bookDetail?->cover_path)
-                            <label class="checkbox-field">
-                                <input name="remove_cover" type="checkbox" value="1">
-                                <span>Hapus cover yang tersimpan</span>
-                            </label>
-                        @endif
                     </div>
                 </div>
             </div>

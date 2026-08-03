@@ -63,6 +63,7 @@
             <table>
                 <thead>
                     <tr>
+                        <th>Foto</th>
                         <th>Kode</th>
                         <th>Barang</th>
                         <th>Jenis</th>
@@ -75,6 +76,16 @@
                 <tbody>
                     @forelse ($items as $item)
                         <tr>
+                            @php($itemImagePath = $item->image_path ?: $item->bookDetail?->cover_path)
+                            <td>
+                                <div class="item-table-photo">
+                                    @if ($itemImagePath)
+                                        <img src="{{ asset('storage/'.$itemImagePath) }}" alt="Foto {{ $item->item_name }}">
+                                    @else
+                                        <span>{{ mb_strtoupper(mb_substr($item->item_name, 0, 2)) }}</span>
+                                    @endif
+                                </div>
+                            </td>
                             <td><strong>{{ $item->item_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $item->item_name }}</div>
@@ -116,7 +127,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada barang di Daftar Hapus.</td>
+                            <td colspan="8" class="empty-state">Belum ada barang di Daftar Hapus.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -107,6 +107,27 @@
         </div>
 
         <div class="form-field form-field-full">
+            <label for="item_image">Foto barang atau cover buku <span>*</span></label>
+            <div class="item-photo-upload">
+                <div class="item-photo-preview" data-image-preview>
+                    <span data-image-placeholder>Pratinjau foto</span>
+                    <img data-image-element alt="Pratinjau foto barang" hidden>
+                </div>
+                <div>
+                    <input
+                        id="item_image"
+                        name="item_image"
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        data-image-input
+                        required
+                    >
+                    <small>Wajib. Format JPG, JPEG, PNG, atau WEBP. Maksimal 3 MB.</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-field form-field-full">
             <label for="description">Deskripsi</label>
             <textarea id="description" name="description" rows="4" placeholder="Keterangan singkat barang">{{ old('description') }}</textarea>
         </div>

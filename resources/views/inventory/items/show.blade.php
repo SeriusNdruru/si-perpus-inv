@@ -24,6 +24,20 @@
         </div>
     </div>
 
+    @php($itemImagePath = $item->image_path ?: $item->bookDetail?->cover_path)
+    <section class="panel item-photo-detail-panel">
+        <div class="panel-header">
+            <h2>Foto Barang</h2>
+        </div>
+        <div class="item-photo-detail">
+            @if ($itemImagePath)
+                <img src="{{ asset('storage/'.$itemImagePath) }}" alt="Foto {{ $item->item_name }}">
+            @else
+                <span>Foto belum tersedia</span>
+            @endif
+        </div>
+    </section>
+
     <div class="detail-grid">
         <section class="panel detail-card">
             <div class="panel-header">

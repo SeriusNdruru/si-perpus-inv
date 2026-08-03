@@ -12,11 +12,12 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('inventory.items.store') }}" class="data-form" id="item-form">
+        <form method="POST" action="{{ route('inventory.items.store') }}" enctype="multipart/form-data" class="data-form" id="item-form">
             @csrf
             @include('inventory.items._create-form')
         </form>
     </section>
 
     <script src="{{ asset('js/item-form.js') }}" defer></script>
+    <script src="{{ asset('js/item-image-preview.js') }}" defer></script>
 @endsection
