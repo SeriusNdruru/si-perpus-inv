@@ -109,23 +109,4 @@
     </div>
 </section>
 
-<section class="portal-section">
-    <div class="portal-container portal-split-card">
-        <div>
-            <span class="portal-kicker">Portal inventaris terpisah</span>
-            <h2>Buka portal inventaris sekolah</h2>
-            <p>Portal inventaris memiliki tampilan dan navigasi sendiri untuk laporan umum, audit aset, lokasi, serta pelaporan kerusakan.</p>
-            <div class="portal-hero-actions">
-                <a href="{{ route('public.inventory.general') }}" class="portal-button portal-button-primary">Buka portal inventaris</a>
-                <a href="{{ route('public.inventory.audit') }}" class="portal-button portal-button-outline">Buka audit publik</a>
-            </div>
-        </div>
-        <div class="portal-report-card">
-            <span>Menemukan kerusakan?</span>
-            <strong>Laporkan langsung tanpa login.</strong>
-            <p>Pilih barang atau lokasi, tulis kondisi, dan lampirkan foto bila diperlukan.</p>
-            <a href="{{ route('public.inventory.report-damage') }}">Lapor kerusakan →</a>
-        </div>
-    </div>
-</section>
 @endsection
