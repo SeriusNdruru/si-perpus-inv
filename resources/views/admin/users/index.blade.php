@@ -75,7 +75,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Pengguna</th>
                         <th>Peran</th>
                         <th>Kontak</th>
@@ -90,7 +90,7 @@
                             $roleNames = $managedUser->roles->pluck('role_name')->implode(', ');
                             $isCurrentAccount = auth()->id() === $managedUser->id;
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($users) && method_exists($users, 'firstItem') && $users->firstItem() !== null ? $users->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <div class="table-primary">{{ $managedUser->full_name }}</div>
                                 <div class="table-secondary">{{ '@'.$managedUser->username }}</div>
@@ -145,7 +145,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="empty-state">Belum ada pengguna yang sesuai dengan filter.</td>
+                            <td colspan="7" class="empty-state">Belum ada pengguna yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

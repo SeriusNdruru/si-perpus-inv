@@ -61,7 +61,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode dan tanggal</th>
                         <th>Aset</th>
                         <th>Alasan</th>
@@ -73,7 +73,7 @@
                 </thead>
                 <tbody>
                     @forelse ($disposals as $disposal)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($disposals) && method_exists($disposals, 'firstItem') && $disposals->firstItem() !== null ? $disposals->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <strong>{{ $disposal->disposal_code }}</strong>
                                 <div class="table-secondary">{{ $disposal->proposed_at?->format('d/m/Y H:i') }}</div>
@@ -105,7 +105,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="7" class="empty-state">Belum ada data penghapusan yang sesuai dengan filter.</td></tr>
+                        <tr><td colspan="8" class="empty-state">Belum ada data penghapusan yang sesuai dengan filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>

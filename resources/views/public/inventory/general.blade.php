@@ -31,10 +31,10 @@
 
         <div class="portal-table-wrap">
             <table class="portal-table">
-                <thead><tr><th>Foto</th><th>Barang</th><th>Jenis</th><th>Kategori</th><th>Jumlah</th><th>Masalah kondisi</th></tr></thead>
+                <thead><tr><th class="table-number-heading">No.</th><th>Foto</th><th>Barang</th><th>Jenis</th><th>Kategori</th><th>Jumlah</th><th>Masalah kondisi</th></tr></thead>
                 <tbody>
                     @forelse ($items as $item)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($items) && method_exists($items, 'firstItem') && $items->firstItem() !== null ? $items->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 @if ($item->image_path)
                                     <button
@@ -68,7 +68,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6">Data tidak ditemukan.</td></tr>
+                        <tr><td colspan="7">Data tidak ditemukan.</td></tr>
                     @endforelse
                 </tbody>
             </table>

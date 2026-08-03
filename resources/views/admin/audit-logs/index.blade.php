@@ -98,7 +98,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Waktu</th>
                         <th>Pengguna</th>
                         <th>Aksi</th>
@@ -110,7 +110,7 @@
                 </thead>
                 <tbody>
                     @forelse ($logs as $log)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($logs) && method_exists($logs, 'firstItem') && $logs->firstItem() !== null ? $logs->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <div class="table-primary">{{ $log->created_at?->translatedFormat('d M Y') }}</div>
                                 <div class="table-secondary">{{ $log->created_at?->format('H:i:s') }}</div>
@@ -149,7 +149,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Tidak ada aktivitas yang sesuai dengan filter.</td>
+                            <td colspan="8" class="empty-state">Tidak ada aktivitas yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

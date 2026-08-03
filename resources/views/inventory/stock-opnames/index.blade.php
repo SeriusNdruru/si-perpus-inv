@@ -80,7 +80,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Tanggal dan lokasi</th>
                         <th>Progres</th>
@@ -98,7 +98,7 @@
                                 default => 'badge-muted',
                             };
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($stockOpnames) && method_exists($stockOpnames, 'firstItem') && $stockOpnames->firstItem() !== null ? $stockOpnames->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <strong>{{ $stockOpname->opname_code }}</strong>
                                 <div class="table-secondary">Dibuat {{ $stockOpname->creator?->full_name ?? 'Sistem' }}</div>
@@ -137,7 +137,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="empty-state">Belum ada stock opname yang sesuai dengan filter.</td>
+                            <td colspan="7" class="empty-state">Belum ada stock opname yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

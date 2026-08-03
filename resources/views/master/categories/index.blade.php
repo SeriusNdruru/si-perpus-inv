@@ -69,7 +69,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Nama kategori</th>
                         <th>Induk</th>
@@ -81,7 +81,7 @@
                 </thead>
                 <tbody>
                     @forelse ($categories as $category)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($categories) && method_exists($categories, 'firstItem') && $categories->firstItem() !== null ? $categories->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $category->category_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $category->category_name }}</div>
@@ -120,7 +120,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada kategori yang sesuai dengan filter.</td>
+                            <td colspan="8" class="empty-state">Belum ada kategori yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

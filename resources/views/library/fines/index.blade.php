@@ -65,7 +65,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Transaksi</th>
                         <th>Anggota</th>
                         <th>Buku</th>
@@ -86,7 +86,7 @@
                             $paymentStatus = $remainingAmount <= 0 ? 'paid' : ($paidAmount > 0 ? 'partial' : 'unpaid');
                             $asset = $loanItem->asset;
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($loanItems) && method_exists($loanItems, 'firstItem') && $loanItems->firstItem() !== null ? $loanItems->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <div class="table-primary">{{ $loanItem->loan?->loan_code }}</div>
                                 <div class="table-secondary">{{ $loanItem->loan?->loan_date?->translatedFormat('d F Y') }}</div>
@@ -122,7 +122,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="empty-state">Tidak ada tagihan denda sesuai filter.</td>
+                            <td colspan="10" class="empty-state">Tidak ada tagihan denda sesuai filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

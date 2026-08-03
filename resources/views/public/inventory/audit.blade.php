@@ -34,11 +34,11 @@
         <div class="portal-table-wrap">
             <table class="portal-table portal-table-audit">
                 <thead>
-                    <tr><th>Foto</th><th>Kode aset</th><th>Barang/buku</th><th>Kategori</th><th>Kondisi</th><th>Status</th><th>Lokasi</th><th>Rak</th></tr>
+                    <tr><th class="table-number-heading">No.</th><th>Foto</th><th>Kode aset</th><th>Barang/buku</th><th>Kategori</th><th>Kondisi</th><th>Status</th><th>Lokasi</th><th>Rak</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($assets as $asset)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($assets) && method_exists($assets, 'firstItem') && $assets->firstItem() !== null ? $assets->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 @if ($asset->image_path)
                                     <button
@@ -90,7 +90,7 @@
                             <td>{{ $asset->shelf_code ?: '-' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="8">Tidak ada aset sesuai filter.</td></tr>
+                        <tr><td colspan="9">Tidak ada aset sesuai filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -107,10 +107,10 @@
         </div>
         <div class="portal-table-wrap">
             <table class="portal-table">
-                <thead><tr><th>Foto</th><th>Kode</th><th>Barang</th><th>Lokasi</th><th>Jumlah</th></tr></thead>
+                <thead><tr><th class="table-number-heading">No.</th><th>Foto</th><th>Kode</th><th>Barang</th><th>Lokasi</th><th>Jumlah</th></tr></thead>
                 <tbody>
                     @forelse ($stockBalances as $stock)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($stockBalances) && method_exists($stockBalances, 'firstItem') && $stockBalances->firstItem() !== null ? $stockBalances->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 @if ($stock->image_path)
                                     <button
@@ -135,7 +135,7 @@
                             <td>{{ number_format((float) $stock->quantity, 2) }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="5">Tidak ada saldo barang berbasis jumlah.</td></tr>
+                        <tr><td colspan="6">Tidak ada saldo barang berbasis jumlah.</td></tr>
                     @endforelse
                 </tbody>
             </table>

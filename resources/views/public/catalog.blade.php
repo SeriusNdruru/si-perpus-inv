@@ -33,7 +33,7 @@
 
         <div class="portal-book-grid portal-book-grid-large">
             @forelse ($books as $book)
-                <article class="portal-book-card">
+                <article class="portal-book-card numbered-list-item" data-list-number="{{ (is_object($books) && method_exists($books, 'firstItem') && $books->firstItem() !== null ? $books->firstItem() : 1) + $loop->index }}">
                     <div class="portal-book-cover">
                         @if ($book->cover_path)
                             <img src="{{ asset('storage/'.$book->cover_path) }}" alt="Cover {{ $book->item_name }}">

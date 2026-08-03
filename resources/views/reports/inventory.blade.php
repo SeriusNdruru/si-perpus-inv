@@ -77,13 +77,13 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Barang</th><th>Jenis</th><th>Kategori</th><th>Status</th><th>Total aset</th><th>Tersedia</th><th>Dipinjam</th><th>Rusak/Hilang</th><th>Stok jumlah</th><th>Nilai perolehan</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($items as $item)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($items) && method_exists($items, 'firstItem') && $items->firstItem() !== null ? $items->firstItem() : 1) + $loop->index }}</td>
                             <td><div class="table-primary">{{ $item->item_name }}</div><div class="table-secondary">{{ $item->item_code }} · {{ $item->unit?->unit_code }}</div></td>
                             <td>{{ $item->item_type === 'book' ? 'Buku' : ucfirst($item->item_type) }}<div class="table-secondary">{{ $item->tracking_type === 'asset' ? 'Per aset' : 'Jumlah stok' }}</div></td>
                             <td>{{ $item->category?->category_name ?? '-' }}</td>
@@ -96,7 +96,7 @@
                             <td>Rp{{ number_format((float) ($item->acquisition_value ?? 0), 0, ',', '.') }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="10" class="empty-state">Tidak ada data inventaris yang sesuai dengan filter.</td></tr>
+                        <tr><td colspan="11" class="empty-state">Tidak ada data inventaris yang sesuai dengan filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>

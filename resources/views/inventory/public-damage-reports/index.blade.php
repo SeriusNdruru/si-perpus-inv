@@ -13,10 +13,10 @@
         <div class="filter-actions"><button class="button-primary" type="submit">Terapkan</button><a class="button-secondary" href="{{ route('inventory.public-damage-reports.index') }}">Reset</a></div>
     </form>
     <div class="table-wrap"><table>
-        <thead><tr><th>Kode</th><th>Barang/aset</th><th>Lokasi</th><th>Pelapor</th><th>Status</th><th>Tanggal</th><th>Aksi</th></tr></thead>
+        <thead><tr><th class="table-number-heading">No.</th><th>Kode</th><th>Barang/aset</th><th>Lokasi</th><th>Pelapor</th><th>Status</th><th>Tanggal</th><th>Aksi</th></tr></thead>
         <tbody>
             @forelse ($reports as $report)
-                <tr>
+                <tr><td class="table-number">{{ (is_object($reports) && method_exists($reports, 'firstItem') && $reports->firstItem() !== null ? $reports->firstItem() : 1) + $loop->index }}</td>
                     <td><strong>{{ $report->report_code }}</strong></td>
                     <td><div class="table-primary">{{ $report->item?->item_name ?: 'Barang tidak dipilih' }}</div><div class="table-secondary">{{ $report->asset?->asset_code ?: '-' }}</div></td>
                     <td>{{ $report->location?->location_name ?: '-' }}</td>
@@ -26,7 +26,7 @@
                     <td><a class="action-link" href="{{ route('inventory.public-damage-reports.show', $report) }}">Periksa</a></td>
                 </tr>
             @empty
-                <tr><td colspan="7" class="empty-state">Belum ada laporan kerusakan.</td></tr>
+                <tr><td colspan="8" class="empty-state">Belum ada laporan kerusakan.</td></tr>
             @endforelse
         </tbody>
     </table></div>

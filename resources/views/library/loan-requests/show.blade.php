@@ -39,10 +39,10 @@
     <div class="panel-header"><div><p class="eyebrow">Daftar permintaan</p><h2>Buku dan eksemplar</h2></div></div>
     <div class="table-wrap">
         <table>
-            <thead><tr><th>Buku</th><th>Penulis</th><th>Eksemplar</th><th>Rak</th><th>Lokasi</th></tr></thead>
+            <thead><tr><th class="table-number-heading">No.</th><th>Buku</th><th>Penulis</th><th>Eksemplar</th><th>Rak</th><th>Lokasi</th></tr></thead>
             <tbody>
                 @foreach ($loanRequest->items as $requestItem)
-                    <tr>
+                    <tr><td class="table-number">{{ (is_object($loanRequest->items) && method_exists($loanRequest->items, 'firstItem') && $loanRequest->items->firstItem() !== null ? $loanRequest->items->firstItem() : 1) + $loop->index }}</td>
                         <td><strong>{{ $requestItem->item?->item_name }}</strong><div class="table-secondary">{{ $requestItem->item?->item_code }}</div></td>
                         <td>{{ $requestItem->item?->authors?->pluck('author_name')->join(', ') ?: '-' }}</td>
                         <td>{{ $requestItem->asset?->asset_code ?: 'Ditentukan saat persetujuan' }}</td>

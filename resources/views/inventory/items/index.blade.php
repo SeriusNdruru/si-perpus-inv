@@ -76,7 +76,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Foto</th>
                         <th>Kode</th>
                         <th>Barang</th>
@@ -89,7 +89,7 @@
                 </thead>
                 <tbody>
                     @forelse ($items as $item)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($items) && method_exists($items, 'firstItem') && $items->firstItem() !== null ? $items->firstItem() : 1) + $loop->index }}</td>
                             @php($itemImagePath = $item->image_path ?: $item->bookDetail?->cover_path)
                             <td>
                                 @if ($itemImagePath)
@@ -155,7 +155,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="empty-state">Belum ada barang aktif yang sesuai dengan filter.</td>
+                            <td colspan="9" class="empty-state">Belum ada barang aktif yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

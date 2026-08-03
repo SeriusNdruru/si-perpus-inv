@@ -126,7 +126,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode aset</th>
                         <th>Barcode</th>
                         <th>Kondisi</th>
@@ -138,7 +138,7 @@
                 </thead>
                 <tbody>
                     @forelse ($copies as $copy)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($copies) && method_exists($copies, 'firstItem') && $copies->firstItem() !== null ? $copies->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $copy->asset_code }}</strong></td>
                             <td>{{ $copy->barcode }}</td>
                             <td>{{ str($copy->condition_status)->replace('_', ' ')->title() }}</td>
@@ -159,7 +159,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada eksemplar untuk buku ini.</td>
+                            <td colspan="8" class="empty-state">Belum ada eksemplar untuk buku ini.</td>
                         </tr>
                     @endforelse
                 </tbody>

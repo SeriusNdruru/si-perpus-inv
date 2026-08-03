@@ -144,7 +144,7 @@
             <div class="table-wrap">
                 <table>
                     <thead>
-                        <tr>
+                        <tr><th class="table-number-heading">No.</th>
                             <th>Kode aset</th>
                             <th>Barcode</th>
                             <th>Lokasi</th>
@@ -157,7 +157,7 @@
                     </thead>
                     <tbody>
                         @forelse ($assets as $asset)
-                            <tr>
+                            <tr><td class="table-number">{{ (is_object($assets) && method_exists($assets, 'firstItem') && $assets->firstItem() !== null ? $assets->firstItem() : 1) + $loop->index }}</td>
                                 <td><strong>{{ $asset->asset_code }}</strong></td>
                                 <td>{{ $asset->barcode }}</td>
                                 <td>{{ $asset->location?->location_name ?? '-' }}</td>
@@ -177,7 +177,7 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr><td colspan="8" class="empty-state">Belum ada aset untuk barang ini.</td></tr>
+                            <tr><td colspan="9" class="empty-state">Belum ada aset untuk barang ini.</td></tr>
                         @endforelse
                     </tbody>
                 </table>
@@ -212,16 +212,16 @@
             </div>
             <div class="table-wrap">
                 <table>
-                    <thead><tr><th>Lokasi</th><th>Jumlah</th><th>Diperbarui</th></tr></thead>
+                    <thead><tr><th class="table-number-heading">No.</th><th>Lokasi</th><th>Jumlah</th><th>Diperbarui</th></tr></thead>
                     <tbody>
                         @forelse ($stockBalances as $balance)
-                            <tr>
+                            <tr><td class="table-number">{{ (is_object($stockBalances) && method_exists($stockBalances, 'firstItem') && $stockBalances->firstItem() !== null ? $stockBalances->firstItem() : 1) + $loop->index }}</td>
                                 <td>{{ $balance->location?->location_code }} - {{ $balance->location?->location_name }}</td>
                                 <td><strong>{{ number_format((float) $balance->quantity, 2, ',', '.') }} {{ $item->unit?->unit_code }}</strong></td>
                                 <td>{{ $balance->updated_at?->translatedFormat('d F Y H:i') ?? '-' }}</td>
                             </tr>
                         @empty
-                            <tr><td colspan="3" class="empty-state">Belum ada saldo stok.</td></tr>
+                            <tr><td colspan="4" class="empty-state">Belum ada saldo stok.</td></tr>
                         @endforelse
                     </tbody>
                 </table>

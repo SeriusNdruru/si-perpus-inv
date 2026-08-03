@@ -82,7 +82,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kolom</th>
                         <th>Nilai sebelumnya</th>
                         <th>Nilai setelahnya</th>
@@ -91,7 +91,7 @@
                 </thead>
                 <tbody>
                     @forelse ($changes as $change)
-                        <tr class="{{ $change['changed'] ? 'audit-row-changed' : '' }}">
+                        <tr class="{{ $change['changed'] ? 'audit-row-changed' : '' }}"><td class="table-number">{{ (is_object($changes) && method_exists($changes, 'firstItem') && $changes->firstItem() !== null ? $changes->firstItem() : 1) + $loop->index }}</td>
                             <td><code>{{ $change['field'] }}</code></td>
                             <td><pre class="audit-inline-value">{{ $displayValue($change['old']) }}</pre></td>
                             <td><pre class="audit-inline-value">{{ $displayValue($change['new']) }}</pre></td>
@@ -105,7 +105,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="empty-state">Aktivitas ini tidak memiliki snapshot perubahan data.</td>
+                            <td colspan="5" class="empty-state">Aktivitas ini tidak memiliki snapshot perubahan data.</td>
                         </tr>
                     @endforelse
                 </tbody>

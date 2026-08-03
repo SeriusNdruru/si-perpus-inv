@@ -49,7 +49,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Nama file</th>
                         <th>Jenis</th>
                         <th>Ukuran</th>
@@ -59,7 +59,7 @@
                 </thead>
                 <tbody>
                     @forelse ($backups as $backup)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($backups) && method_exists($backups, 'firstItem') && $backups->firstItem() !== null ? $backups->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <strong>{{ $backup['filename'] }}</strong>
                                 <div class="table-secondary">File SQL privat</div>
@@ -86,7 +86,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="empty-state">
+                            <td colspan="6" class="empty-state">
                                 Belum ada backup. Buat backup pertama sebelum melakukan pengujian berikutnya.
                             </td>
                         </tr>

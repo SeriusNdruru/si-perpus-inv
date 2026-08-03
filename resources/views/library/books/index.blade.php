@@ -81,7 +81,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Judul dan penulis</th>
                         <th>Katalog</th>
@@ -96,7 +96,7 @@
                             $status = $book->bookDetail?->completion_status ?? 'incomplete';
                             $authors = $book->authors->pluck('author_name')->join(', ');
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($books) && method_exists($books, 'firstItem') && $books->firstItem() !== null ? $books->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $book->item_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $book->item_name }}</div>
@@ -136,7 +136,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="empty-state">Belum ada buku yang sesuai dengan filter.</td>
+                            <td colspan="7" class="empty-state">Belum ada buku yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

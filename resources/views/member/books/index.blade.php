@@ -29,7 +29,7 @@
 
 <div class="member-book-grid member-book-grid-catalog">
     @forelse ($books as $book)
-        <article class="{{ $book->available_copies < 1 ? 'is-unavailable' : '' }}">
+        <article class="numbered-list-item {{ $book->available_copies < 1 ? 'is-unavailable' : '' }}" data-list-number="{{ (is_object($books) && method_exists($books, 'firstItem') && $books->firstItem() !== null ? $books->firstItem() : 1) + $loop->index }}">
             <div class="member-book-cover">
                 @if ($book->cover_path)<img src="{{ asset('storage/'.$book->cover_path) }}" alt="Cover {{ $book->item_name }}">@else<span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>@endif
                 <em>{{ $book->available_copies }} tersedia</em>

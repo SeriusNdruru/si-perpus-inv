@@ -113,7 +113,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th class="checkbox-column"><input type="checkbox" id="select-all-assets" aria-label="Pilih semua eksemplar yang dapat diproses"></th>
                         <th>Eksemplar dan buku</th>
                         <th>Katalog</th>
@@ -129,7 +129,7 @@
                             $canAssign = in_array($asset->asset_status, ['unprocessed', 'available'], true);
                             $authors = $asset->item?->authors?->pluck('author_name')->join(', ') ?? '';
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($assets) && method_exists($assets, 'firstItem') && $assets->firstItem() !== null ? $assets->firstItem() : 1) + $loop->index }}</td>
                             <td class="checkbox-column">
                                 <input type="checkbox" name="asset_ids[]" value="{{ $asset->id }}" form="bulk-assignment-form" class="js-asset-checkbox" @checked(in_array($asset->id, old('asset_ids', []))) @disabled(! $canAssign) aria-label="Pilih {{ $asset->asset_code }}">
                             </td>
@@ -164,7 +164,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="empty-state">Belum ada eksemplar buku yang sesuai dengan filter.</td></tr>
+                        <tr><td colspan="7" class="empty-state">Belum ada eksemplar buku yang sesuai dengan filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>

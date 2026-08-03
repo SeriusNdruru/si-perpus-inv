@@ -72,7 +72,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Nama rak</th>
                         <th>Lokasi</th>
@@ -92,7 +92,7 @@
                                 ? min(100, (int) round(($occupied / $capacity) * 100))
                                 : null;
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($shelves) && method_exists($shelves, 'firstItem') && $shelves->firstItem() !== null ? $shelves->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $shelf->shelf_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $shelf->shelf_name }}</div>
@@ -144,7 +144,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada rak yang sesuai dengan filter.</td>
+                            <td colspan="8" class="empty-state">Belum ada rak yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

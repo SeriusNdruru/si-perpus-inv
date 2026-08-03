@@ -59,7 +59,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Supplier</th>
                         <th>Kontak</th>
@@ -71,7 +71,7 @@
                 </thead>
                 <tbody>
                     @forelse ($suppliers as $supplier)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($suppliers) && method_exists($suppliers, 'firstItem') && $suppliers->firstItem() !== null ? $suppliers->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $supplier->supplier_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $supplier->supplier_name }}</div>
@@ -107,7 +107,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada supplier yang sesuai dengan filter.</td>
+                            <td colspan="8" class="empty-state">Belum ada supplier yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -64,7 +64,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Transaksi</th>
                         <th>Anggota</th>
                         <th>Eksemplar</th>
@@ -84,7 +84,7 @@
                             $fineAmount = $daysLate * $finePerDay;
                             $asset = $loanItem->asset;
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($loanItems) && method_exists($loanItems, 'firstItem') && $loanItems->firstItem() !== null ? $loanItems->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <div class="table-primary">{{ $loanItem->loan?->loan_code }}</div>
                                 <div class="table-secondary">{{ $loanItem->loan?->loan_date?->translatedFormat('d F Y H:i') }}</div>
@@ -126,7 +126,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="empty-state">Tidak ada buku yang menunggu pengembalian sesuai filter.</td>
+                            <td colspan="9" class="empty-state">Tidak ada buku yang menunggu pengembalian sesuai filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

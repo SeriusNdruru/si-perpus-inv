@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Inventaris Umum') | {{ $systemBrand['institution.name'] ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=48">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=49">
 </head>
 <body class="portal-page inventory-public-page inventory-general-page">
     <header class="portal-header inventory-public-header">

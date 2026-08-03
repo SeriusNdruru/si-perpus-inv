@@ -31,7 +31,7 @@
         <div class="report-print-meta">Dicetak pada {{ now()->translatedFormat('d F Y H:i') }} oleh {{ auth()->user()->full_name }}</div>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Transaksi</th><th>Anggota</th><th>Buku</th><th>Tanggal kembali</th><th>Denda final</th><th>Dibayar</th><th>Sisa</th><th>Status</th></tr></thead>
+                <thead><tr><th class="table-number-heading">No.</th><th>Transaksi</th><th>Anggota</th><th>Buku</th><th>Tanggal kembali</th><th>Denda final</th><th>Dibayar</th><th>Sisa</th><th>Status</th></tr></thead>
                 <tbody>
                     @forelse ($fines as $fine)
                         @php
@@ -40,7 +40,7 @@
                             $remaining = max($fineAmount - $paidAmount, 0);
                             $paymentLabel = $remaining <= 0 ? 'Lunas' : ($paidAmount > 0 ? 'Sebagian' : 'Belum dibayar');
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($fines) && method_exists($fines, 'firstItem') && $fines->firstItem() !== null ? $fines->firstItem() : 1) + $loop->index }}</td>
                             <td><div class="table-primary">{{ $fine->loan?->loan_code }}</div><div class="table-secondary">{{ $fine->asset?->asset_code }}</div></td>
                             <td><div class="table-primary">{{ $fine->loan?->member?->member_name }}</div><div class="table-secondary">{{ $fine->loan?->member?->member_code }}</div></td>
                             <td><div class="table-primary">{{ $fine->asset?->item?->item_name }}</div><div class="table-secondary">{{ $fine->asset?->barcode }}</div></td>
@@ -51,7 +51,7 @@
                             <td><span class="badge {{ $remaining <= 0 ? 'badge-success' : ($paidAmount > 0 ? 'badge-warning' : 'badge-danger') }}">{{ $paymentLabel }}</span></td>
                         </tr>
                     @empty
-                        <tr><td colspan="8" class="empty-state">Tidak ada data denda yang sesuai dengan filter.</td></tr>
+                        <tr><td colspan="9" class="empty-state">Tidak ada data denda yang sesuai dengan filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>

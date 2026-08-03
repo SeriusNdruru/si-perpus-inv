@@ -1485,3 +1485,21 @@ body.portal-modal-open {
     object-fit: cover !important;
     display: block !important;
 }
+
+/* Tahap 49: nomor urut konsisten pada seluruh tabel daftar */
+.table-number-heading,
+.table-number {
+    box-sizing: border-box;
+    width: 58px;
+    min-width: 58px;
+    max-width: 58px;
+    text-align: center !important;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.table-number {
+    color: var(--muted);
+    font-weight: 800;
+    vertical-align: middle;
+}

@@ -32,11 +32,11 @@
         <div class="report-print-meta">Dicetak pada {{ now()->translatedFormat('d F Y H:i') }} oleh {{ auth()->user()->full_name }}</div>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Anggota</th><th>Jenis</th><th>Kelas</th><th>Masa berlaku</th><th>Status</th><th>Total transaksi</th><th>Pinjaman aktif</th><th>Reservasi aktif</th><th>Sisa denda</th></tr></thead>
+                <thead><tr><th class="table-number-heading">No.</th><th>Anggota</th><th>Jenis</th><th>Kelas</th><th>Masa berlaku</th><th>Status</th><th>Total transaksi</th><th>Pinjaman aktif</th><th>Reservasi aktif</th><th>Sisa denda</th></tr></thead>
                 <tbody>
                     @forelse ($members as $member)
                         @php $remainingFine = max((float) ($member->total_fines ?? 0) - (float) ($member->paid_fines ?? 0), 0); @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($members) && method_exists($members, 'firstItem') && $members->firstItem() !== null ? $members->firstItem() : 1) + $loop->index }}</td>
                             <td><div class="table-primary">{{ $member->member_name }}</div><div class="table-secondary">{{ $member->member_code }} · {{ $member->identity_number ?: '-' }}</div></td>
                             <td>{{ $member->typeLabel() }}</td><td>{{ $member->department ?: '-' }}</td>
                             <td><div class="table-primary">{{ $member->join_date?->translatedFormat('d M Y') }}</div><div class="table-secondary">sampai {{ $member->expiry_date?->translatedFormat('d M Y') ?? 'tanpa batas' }}</div></td>
@@ -45,7 +45,7 @@
                             <td>Rp{{ number_format($remainingFine, 0, ',', '.') }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="9" class="empty-state">Tidak ada anggota yang sesuai dengan filter.</td></tr>
+                        <tr><td colspan="10" class="empty-state">Tidak ada anggota yang sesuai dengan filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>

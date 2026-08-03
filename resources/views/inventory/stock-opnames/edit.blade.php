@@ -48,7 +48,7 @@
             <div class="table-wrap stock-opname-edit-table">
                 <table>
                     <thead>
-                        <tr>
+                        <tr><th class="table-number-heading">No.</th>
                             <th>Barang</th>
                             <th>Unit atau aset</th>
                             <th>Menurut sistem</th>
@@ -59,7 +59,7 @@
                     </thead>
                     <tbody>
                         @foreach ($lines as $line)
-                            <tr>
+                            <tr><td class="table-number">{{ (is_object($lines) && method_exists($lines, 'firstItem') && $lines->firstItem() !== null ? $lines->firstItem() : 1) + $loop->index }}</td>
                                 <td>
                                     <input type="hidden" name="items[{{ $loop->index }}][id]" value="{{ $line->id }}">
                                     <div class="table-primary">{{ $line->item?->item_name }}</div>

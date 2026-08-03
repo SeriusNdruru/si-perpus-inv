@@ -137,7 +137,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode pembayaran</th>
                         <th>Tanggal</th>
                         <th>Nominal</th>
@@ -149,7 +149,7 @@
                 </thead>
                 <tbody>
                     @forelse ($loanItem->finePayments as $payment)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($loanItem->finePayments) && method_exists($loanItem->finePayments, 'firstItem') && $loanItem->finePayments->firstItem() !== null ? $loanItem->finePayments->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $payment->payment_code }}</strong></td>
                             <td>{{ $payment->payment_date?->translatedFormat('d F Y H:i') }}</td>
                             <td><strong>Rp{{ number_format((float) $payment->amount, 0, ',', '.') }}</strong></td>
@@ -162,7 +162,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada pembayaran untuk tagihan ini.</td>
+                            <td colspan="8" class="empty-state">Belum ada pembayaran untuk tagihan ini.</td>
                         </tr>
                     @endforelse
                 </tbody>

@@ -32,10 +32,10 @@
         <div class="report-print-meta">Dicetak pada {{ now()->translatedFormat('d F Y H:i') }} oleh {{ auth()->user()->full_name }}</div>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Transaksi</th><th>Anggota</th><th>Tanggal</th><th>Status</th><th>Eksemplar</th><th>Belum kembali</th><th>Sudah diproses</th><th>Total denda</th><th>Petugas</th></tr></thead>
+                <thead><tr><th class="table-number-heading">No.</th><th>Transaksi</th><th>Anggota</th><th>Tanggal</th><th>Status</th><th>Eksemplar</th><th>Belum kembali</th><th>Sudah diproses</th><th>Total denda</th><th>Petugas</th></tr></thead>
                 <tbody>
                     @forelse ($loans as $loan)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($loans) && method_exists($loans, 'firstItem') && $loans->firstItem() !== null ? $loans->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $loan->loan_code }}</strong></td>
                             <td><div class="table-primary">{{ $loan->member?->member_name }}</div><div class="table-secondary">{{ $loan->member?->member_code }} · {{ $loan->member?->typeLabel() }}</div></td>
                             <td><div class="table-primary">{{ $loan->loan_date?->translatedFormat('d M Y H:i') }}</div><div class="table-secondary">Jatuh tempo {{ $loan->default_due_date?->translatedFormat('d M Y') }}</div></td>
@@ -44,7 +44,7 @@
                             <td>Rp{{ number_format((float) ($loan->fine_total ?? 0), 0, ',', '.') }}</td><td>{{ $loan->processor?->full_name ?? '-' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="9" class="empty-state">Tidak ada transaksi peminjaman yang sesuai dengan filter.</td></tr>
+                        <tr><td colspan="10" class="empty-state">Tidak ada transaksi peminjaman yang sesuai dengan filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>

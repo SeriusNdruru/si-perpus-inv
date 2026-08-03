@@ -30,7 +30,7 @@
         <div class="member-panel-heading"><div><small>Pinjaman aktif</small><h2>Tanggal pengembalian terdekat</h2></div><a href="{{ route('member.history.loans') }}">Semua riwayat</a></div>
         <div class="member-loan-list">
             @forelse ($activeLoans as $loan)
-                <article>
+                <article class="numbered-list-item" data-list-number="{{ $loop->iteration }}">
                     <div class="member-mini-cover">
                         @if ($loan->cover_path)<img src="{{ asset('storage/'.$loan->cover_path) }}" alt="">@else<span>BK</span>@endif
                     </div>
@@ -48,7 +48,7 @@
         <div class="member-notification-list">
             @forelse ($notifications as $notification)
                 <article class="{{ $notification->is_read ? '' : 'is-unread' }}">
-                    <span>●</span>
+                    <span class="member-list-number">{{ $loop->iteration }}</span>
                     <div><strong>{{ $notification->title }}</strong><p>{{ $notification->message }}</p><small>{{ \Illuminate\Support\Carbon::parse($notification->created_at)->diffForHumans() }}</small></div>
                 </article>
             @empty
@@ -62,7 +62,7 @@
     <div class="member-panel-heading"><div><small>Koleksi tersedia</small><h2>Rekomendasi untuk dipinjam</h2></div><a href="{{ route('member.books.index') }}">Buka katalog</a></div>
     <div class="member-book-grid">
         @forelse ($recommendedBooks as $book)
-            <article>
+            <article class="numbered-list-item" data-list-number="{{ $loop->iteration }}">
                 <div class="member-book-cover">
                     @if ($book->cover_path)<img src="{{ asset('storage/'.$book->cover_path) }}" alt="">@else<span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>@endif
                 </div>

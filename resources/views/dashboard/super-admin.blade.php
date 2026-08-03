@@ -50,7 +50,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Nama</th>
                         <th>Username</th>
                         <th>Peran</th>
@@ -59,7 +59,7 @@
                 </thead>
                 <tbody>
                     @forelse ($administrators as $administrator)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($administrators) && method_exists($administrators, 'firstItem') && $administrators->firstItem() !== null ? $administrators->firstItem() : 1) + $loop->index }}</td>
                             <td class="table-primary">{{ $administrator->full_name }}</td>
                             <td>{{ $administrator->username }}</td>
                             <td><span class="badge badge-neutral">{{ $administrator->role_name }}</span></td>
@@ -70,7 +70,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="empty-state">Belum ada akun administrator.</td></tr>
+                        <tr><td colspan="5" class="empty-state">Belum ada akun administrator.</td></tr>
                     @endforelse
                 </tbody>
             </table>

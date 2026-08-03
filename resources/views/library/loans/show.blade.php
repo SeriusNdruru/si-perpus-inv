@@ -68,7 +68,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Eksemplar</th>
                         <th>Judul buku</th>
                         <th>Rak asal</th>
@@ -90,7 +90,7 @@
                                 default => 'badge-warning',
                             };
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($itemRows) && method_exists($itemRows, 'firstItem') && $itemRows->firstItem() !== null ? $itemRows->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <div class="table-primary">{{ $asset?->asset_code }}</div>
                                 <div class="table-secondary">{{ $asset?->barcode }}</div>

@@ -107,7 +107,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Barang</th>
                         <th>Unit atau aset</th>
                         <th>Data sistem</th>
@@ -126,7 +126,7 @@
                                 default => 'badge-warning',
                             };
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($lines) && method_exists($lines, 'firstItem') && $lines->firstItem() !== null ? $lines->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <div class="table-primary">{{ $line->item?->item_name }}</div>
                                 <div class="table-secondary">{{ $line->item?->item_code }}</div>

@@ -32,10 +32,10 @@
         <div class="report-print-meta">Dicetak pada {{ now()->translatedFormat('d F Y H:i') }} oleh {{ auth()->user()->full_name }}</div>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Reservasi</th><th>Anggota</th><th>Buku</th><th>Tanggal</th><th>Antrean</th><th>Batas pengambilan</th><th>Status</th><th>Petugas</th></tr></thead>
+                <thead><tr><th class="table-number-heading">No.</th><th>Reservasi</th><th>Anggota</th><th>Buku</th><th>Tanggal</th><th>Antrean</th><th>Batas pengambilan</th><th>Status</th><th>Petugas</th></tr></thead>
                 <tbody>
                     @forelse ($reservations as $reservation)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($reservations) && method_exists($reservations, 'firstItem') && $reservations->firstItem() !== null ? $reservations->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $reservation->reservation_code }}</strong></td>
                             <td><div class="table-primary">{{ $reservation->member?->member_name }}</div><div class="table-secondary">{{ $reservation->member?->member_code }}</div></td>
                             <td><div class="table-primary">{{ $reservation->item?->item_name }}</div><div class="table-secondary">ISBN {{ $reservation->item?->bookDetail?->isbn_13 ?: ($reservation->item?->bookDetail?->isbn_10 ?: '-') }}</div></td>
@@ -44,7 +44,7 @@
                             <td><span class="badge {{ $reservation->statusBadgeClass() }}">{{ $reservation->statusLabel() }}</span></td><td>{{ $reservation->processor?->full_name ?? '-' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="8" class="empty-state">Tidak ada reservasi yang sesuai dengan filter.</td></tr>
+                        <tr><td colspan="9" class="empty-state">Tidak ada reservasi yang sesuai dengan filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>

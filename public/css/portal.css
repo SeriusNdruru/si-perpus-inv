@@ -1260,9 +1260,6 @@ body.portal-modal-open {
 
 
 /* Tahap 48: kunci ukuran thumbnail agar konsisten dan tidak terpengaruh cache lama */
-.portal-table td:first-child {
-    width: 90px;
-}
 
 .portal-table .item-table-photo {
     box-sizing: border-box;
@@ -1289,4 +1286,85 @@ body.portal-modal-open {
     max-height: 58px !important;
     object-fit: cover !important;
     display: block !important;
+}
+
+/* Tahap 49: nomor urut konsisten pada tabel portal */
+.portal-table .table-number-heading,
+.portal-table .table-number {
+    box-sizing: border-box;
+    width: 58px;
+    min-width: 58px;
+    max-width: 58px;
+    text-align: center !important;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.portal-table .table-number {
+    color: var(--portal-muted);
+    font-weight: 800;
+    vertical-align: middle;
+}
+
+.portal-table td:first-child {
+    width: 58px;
+}
+
+.portal-table td:nth-child(2) {
+    width: 90px;
+}
+
+/* Tahap 49: nomor urut pada daftar kartu barang dan buku */
+.numbered-list-item {
+    position: relative;
+}
+
+.numbered-list-item::before {
+    content: attr(data-list-number);
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    z-index: 4;
+    display: inline-grid;
+    place-items: center;
+    min-width: 28px;
+    height: 28px;
+    padding: 0 7px;
+    border: 2px solid rgba(255, 255, 255, 0.92);
+    border-radius: 999px;
+    color: #ffffff;
+    background: #143f55;
+    box-shadow: 0 5px 14px rgba(10, 38, 55, 0.22);
+    font-size: 11px;
+    font-weight: 900;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+@media print {
+    .numbered-list-item::before {
+        border-color: #143f55;
+        color: #143f55;
+        background: #ffffff;
+        box-shadow: none;
+    }
+}
+
+.member-notification-list article > .member-list-number {
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    color: #ffffff;
+    background: #59717a;
+    font-size: 10px;
+    font-weight: 900;
+    font-variant-numeric: tabular-nums;
+}
+
+.member-notification-list article.is-unread > .member-list-number {
+    color: #ffffff;
+    background: #c77c14;
 }

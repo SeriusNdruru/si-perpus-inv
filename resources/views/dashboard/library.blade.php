@@ -112,7 +112,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Judul</th>
                         <th>Status katalog</th>
@@ -121,14 +121,14 @@
                 </thead>
                 <tbody>
                     @forelse ($newBooks as $book)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($newBooks) && method_exists($newBooks, 'firstItem') && $newBooks->firstItem() !== null ? $newBooks->firstItem() : 1) + $loop->index }}</td>
                             <td>{{ $book->item_code }}</td>
                             <td class="table-primary">{{ $book->item_name }}</td>
                             <td><span class="badge {{ ($book->completion_status ?? 'incomplete') === 'incomplete' ? 'badge-warning' : 'badge-success' }}">{{ $book->completion_status ?? 'incomplete' }}</span></td>
                             <td>{{ \Illuminate\Support\Carbon::parse($book->created_at)->format('d/m/Y H:i') }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="empty-state">Belum ada buku yang diinput dari inventaris.</td></tr>
+                        <tr><td colspan="5" class="empty-state">Belum ada buku yang diinput dari inventaris.</td></tr>
                     @endforelse
                 </tbody>
             </table>

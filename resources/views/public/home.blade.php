@@ -66,7 +66,7 @@
 
         <div class="portal-book-grid">
             @forelse ($featuredBooks as $book)
-                <article class="portal-book-card">
+                <article class="portal-book-card numbered-list-item" data-list-number="{{ $loop->iteration }}">
                     <div class="portal-book-cover">
                         @if ($book->cover_path)
                             <img src="{{ asset('storage/'.$book->cover_path) }}" alt="Cover {{ $book->item_name }}">

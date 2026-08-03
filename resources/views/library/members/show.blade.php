@@ -90,7 +90,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode transaksi</th>
                         <th>Tanggal pinjam</th>
                         <th>Jatuh tempo</th>
@@ -101,7 +101,7 @@
                 </thead>
                 <tbody>
                     @forelse ($loans as $loan)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($loans) && method_exists($loans, 'firstItem') && $loans->firstItem() !== null ? $loans->firstItem() : 1) + $loop->index }}</td>
                             <td><a href="{{ route('library.loans.show', $loan) }}" class="action-link"><strong>{{ $loan->loan_code }}</strong></a></td>
                             <td>{{ $loan->loan_date?->translatedFormat('d F Y H:i') }}</td>
                             <td>{{ $loan->default_due_date?->translatedFormat('d F Y') }}</td>
@@ -110,7 +110,7 @@
                             <td><span class="badge badge-neutral">{{ ucfirst($loan->status) }}</span></td>
                         </tr>
                     @empty
-                        <tr><td colspan="6" class="empty-state">Anggota ini belum memiliki riwayat peminjaman.</td></tr>
+                        <tr><td colspan="7" class="empty-state">Anggota ini belum memiliki riwayat peminjaman.</td></tr>
                     @endforelse
                 </tbody>
             </table>

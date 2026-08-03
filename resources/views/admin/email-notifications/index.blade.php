@@ -102,7 +102,7 @@
     <div class="table-wrap">
         <table class="data-table">
             <thead>
-                <tr>
+                <tr><th class="table-number-heading">No.</th>
                     <th>Waktu</th>
                     <th>Penerima</th>
                     <th>Jenis</th>
@@ -113,7 +113,7 @@
             </thead>
             <tbody>
                 @forelse ($logs as $log)
-                    <tr>
+                    <tr><td class="table-number">{{ (is_object($logs) && method_exists($logs, 'firstItem') && $logs->firstItem() !== null ? $logs->firstItem() : 1) + $loop->index }}</td>
                         <td>{{ $log->created_at?->format('d/m/Y H:i:s') }}</td>
                         <td>{{ $log->recipient_email }}</td>
                         <td>{{ str($log->mail_type)->replace('_', ' ')->title() }}</td>
@@ -126,7 +126,7 @@
                         <td class="email-error-cell">{{ $log->error_message ?: '-' }}</td>
                     </tr>
                 @empty
-                    <tr><td colspan="6" class="empty-state">Belum ada riwayat pengiriman email.</td></tr>
+                    <tr><td colspan="7" class="empty-state">Belum ada riwayat pengiriman email.</td></tr>
                 @endforelse
             </tbody>
         </table>

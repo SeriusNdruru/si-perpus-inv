@@ -69,7 +69,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Lokasi</th>
                         <th>Jenis</th>
@@ -81,7 +81,7 @@
                 </thead>
                 <tbody>
                     @forelse ($locations as $location)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($locations) && method_exists($locations, 'firstItem') && $locations->firstItem() !== null ? $locations->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $location->location_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $location->location_name }}</div>
@@ -125,7 +125,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada lokasi yang sesuai dengan filter.</td>
+                            <td colspan="8" class="empty-state">Belum ada lokasi yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

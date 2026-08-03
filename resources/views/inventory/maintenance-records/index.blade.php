@@ -68,7 +68,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode dan tanggal</th>
                         <th>Aset</th>
                         <th>Masalah</th>
@@ -80,7 +80,7 @@
                 </thead>
                 <tbody>
                     @forelse ($records as $record)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($records) && method_exists($records, 'firstItem') && $records->firstItem() !== null ? $records->firstItem() : 1) + $loop->index }}</td>
                             <td>
                                 <strong>{{ $record->maintenance_code }}</strong>
                                 <div class="table-secondary">{{ $record->reported_at?->format('d/m/Y H:i') }}</div>
@@ -110,7 +110,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada data pemeliharaan yang sesuai dengan filter.</td>
+                            <td colspan="8" class="empty-state">Belum ada data pemeliharaan yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

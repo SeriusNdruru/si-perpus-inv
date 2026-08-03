@@ -59,7 +59,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Nama satuan</th>
                         <th>Deskripsi</th>
@@ -70,7 +70,7 @@
                 </thead>
                 <tbody>
                     @forelse ($units as $unit)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($units) && method_exists($units, 'firstItem') && $units->firstItem() !== null ? $units->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $unit->unit_code }}</strong></td>
                             <td><div class="table-primary">{{ $unit->unit_name }}</div></td>
                             <td>
@@ -99,7 +99,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="empty-state">Belum ada satuan yang sesuai dengan filter.</td>
+                            <td colspan="7" class="empty-state">Belum ada satuan yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

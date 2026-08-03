@@ -71,7 +71,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Anggota</th>
                         <th>Jenis</th>
@@ -91,7 +91,7 @@
                                 default => 'badge-muted',
                             };
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($members) && method_exists($members, 'firstItem') && $members->firstItem() !== null ? $members->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $member->member_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $member->member_name }}</div>
@@ -127,7 +127,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="empty-state">Belum ada anggota yang sesuai dengan filter.</td>
+                            <td colspan="9" class="empty-state">Belum ada anggota yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

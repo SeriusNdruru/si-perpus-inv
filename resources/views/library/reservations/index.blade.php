@@ -63,7 +63,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Anggota</th>
                         <th>Judul buku</th>
@@ -77,7 +77,7 @@
                 </thead>
                 <tbody>
                     @forelse ($reservations as $reservation)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($reservations) && method_exists($reservations, 'firstItem') && $reservations->firstItem() !== null ? $reservations->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $reservation->reservation_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $reservation->member?->member_name }}</div>
@@ -119,7 +119,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="empty-state">Belum ada reservasi yang sesuai dengan filter.</td>
+                            <td colspan="10" class="empty-state">Belum ada reservasi yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

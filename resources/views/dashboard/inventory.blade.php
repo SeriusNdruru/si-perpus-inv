@@ -82,7 +82,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode</th>
                         <th>Nama barang</th>
                         <th>Jenis</th>
@@ -92,7 +92,7 @@
                 </thead>
                 <tbody>
                     @forelse ($latestItems as $item)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($latestItems) && method_exists($latestItems, 'firstItem') && $latestItems->firstItem() !== null ? $latestItems->firstItem() : 1) + $loop->index }}</td>
                             <td>{{ $item->item_code }}</td>
                             <td class="table-primary">{{ $item->item_name }}</td>
                             <td><span class="badge badge-neutral">{{ $item->item_type }}</span></td>
@@ -100,7 +100,7 @@
                             <td>{{ \Illuminate\Support\Carbon::parse($item->created_at)->format('d/m/Y H:i') }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="empty-state">Belum ada barang yang dimasukkan.</td></tr>
+                        <tr><td colspan="6" class="empty-state">Belum ada barang yang dimasukkan.</td></tr>
                     @endforelse
                 </tbody>
             </table>

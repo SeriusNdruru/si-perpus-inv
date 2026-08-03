@@ -70,7 +70,7 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr>
+                    <tr><th class="table-number-heading">No.</th>
                         <th>Kode transaksi</th>
                         <th>Anggota</th>
                         <th>Tanggal pinjam</th>
@@ -91,7 +91,7 @@
                                 default => 'badge-muted',
                             };
                         @endphp
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($loans) && method_exists($loans, 'firstItem') && $loans->firstItem() !== null ? $loans->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $loan->loan_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $loan->member?->member_name }}</div>
@@ -120,7 +120,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="empty-state">Belum ada transaksi peminjaman yang sesuai dengan filter.</td>
+                            <td colspan="9" class="empty-state">Belum ada transaksi peminjaman yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>

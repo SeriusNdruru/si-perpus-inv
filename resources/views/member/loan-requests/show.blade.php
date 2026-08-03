@@ -14,7 +14,7 @@
         <div class="member-panel-heading"><h2>Buku yang diajukan</h2></div>
         <div class="member-cart-list">
             @foreach ($loanRequest->items as $requestItem)
-                <article>
+                <article class="numbered-list-item" data-list-number="{{ $loop->iteration }}">
                     <div class="member-mini-cover">@if ($requestItem->item?->bookDetail?->cover_path)<img src="{{ asset('storage/'.$requestItem->item->bookDetail->cover_path) }}" alt="">@else<span>BK</span>@endif</div>
                     <div><strong>{{ $requestItem->item?->item_name }}</strong><small>{{ $requestItem->item?->authors?->pluck('author_name')->join(', ') ?: '-' }}</small></div>
                     <span>{{ $requestItem->asset?->asset_code ?: 'Eksemplar belum ditentukan' }}</span>

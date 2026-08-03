@@ -166,11 +166,11 @@
         <div class="table-wrap">
             <table>
                 <thead>
-                    <tr><th>Waktu</th><th>Rak lama</th><th>Rak baru</th><th>Petugas</th><th>Catatan</th></tr>
+                    <tr><th class="table-number-heading">No.</th><th>Waktu</th><th>Rak lama</th><th>Rak baru</th><th>Petugas</th><th>Catatan</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($history as $entry)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($history) && method_exists($history, 'firstItem') && $history->firstItem() !== null ? $history->firstItem() : 1) + $loop->index }}</td>
                             <td>{{ $entry->changed_at?->format('d-m-Y H:i') ?? '-' }}</td>
                             <td>{{ $entry->oldShelf?->shelf_code ?? 'Tanpa rak' }}</td>
                             <td>{{ $entry->newShelf?->shelf_code ?? 'Tanpa rak' }}</td>
@@ -178,7 +178,7 @@
                             <td>{{ $entry->notes ?? '-' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="empty-state">Belum ada riwayat perpindahan rak.</td></tr>
+                        <tr><td colspan="6" class="empty-state">Belum ada riwayat perpindahan rak.</td></tr>
                     @endforelse
                 </tbody>
             </table>

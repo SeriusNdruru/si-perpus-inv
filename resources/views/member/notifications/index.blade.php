@@ -13,7 +13,7 @@
     <div class="member-notification-list member-notification-list-full">
         @forelse ($notifications as $notification)
             <article class="{{ $notification->is_read ? '' : 'is-unread' }}">
-                <span>●</span>
+                <span class="member-list-number">{{ (is_object($notifications) && method_exists($notifications, 'firstItem') && $notifications->firstItem() !== null ? $notifications->firstItem() : 1) + $loop->index }}</span>
                 <div><strong>{{ $notification->title }}</strong><p>{{ $notification->message }}</p><small>{{ $notification->created_at?->format('d/m/Y H:i') }}</small></div>
                 @if (! $notification->is_read)
                     <form method="POST" action="{{ route('member.notifications.read', $notification) }}">@csrf @method('PATCH')<button type="submit">Tandai dibaca</button></form>

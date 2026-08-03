@@ -82,10 +82,10 @@
 
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Buku</th><th>Bibliografi</th><th>Kategori</th><th>Katalog</th><th>Total</th><th>Tersedia</th><th>Dipinjam</th><th>Belum diproses</th><th>Tanpa rak</th><th>Reservasi</th></tr></thead>
+                <thead><tr><th class="table-number-heading">No.</th><th>Buku</th><th>Bibliografi</th><th>Kategori</th><th>Katalog</th><th>Total</th><th>Tersedia</th><th>Dipinjam</th><th>Belum diproses</th><th>Tanpa rak</th><th>Reservasi</th></tr></thead>
                 <tbody>
                     @forelse ($books as $book)
-                        <tr>
+                        <tr><td class="table-number">{{ (is_object($books) && method_exists($books, 'firstItem') && $books->firstItem() !== null ? $books->firstItem() : 1) + $loop->index }}</td>
                             <td><div class="table-primary">{{ $book->item_name }}</div><div class="table-secondary">{{ $book->item_code }}</div></td>
                             <td>
                                 <div class="table-primary">{{ $book->authors->pluck('author_name')->join(', ') ?: 'Penulis belum diisi' }}</div>
@@ -101,7 +101,7 @@
                             <td>{{ number_format((int) $book->active_reservations) }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="10" class="empty-state">Tidak ada koleksi buku yang sesuai dengan filter.</td></tr>
+                        <tr><td colspan="11" class="empty-state">Tidak ada koleksi buku yang sesuai dengan filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>

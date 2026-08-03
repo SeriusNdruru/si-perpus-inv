@@ -33,10 +33,10 @@
 
     <div class="table-wrap">
         <table>
-            <thead><tr><th>Kode</th><th>Anggota</th><th>Tanggal</th><th>Buku</th><th>Status</th><th>Batas ambil</th><th>Aksi</th></tr></thead>
+            <thead><tr><th class="table-number-heading">No.</th><th>Kode</th><th>Anggota</th><th>Tanggal</th><th>Buku</th><th>Status</th><th>Batas ambil</th><th>Aksi</th></tr></thead>
             <tbody>
                 @forelse ($requests as $loanRequest)
-                    <tr>
+                    <tr><td class="table-number">{{ (is_object($requests) && method_exists($requests, 'firstItem') && $requests->firstItem() !== null ? $requests->firstItem() : 1) + $loop->index }}</td>
                         <td><strong>{{ $loanRequest->request_code }}</strong></td>
                         <td><div class="table-primary">{{ $loanRequest->member?->member_name }}</div><div class="table-secondary">{{ $loanRequest->member?->member_code }} · {{ $loanRequest->member?->identity_number }}</div></td>
                         <td>{{ $loanRequest->requested_at?->format('d/m/Y H:i') }}</td>
@@ -46,7 +46,7 @@
                         <td><a href="{{ route('library.loan-requests.show', $loanRequest) }}" class="action-link">Proses</a></td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="empty-state">Belum ada pengajuan sesuai filter.</td></tr>
+                    <tr><td colspan="8" class="empty-state">Belum ada pengajuan sesuai filter.</td></tr>
                 @endforelse
             </tbody>
         </table>
