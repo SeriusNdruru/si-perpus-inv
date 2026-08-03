@@ -121,6 +121,82 @@
                 </div>
             </div>
 
+            <div class="form-section">
+                <div class="form-section-heading">
+                    <span>2</span>
+                    <div>
+                        <h3>Kontrak, SPK, dan klasifikasi aset</h3>
+                        <p>Perbarui metadata yang mengikuti daftar inventaris sekolah.</p>
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-field form-field-full">
+                        <label for="contract_number">Nomor kontrak/SPK/surat pesanan</label>
+                        <input
+                            id="contract_number"
+                            name="contract_number"
+                            type="text"
+                            maxlength="180"
+                            value="{{ old('contract_number', $item->contract_number) }}"
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="contract_date">Tanggal kontrak/SPK/surat pesanan</label>
+                        <input
+                            id="contract_date"
+                            name="contract_date"
+                            type="date"
+                            value="{{ old('contract_date', $item->contract_date?->format('Y-m-d')) }}"
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="contract_start_date">Tanggal mulai kontrak</label>
+                        <input
+                            id="contract_start_date"
+                            name="contract_start_date"
+                            type="date"
+                            value="{{ old('contract_start_date', $item->contract_start_date?->format('Y-m-d')) }}"
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="contract_end_date">Tanggal akhir kontrak</label>
+                        <input
+                            id="contract_end_date"
+                            name="contract_end_date"
+                            type="date"
+                            value="{{ old('contract_end_date', $item->contract_end_date?->format('Y-m-d')) }}"
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="asset_type_code">Jenis aset</label>
+                        <input
+                            id="asset_type_code"
+                            name="asset_type_code"
+                            type="text"
+                            maxlength="80"
+                            value="{{ old('asset_type_code', $item->asset_type_code) }}"
+                        >
+                    </div>
+
+                    <div class="form-field">
+                        <label for="skpd_name">SKPD <span>*</span></label>
+                        <input
+                            id="skpd_name"
+                            name="skpd_name"
+                            type="text"
+                            maxlength="160"
+                            value="{{ old('skpd_name', $item->skpd_name ?: 'SDN MEKARSARI 08') }}"
+                            required
+                        >
+                    </div>
+                </div>
+            </div>
+
             <div class="form-actions">
                 <a href="{{ route('inventory.items.show', $item) }}" class="button-secondary">Batal</a>
                 <button type="submit" class="button-primary">Simpan perubahan</button>

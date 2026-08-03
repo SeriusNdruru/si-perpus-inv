@@ -123,6 +123,12 @@ class ItemController extends Controller
                     'unit_id' => $data['unit_id'],
                     'description' => $data['description'] ?? null,
                     'image_path' => $imagePath,
+                    'contract_number' => $data['contract_number'] ?? null,
+                    'contract_date' => $data['contract_date'] ?? null,
+                    'contract_start_date' => $data['contract_start_date'] ?? null,
+                    'contract_end_date' => $data['contract_end_date'] ?? null,
+                    'asset_type_code' => $data['asset_type_code'] ?? null,
+                    'skpd_name' => $data['skpd_name'],
                     'minimum_stock' => $data['minimum_stock'],
                     'status' => 'active',
                     'created_by' => $userId,
@@ -290,6 +296,12 @@ class ItemController extends Controller
                     'category_id' => $data['category_id'],
                     'unit_id' => $data['unit_id'],
                     'description' => $data['description'] ?? null,
+                    'contract_number' => $data['contract_number'] ?? null,
+                    'contract_date' => $data['contract_date'] ?? null,
+                    'contract_start_date' => $data['contract_start_date'] ?? null,
+                    'contract_end_date' => $data['contract_end_date'] ?? null,
+                    'asset_type_code' => $data['asset_type_code'] ?? null,
+                    'skpd_name' => $data['skpd_name'],
                     'minimum_stock' => $data['minimum_stock'],
                     'status' => $data['status'],
                     'updated_by' => $request->user()->id,
@@ -423,6 +435,9 @@ class ItemController extends Controller
                     $subQuery
                         ->where('item_code', 'like', "%{$search}%")
                         ->orWhere('item_name', 'like', "%{$search}%")
+                        ->orWhere('contract_number', 'like', "%{$search}%")
+                        ->orWhere('asset_type_code', 'like', "%{$search}%")
+                        ->orWhere('skpd_name', 'like', "%{$search}%")
                         ->orWhere('description', 'like', "%{$search}%");
                 });
             })

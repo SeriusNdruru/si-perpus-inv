@@ -81,6 +81,25 @@
         @endif
     </div>
 
+    <section class="panel">
+        <div class="panel-header panel-header-wrap">
+            <div>
+                <p class="eyebrow">Dokumen Inventaris</p>
+                <h2>Kontrak, SPK, dan Klasifikasi Aset</h2>
+            </div>
+        </div>
+        <dl class="definition-list definition-list-wide">
+            <div><dt>Jenis barang/buku</dt><dd>{{ $itemTypes[$item->item_type] ?? $item->item_type }}</dd></div>
+            <div><dt>Nomor kontrak/SPK/surat pesanan</dt><dd>{{ $item->contract_number ?: '-' }}</dd></div>
+            <div><dt>Tanggal dokumen</dt><dd>{{ $item->contract_date?->format('d-m-Y') ?? '-' }}</dd></div>
+            <div><dt>Tanggal mulai</dt><dd>{{ $item->contract_start_date?->format('d-m-Y') ?? '-' }}</dd></div>
+            <div><dt>Tanggal akhir</dt><dd>{{ $item->contract_end_date?->format('d-m-Y') ?? '-' }}</dd></div>
+            <div><dt>Jenis aset</dt><dd>{{ $item->asset_type_code ?: '-' }}</dd></div>
+            <div><dt>SKPD</dt><dd>{{ $item->skpd_name ?: 'SDN MEKARSARI 08' }}</dd></div>
+            <div><dt>Foto</dt><dd>{{ $itemImagePath ? 'Tersedia' : 'Belum tersedia' }}</dd></div>
+        </dl>
+    </section>
+
     @if ($item->item_type === 'book')
         <section class="panel">
             <div class="panel-header panel-header-wrap">

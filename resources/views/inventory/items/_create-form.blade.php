@@ -48,7 +48,7 @@
         </div>
 
         <div class="form-field">
-            <label for="item_type">Jenis barang <span>*</span></label>
+            <label for="item_type">Jenis barang/buku <span>*</span></label>
             <select id="item_type" name="item_type" required>
                 <option value="">Pilih jenis barang</option>
                 @foreach ($itemTypes as $value => $label)
@@ -137,6 +137,85 @@
 <div class="form-section">
     <div class="form-section-heading">
         <span>2</span>
+        <div>
+            <h3>Kontrak, SPK, dan klasifikasi aset</h3>
+            <p>Data tambahan mengikuti kolom pada daftar inventaris sekolah. Jenis barang/buku dan foto sudah diisi pada bagian sebelumnya.</p>
+        </div>
+    </div>
+
+    <div class="form-grid">
+        <div class="form-field form-field-full">
+            <label for="contract_number">Nomor kontrak/SPK/surat pesanan</label>
+            <input
+                id="contract_number"
+                name="contract_number"
+                type="text"
+                maxlength="180"
+                value="{{ old('contract_number') }}"
+                placeholder="Contoh: 4670658/BAST/P066F413CB1E9A4"
+            >
+        </div>
+
+        <div class="form-field">
+            <label for="contract_date">Tanggal kontrak/SPK/surat pesanan</label>
+            <input
+                id="contract_date"
+                name="contract_date"
+                type="date"
+                value="{{ old('contract_date') }}"
+            >
+        </div>
+
+        <div class="form-field">
+            <label for="contract_start_date">Tanggal mulai kontrak</label>
+            <input
+                id="contract_start_date"
+                name="contract_start_date"
+                type="date"
+                value="{{ old('contract_start_date') }}"
+            >
+        </div>
+
+        <div class="form-field">
+            <label for="contract_end_date">Tanggal akhir kontrak</label>
+            <input
+                id="contract_end_date"
+                name="contract_end_date"
+                type="date"
+                value="{{ old('contract_end_date') }}"
+            >
+        </div>
+
+        <div class="form-field">
+            <label for="asset_type_code">Jenis aset</label>
+            <input
+                id="asset_type_code"
+                name="asset_type_code"
+                type="text"
+                maxlength="80"
+                value="{{ old('asset_type_code') }}"
+                placeholder="Contoh: 5.2.05.01.01.0004"
+            >
+            <small>Isi kode atau jenis aset sesuai daftar inventaris sekolah.</small>
+        </div>
+
+        <div class="form-field">
+            <label for="skpd_name">SKPD <span>*</span></label>
+            <input
+                id="skpd_name"
+                name="skpd_name"
+                type="text"
+                maxlength="160"
+                value="{{ old('skpd_name', 'SDN MEKARSARI 08') }}"
+                required
+            >
+        </div>
+    </div>
+</div>
+
+<div class="form-section">
+    <div class="form-section-heading">
+        <span>3</span>
         <div>
             <h3>Stok awal dan pengadaan</h3>
             <p>Sistem membuat aset atau saldo stok secara otomatis setelah data disimpan.</p>

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Inventory;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Item;
 use Illuminate\Validation\Rule;
 
 class UpdateItemRequest extends FormRequest
@@ -16,6 +17,13 @@ class UpdateItemRequest extends FormRequest
     {
         $this->merge([
             'item_name' => trim((string) $this->input('item_name')),
+            'contract_number' => $this->filled('contract_number')
+                ? trim((string) $this->input('contract_number'))
+                : null,
+            'asset_type_code' => $this->filled('asset_type_code')
+                ? trim((string) $this->input('asset_type_code'))
+                : null,
+            'skpd_name' => trim((string) $this->input('skpd_name', 'SDN MEKARSARI 08')),
             'category_id' => $this->filled('category_id') ? $this->input('category_id') : null,
             'minimum_stock' => $this->filled('minimum_stock') ? $this->input('minimum_stock') : 0,
         ]);
@@ -26,6 +34,10 @@ class UpdateItemRequest extends FormRequest
      */
     public function rules(): array
     {
+        $item = $this->route('item');
+        $hasStoredImage = $item instanceof Item
+            && ($item->image_path !== null || $item->bookDetail()->whereNotNull('cover_path')->exists());
+
         return [
             'item_name' => ['required', 'string', 'max:220'],
             'category_id' => [
@@ -39,8 +51,44 @@ class UpdateItemRequest extends FormRequest
                 Rule::exists('units', 'id')->where(fn ($query) => $query->where('status', 'active')),
             ],
             'description' => ['nullable', 'string'],
+            'contract_number' => ['nullable', 'string', 'max:180'],
+            'contract_date' => ['nullable', 'date'],
+            'contract_start_date' => ['nullable', 'date'],
+            'contract_end_date' => ['nullable', 'date'],
+            'asset_type_code' => ['nullable', 'string', 'max:80'],
+            'skpd_name' => ['required', 'string', 'max:160'],
+            'item_image' => [Rule::requiredIf(! $hasStoredImage), 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
             'minimum_stock' => ['required', 'numeric', 'min:0', 'max:9999999999999.99'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
         ];
     }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'item_image.required' => 'Foto barang atau cover buku wajib ditambahkan.',
+            'item_image.image' => 'File foto harus berupa gambar.',
+            'item_image.mimes' => 'Foto hanya mendukung JPG, JPEG, PNG, atau WEBP.',
+            'item_image.max' => 'Ukuran foto maksimal 3 MB.',
+        ];
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function ($validator): void {
+            $startDate = strtotime((string) $this->input('contract_start_date'));
+            $endDate = strtotime((string) $this->input('contract_end_date'));
+
+            if ($startDate !== false && $endDate !== false && $endDate < $startDate) {
+                $validator->errors()->add(
+                    'contract_end_date',
+                    'Tanggal akhir kontrak tidak boleh lebih awal dari tanggal mulai.'
+                );
+            }
+        });
+    }
+
 }

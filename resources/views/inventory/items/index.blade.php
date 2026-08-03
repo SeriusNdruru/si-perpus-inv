@@ -43,7 +43,7 @@
                     name="search"
                     type="search"
                     value="{{ request('search') }}"
-                    placeholder="Kode atau nama barang"
+                    placeholder="Kode, nama, kontrak, jenis aset, atau SKPD"
                 >
             </div>
 

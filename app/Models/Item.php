@@ -18,6 +18,13 @@ class Item extends Model
         'category_id',
         'unit_id',
         'description',
+        'image_path',
+        'contract_number',
+        'contract_date',
+        'contract_start_date',
+        'contract_end_date',
+        'asset_type_code',
+        'skpd_name',
         'minimum_stock',
         'status',
         'created_by',
@@ -27,6 +34,9 @@ class Item extends Model
     protected function casts(): array
     {
         return [
+            'contract_date' => 'date',
+            'contract_start_date' => 'date',
+            'contract_end_date' => 'date',
             'minimum_stock' => 'decimal:2',
         ];
     }
