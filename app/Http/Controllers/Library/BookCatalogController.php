@@ -36,6 +36,7 @@ class BookCatalogController extends Controller
 
         $books = Item::query()
             ->where('item_type', 'book')
+            ->where('status', 'active')
             ->with([
                 'category:id,category_code,category_name',
                 'bookDetail.publisher:id,publisher_name',
@@ -98,16 +99,26 @@ class BookCatalogController extends Controller
             ->withQueryString();
 
         $summary = [
-            'titles' => Item::query()->where('item_type', 'book')->count(),
-            'incomplete' => BookDetail::query()->where('completion_status', 'incomplete')->count(),
+            'titles' => Item::query()
+                ->where('item_type', 'book')
+                ->where('status', 'active')
+                ->count(),
+            'incomplete' => BookDetail::query()
+                ->where('completion_status', 'incomplete')
+                ->whereHas('item', fn ($query) => $query->where('status', 'active'))
+                ->count(),
             'unprocessed_copies' => Asset::query()
                 ->where('asset_status', 'unprocessed')
-                ->whereHas('item', fn ($query) => $query->where('item_type', 'book'))
+                ->whereHas('item', fn ($query) => $query
+                    ->where('item_type', 'book')
+                    ->where('status', 'active'))
                 ->count(),
             'without_shelf' => Asset::query()
                 ->whereNull('current_shelf_id')
                 ->whereNotIn('asset_status', ['disposed', 'lost'])
-                ->whereHas('item', fn ($query) => $query->where('item_type', 'book'))
+                ->whereHas('item', fn ($query) => $query
+                    ->where('item_type', 'book')
+                    ->where('status', 'active'))
                 ->count(),
         ];
 
@@ -307,7 +318,10 @@ class BookCatalogController extends Controller
 
     private function ensureBook(Item $book): void
     {
-        abort_unless($book->item_type === 'book', 404);
+        abort_unless(
+            $book->item_type === 'book' && $book->status === 'active',
+            404
+        );
     }
 
     /**
