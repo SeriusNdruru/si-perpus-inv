@@ -106,5 +106,6 @@
     </footer>
     @include('shared.photo-preview-modal')
     <script src="{{ asset('js/portal-photo-preview.js') }}?v=48" defer></script>
+    <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
 </body>
 </html>

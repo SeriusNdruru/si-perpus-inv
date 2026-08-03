@@ -45,11 +45,11 @@
                                         type="button"
                                         class="item-table-photo item-photo-preview-button"
                                         data-photo-preview
-                                        data-photo-src="{{ asset('storage/'.$asset->image_path) }}"
+                                        data-photo-src="{{ route('media.image', ['path' => $asset->image_path]) }}"
                                         data-photo-title="{{ $asset->item_name }}"
                                         aria-label="Lihat foto {{ $asset->item_name }}"
                                     >
-                                        <img src="{{ asset('storage/'.$asset->image_path) }}" alt="Foto {{ $asset->item_name }}" width="58" height="58" loading="eager" decoding="async">
+                                        <img src="{{ route('media.thumbnail', ['path' => $asset->image_path, 'size' => 160]) }}" alt="Foto {{ $asset->item_name }}" width="58" height="58" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>
                                     </button>
                                 @else
                                     <div class="item-table-photo" aria-label="Tidak ada foto {{ $asset->item_name }}">
@@ -117,11 +117,11 @@
                                         type="button"
                                         class="item-table-photo item-photo-preview-button"
                                         data-photo-preview
-                                        data-photo-src="{{ asset('storage/'.$stock->image_path) }}"
+                                        data-photo-src="{{ route('media.image', ['path' => $stock->image_path]) }}"
                                         data-photo-title="{{ $stock->item_name }}"
                                         aria-label="Lihat foto {{ $stock->item_name }}"
                                     >
-                                        <img src="{{ asset('storage/'.$stock->image_path) }}" alt="Foto {{ $stock->item_name }}" width="58" height="58" loading="eager" decoding="async">
+                                        <img src="{{ route('media.thumbnail', ['path' => $stock->image_path, 'size' => 160]) }}" alt="Foto {{ $stock->item_name }}" width="58" height="58" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>
                                     </button>
                                 @else
                                     <div class="item-table-photo" aria-label="Tidak ada foto {{ $stock->item_name }}">

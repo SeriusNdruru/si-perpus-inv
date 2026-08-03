@@ -105,11 +105,11 @@
                                         type="button"
                                         class="item-table-photo item-photo-preview-button"
                                         data-photo-preview
-                                        data-photo-src="{{ asset('storage/'.$bookImagePath) }}"
+                                        data-photo-src="{{ route('media.image', ['path' => $bookImagePath]) }}"
                                         data-photo-title="{{ $book->item_name }}"
                                         aria-label="Lihat cover {{ $book->item_name }}"
                                     >
-                                        <img src="{{ asset('storage/'.$bookImagePath) }}" alt="Cover {{ $book->item_name }}">
+                                        <img src="{{ route('media.thumbnail', ['path' => $bookImagePath, 'size' => 160]) }}" alt="Cover {{ $book->item_name }}" width="58" height="58" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>
                                     </button>
                                 @else
                                     <div class="item-table-photo">{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</div>

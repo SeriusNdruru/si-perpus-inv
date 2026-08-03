@@ -14,6 +14,7 @@ use App\Http\Controllers\Auth\StudentLoginController;
 use App\Http\Controllers\Auth\StudentPasswordResetController;
 use App\Http\Controllers\Auth\StudentEmailVerificationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PublicInventoryController;
 use App\Http\Controllers\PublicPortalController;
 use App\Http\Controllers\Inventory\DisposalController;
@@ -45,6 +46,11 @@ use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/perpustakaan');
+
+Route::get('/media/gambar', [MediaController::class, 'image'])
+    ->name('media.image');
+Route::get('/media/thumbnail', [MediaController::class, 'thumbnail'])
+    ->name('media.thumbnail');
 
 Route::get('/perpustakaan', [PublicPortalController::class, 'home'])
     ->name('public.home');

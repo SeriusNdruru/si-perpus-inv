@@ -228,7 +228,7 @@
                 <div class="catalog-cover-grid">
                     <div class="admin-cover-preview">
                         @if ($book->bookDetail?->cover_path || $book->image_path)
-                            <img src="{{ asset('storage/'.($book->bookDetail?->cover_path ?: $book->image_path)) }}" alt="Cover {{ $book->item_name }}">
+                            <img src="{{ route('media.thumbnail', ['path' => ($book->bookDetail?->cover_path ?: $book->image_path), 'size' => 800]) }}" alt="Cover {{ $book->item_name }}" decoding="async" data-image-retry>
                         @else
                             <span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>
                         @endif

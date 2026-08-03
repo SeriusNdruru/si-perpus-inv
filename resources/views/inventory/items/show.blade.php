@@ -35,11 +35,11 @@
                     type="button"
                     class="item-photo-detail-button"
                     data-photo-preview
-                    data-photo-src="{{ asset('storage/'.$itemImagePath) }}"
+                    data-photo-src="{{ route('media.image', ['path' => $itemImagePath]) }}"
                     data-photo-title="{{ $item->item_name }}"
                     aria-label="Perbesar foto {{ $item->item_name }}"
                 >
-                    <img src="{{ asset('storage/'.$itemImagePath) }}" alt="Foto {{ $item->item_name }}">
+                    <img src="{{ route('media.thumbnail', ['path' => $itemImagePath, 'size' => 800]) }}" alt="Foto {{ $item->item_name }}" decoding="async" data-image-retry>
                     <span>Klik foto untuk memperbesar</span>
                 </button>
             @else

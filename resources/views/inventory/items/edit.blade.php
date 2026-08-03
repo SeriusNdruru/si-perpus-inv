@@ -117,7 +117,7 @@
                     <div class="item-photo-upload">
                         <div class="item-photo-preview" data-image-preview>
                             @if ($currentImagePath)
-                                <img src="{{ asset('storage/'.$currentImagePath) }}" data-image-element alt="Foto {{ $item->item_name }}">
+                                <img src="{{ route('media.thumbnail', ['path' => $currentImagePath, 'size' => 800]) }}" data-image-element alt="Foto {{ $item->item_name }}" decoding="async" data-image-retry>
                                 <span data-image-placeholder hidden>Pratinjau foto</span>
                             @else
                                 <span data-image-placeholder>Pratinjau foto</span>

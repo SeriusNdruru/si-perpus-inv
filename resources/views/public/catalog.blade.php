@@ -36,7 +36,7 @@
                 <article class="portal-book-card numbered-list-item" data-list-number="{{ (is_object($books) && method_exists($books, 'firstItem') && $books->firstItem() !== null ? $books->firstItem() : 1) + $loop->index }}">
                     <div class="portal-book-cover">
                         @if ($book->cover_path)
-                            <img src="{{ asset('storage/'.$book->cover_path) }}" alt="Cover {{ $book->item_name }}">
+                            <img src="{{ route('media.thumbnail', ['path' => $book->cover_path, 'size' => 480]) }}" alt="Cover {{ $book->item_name }}" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>
                         @else
                             <span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>
                         @endif

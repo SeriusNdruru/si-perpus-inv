@@ -15,7 +15,7 @@
         <div class="member-cart-list">
             @foreach ($loanRequest->items as $requestItem)
                 <article class="numbered-list-item" data-list-number="{{ $loop->iteration }}">
-                    <div class="member-mini-cover">@if ($requestItem->item?->bookDetail?->cover_path)<img src="{{ asset('storage/'.$requestItem->item->bookDetail->cover_path) }}" alt="">@else<span>BK</span>@endif</div>
+                    <div class="member-mini-cover">@if ($requestItem->item?->bookDetail?->cover_path)<img src="{{ route('media.thumbnail', ['path' => $requestItem->item->bookDetail->cover_path, 'size' => 160]) }}" alt="" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>@else<span>BK</span>@endif</div>
                     <div><strong>{{ $requestItem->item?->item_name }}</strong><small>{{ $requestItem->item?->authors?->pluck('author_name')->join(', ') ?: '-' }}</small></div>
                     <span>{{ $requestItem->asset?->asset_code ?: 'Eksemplar belum ditentukan' }}</span>
                 </article>

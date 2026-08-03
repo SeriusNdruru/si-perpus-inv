@@ -41,11 +41,11 @@
                                         type="button"
                                         class="item-table-photo item-photo-preview-button"
                                         data-photo-preview
-                                        data-photo-src="{{ asset('storage/'.$item->image_path) }}"
+                                        data-photo-src="{{ route('media.image', ['path' => $item->image_path]) }}"
                                         data-photo-title="{{ $item->item_name }}"
                                         aria-label="Lihat foto {{ $item->item_name }}"
                                     >
-                                        <img src="{{ asset('storage/'.$item->image_path) }}" alt="Foto {{ $item->item_name }}" width="58" height="58" loading="eager" decoding="async">
+                                        <img src="{{ route('media.thumbnail', ['path' => $item->image_path, 'size' => 160]) }}" alt="Foto {{ $item->item_name }}" width="58" height="58" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>
                                     </button>
                                 @else
                                     <div class="item-table-photo" aria-label="Tidak ada foto {{ $item->item_name }}">

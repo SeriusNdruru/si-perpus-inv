@@ -32,7 +32,7 @@
             @forelse ($activeLoans as $loan)
                 <article class="numbered-list-item" data-list-number="{{ $loop->iteration }}">
                     <div class="member-mini-cover">
-                        @if ($loan->cover_path)<img src="{{ asset('storage/'.$loan->cover_path) }}" alt="">@else<span>BK</span>@endif
+                        @if ($loan->cover_path)<img src="{{ route('media.thumbnail', ['path' => $loan->cover_path, 'size' => 160]) }}" alt="" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>@else<span>BK</span>@endif
                     </div>
                     <div><strong>{{ $loan->item_name }}</strong><small>{{ $loan->loan_code }}</small></div>
                     <time class="{{ \Illuminate\Support\Carbon::parse($loan->due_date)->isBefore(today()) ? 'is-overdue' : '' }}">{{ \Illuminate\Support\Carbon::parse($loan->due_date)->format('d M Y') }}</time>
@@ -64,7 +64,7 @@
         @forelse ($recommendedBooks as $book)
             <article class="numbered-list-item" data-list-number="{{ $loop->iteration }}">
                 <div class="member-book-cover">
-                    @if ($book->cover_path)<img src="{{ asset('storage/'.$book->cover_path) }}" alt="">@else<span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>@endif
+                    @if ($book->cover_path)<img src="{{ route('media.thumbnail', ['path' => $book->cover_path, 'size' => 480]) }}" alt="" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>@else<span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>@endif
                 </div>
                 <h3>{{ $book->item_name }}</h3>
                 <p>{{ $book->publication_year ?: 'Tahun belum dicantumkan' }} · {{ \App\Models\BookDetail::GRADE_LEVELS[$book->grade_level ?? 'umum'] ?? 'Umum / Semua Kelas' }}</p>

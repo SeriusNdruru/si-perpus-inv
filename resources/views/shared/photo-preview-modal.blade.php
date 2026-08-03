@@ -16,7 +16,7 @@
             <button class="portal-photo-modal-close" type="button" data-photo-modal-close aria-label="Tutup pratinjau foto">×</button>
         </div>
         <div class="portal-photo-modal-body">
-            <img data-photo-modal-image src="" alt="">
+            <img data-photo-modal-image data-image-retry src="" alt="">
         </div>
     </section>
 </div>

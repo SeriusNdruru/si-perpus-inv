@@ -13,7 +13,7 @@
     <div class="member-cart-list">
         @forelse ($books as $book)
             <article class="numbered-list-item" data-list-number="{{ $loop->iteration }}">
-                <div class="member-mini-cover">@if ($book->bookDetail?->cover_path)<img src="{{ asset('storage/'.$book->bookDetail->cover_path) }}" alt="">@else<span>BK</span>@endif</div>
+                <div class="member-mini-cover">@if ($book->bookDetail?->cover_path)<img src="{{ route('media.thumbnail', ['path' => $book->bookDetail->cover_path, 'size' => 160]) }}" alt="" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>@else<span>BK</span>@endif</div>
                 <div><strong>{{ $book->item_name }}</strong><small>{{ $book->authors->pluck('author_name')->join(', ') ?: 'Penulis belum dicantumkan' }}</small></div>
                 <form method="POST" action="{{ route('member.books.cart.remove', $book) }}">@csrf @method('DELETE')<button type="submit">Hapus</button></form>
             </article>

@@ -31,7 +31,7 @@
     @forelse ($books as $book)
         <article class="numbered-list-item {{ $book->available_copies < 1 ? 'is-unavailable' : '' }}" data-list-number="{{ (is_object($books) && method_exists($books, 'firstItem') && $books->firstItem() !== null ? $books->firstItem() : 1) + $loop->index }}">
             <div class="member-book-cover">
-                @if ($book->cover_path)<img src="{{ asset('storage/'.$book->cover_path) }}" alt="Cover {{ $book->item_name }}">@else<span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>@endif
+                @if ($book->cover_path)<img src="{{ route('media.thumbnail', ['path' => $book->cover_path, 'size' => 480]) }}" alt="Cover {{ $book->item_name }}" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>@else<span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>@endif
                 <em>{{ $book->available_copies }} tersedia</em>
             </div>
             <small>{{ $book->author_names ?: 'Penulis belum dicantumkan' }}</small>

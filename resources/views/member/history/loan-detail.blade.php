@@ -9,7 +9,7 @@
     <div class="member-cart-list">
         @foreach ($items as $item)
             <article class="numbered-list-item" data-list-number="{{ $loop->iteration }}">
-                <div class="member-mini-cover">@if ($item->cover_path)<img src="{{ asset('storage/'.$item->cover_path) }}" alt="">@else<span>BK</span>@endif</div>
+                <div class="member-mini-cover">@if ($item->cover_path)<img src="{{ route('media.thumbnail', ['path' => $item->cover_path, 'size' => 160]) }}" alt="" loading="lazy" decoding="async" fetchpriority="low" data-image-retry>@else<span>BK</span>@endif</div>
                 <div>
                     <strong>{{ $item->item_name }}</strong>
                     <small>{{ $item->asset_code }} · Jatuh tempo {{ \Illuminate\Support\Carbon::parse($item->due_date)->format('d/m/Y') }}</small>

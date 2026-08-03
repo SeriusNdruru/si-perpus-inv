@@ -23,7 +23,7 @@
     </dl></section>
 </div>
 
-<section class="panel detail-card"><div class="panel-header"><h2>Penjelasan kerusakan</h2></div><div class="panel-body-form"><p style="white-space:pre-line">{{ $publicDamageReport->issue_description }}</p>@if ($publicDamageReport->photo_path)<img class="public-report-photo" src="{{ asset('storage/'.$publicDamageReport->photo_path) }}" alt="Foto kerusakan">@endif</div></section>
+<section class="panel detail-card"><div class="panel-header"><h2>Penjelasan kerusakan</h2></div><div class="panel-body-form"><p style="white-space:pre-line">{{ $publicDamageReport->issue_description }}</p>@if ($publicDamageReport->photo_path)<img class="public-report-photo" src="{{ route('media.thumbnail', ['path' => $publicDamageReport->photo_path, 'size' => 1200]) }}" alt="Foto kerusakan" loading="lazy" decoding="async" data-image-retry>@endif</div></section>
 
 <section class="panel">
     <div class="panel-header"><h2>Perbarui penanganan</h2></div>

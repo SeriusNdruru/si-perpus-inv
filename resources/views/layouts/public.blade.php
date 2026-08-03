@@ -85,5 +85,6 @@
             <span>Layanan perpustakaan untuk siswa dan masyarakat sekolah</span>
         </div>
     </footer>
+    <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
 </body>
 </html>

@@ -350,3 +350,57 @@ Artisan::command('library:send-due-reminders', function (
 Schedule::command('library:send-due-reminders')
     ->dailyAt('07:00')
     ->withoutOverlapping();
+
+Artisan::command('media:warm-thumbnails {--size=* : Ukuran thumbnail yang dibuat}', function (\App\Services\MediaImageService $images): int {
+    if (! $images->supportsThumbnailGeneration()) {
+        $this->error('Ekstensi GD tidak tersedia. Thumbnail tidak dapat dibuat di server ini.');
+
+        return 1;
+    }
+
+    $requestedSizes = collect($this->option('size'))
+        ->map(fn ($size) => max(48, min((int) $size, 1200)))
+        ->filter()
+        ->unique()
+        ->values();
+    $sizes = $requestedSizes->isNotEmpty() ? $requestedSizes : collect([160, 480]);
+
+    $files = collect($images->disk()->allFiles())
+        ->reject(fn (string $path) => str_starts_with($path, '.thumbnails/'))
+        ->filter(function (string $path) use ($images): bool {
+            try {
+                $images->resolveImage($path);
+
+                return true;
+            } catch (\RuntimeException) {
+                return false;
+            }
+        })
+        ->values();
+
+    $total = $files->count() * $sizes->count();
+    if ($total === 0) {
+        $this->info('Tidak ada gambar yang perlu diproses.');
+
+        return 0;
+    }
+
+    $bar = $this->output->createProgressBar($total);
+    $bar->start();
+    $created = 0;
+
+    foreach ($files as $path) {
+        foreach ($sizes as $size) {
+            if ($images->ensureThumbnail($path, $size) !== null) {
+                $created++;
+            }
+            $bar->advance();
+        }
+    }
+
+    $bar->finish();
+    $this->newLine(2);
+    $this->info("Thumbnail siap: {$created} dari {$total} proses.");
+
+    return 0;
+})->purpose('Membuat cache thumbnail agar foto daftar lebih cepat dibuka.');

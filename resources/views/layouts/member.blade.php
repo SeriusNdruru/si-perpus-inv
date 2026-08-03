@@ -85,5 +85,6 @@
             </div>
         </main>
     </div>
+    <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
 </body>
 </html>
