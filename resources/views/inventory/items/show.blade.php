@@ -71,7 +71,7 @@
                 </div>
                 <dl class="definition-list">
                     <div><dt>Total unit</dt><dd>{{ number_format($statusSummary->sum()) }}</dd></div>
-                    <div><dt>Tersedia</dt><dd>{{ number_format((int) ($statusSummary['available'] ?? 0)) }}</dd></div>
+                    <div><dt>Tersedia</dt><dd>{{ number_format((int) ($statusSummary['available'] ?? 0) + (int) ($statusSummary['unprocessed'] ?? 0)) }}</dd></div>
                     <div><dt>Belum diproses</dt><dd>{{ number_format((int) ($statusSummary['unprocessed'] ?? 0)) }}</dd></div>
                     <div><dt>Dipinjam</dt><dd>{{ number_format((int) ($statusSummary['borrowed'] ?? 0)) }}</dd></div>
                     <div><dt>Rusak</dt><dd>{{ number_format((int) ($statusSummary['damaged'] ?? 0)) }}</dd></div>

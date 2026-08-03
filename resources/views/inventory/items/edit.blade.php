@@ -73,6 +73,29 @@
                 </div>
 
                 <div class="form-field">
+                    <label for="stock_quantity">Stok <span>*</span></label>
+                    <input
+                        id="stock_quantity"
+                        name="stock_quantity"
+                        type="number"
+                        min="{{ $item->tracking_type === 'asset' ? $protectedStock : 0 }}"
+                        step="{{ $item->tracking_type === 'asset' ? 1 : '0.01' }}"
+                        value="{{ old('stock_quantity', $item->tracking_type === 'asset' ? (int) $currentStock : number_format((float) $currentStock, 2, '.', '')) }}"
+                        required
+                    >
+                    @if ($item->tracking_type === 'asset')
+                        <small>
+                            Jumlah unit fisik barang. Untuk buku, jumlah tersedia berkurang saat dipinjam dan bertambah kembali setelah dikembalikan. Jika stok dikurangi, unit terbaru yang tidak sedang dipinjam, dipesan, atau dalam pemeliharaan akan dikeluarkan dari stok aktif.
+                            @if ($protectedStock > 0)
+                                Stok minimum saat ini {{ number_format($protectedStock) }} unit karena masih ada unit yang dipinjam, dipesan, atau dalam pemeliharaan.
+                            @endif
+                        </small>
+                    @else
+                        <small>Jumlah saldo barang berbasis stok.</small>
+                    @endif
+                </div>
+
+                <div class="form-field">
                     <label for="minimum_stock">Stok minimum <span>*</span></label>
                     <input id="minimum_stock" name="minimum_stock" type="number" min="0" step="0.01" value="{{ old('minimum_stock', $item->minimum_stock) }}" required>
                 </div>

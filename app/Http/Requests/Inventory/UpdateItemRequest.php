@@ -38,8 +38,13 @@ class UpdateItemRequest extends FormRequest
         $hasStoredImage = $item instanceof Item
             && ($item->image_path !== null || $item->bookDetail()->whereNotNull('cover_path')->exists());
 
+        $stockRules = $item instanceof Item && $item->tracking_type === 'asset'
+            ? ['required', 'integer', 'min:0', 'max:100000']
+            : ['required', 'numeric', 'min:0', 'max:9999999999999.99'];
+
         return [
             'item_name' => ['required', 'string', 'max:220'],
+            'stock_quantity' => $stockRules,
             'category_id' => [
                 'nullable',
                 'integer',
@@ -69,6 +74,10 @@ class UpdateItemRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'stock_quantity.required' => 'Jumlah stok wajib diisi.',
+            'stock_quantity.integer' => 'Stok barang per aset harus berupa bilangan bulat.',
+            'stock_quantity.numeric' => 'Jumlah stok harus berupa angka.',
+            'stock_quantity.min' => 'Jumlah stok tidak boleh kurang dari 0.',
             'item_image.required' => 'Foto barang atau cover buku wajib ditambahkan.',
             'item_image.image' => 'File foto harus berupa gambar.',
             'item_image.mimes' => 'Foto hanya mendukung JPG, JPEG, PNG, atau WEBP.',
@@ -87,6 +96,21 @@ class UpdateItemRequest extends FormRequest
                     'contract_end_date',
                     'Tanggal akhir kontrak tidak boleh lebih awal dari tanggal mulai.'
                 );
+            }
+
+            $item = $this->route('item');
+
+            if ($item instanceof Item && $item->tracking_type === 'asset' && $this->filled('stock_quantity')) {
+                $protectedStock = $item->assets()
+                    ->whereIn('asset_status', ['borrowed', 'reserved', 'maintenance'])
+                    ->count();
+
+                if ((int) $this->input('stock_quantity') < $protectedStock) {
+                    $validator->errors()->add(
+                        'stock_quantity',
+                        "Stok tidak dapat dikurangi di bawah {$protectedStock} unit karena masih ada unit yang dipinjam, dipesan, atau dalam pemeliharaan."
+                    );
+                }
             }
         });
     }

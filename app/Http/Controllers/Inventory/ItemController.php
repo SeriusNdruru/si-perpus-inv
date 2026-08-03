@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Inventory;
 
+use App\Exceptions\StockAdjustmentException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Inventory\StoreItemRequest;
 use App\Http\Requests\Inventory\UpdateItemRequest;
@@ -254,6 +255,7 @@ class ItemController extends Controller
                 'shelf:id,shelf_code,shelf_name',
             ])
             ->where('item_id', $item->id)
+            ->where('asset_status', '<>', 'disposed')
             ->orderBy('asset_code')
             ->paginate(15, ['*'], 'assets_page');
 
@@ -265,6 +267,7 @@ class ItemController extends Controller
 
         $statusSummary = Asset::query()
             ->where('item_id', $item->id)
+            ->where('asset_status', '<>', 'disposed')
             ->select('asset_status', DB::raw('COUNT(*) AS total'))
             ->groupBy('asset_status')
             ->pluck('total', 'asset_status');
@@ -284,7 +287,13 @@ class ItemController extends Controller
     {
         return view('inventory.items.edit', array_merge(
             $this->formOptions(),
-            ['item' => $item]
+            [
+                'item' => $item,
+                'currentStock' => $this->currentStock($item),
+                'protectedStock' => $item->tracking_type === 'asset'
+                    ? $item->assets()->whereIn('asset_status', ['borrowed', 'reserved', 'maintenance'])->count()
+                    : 0,
+            ]
         ));
     }
 
@@ -306,9 +315,11 @@ class ItemController extends Controller
         $newImagePath = $request->hasFile('item_image')
             ? $request->file('item_image')->store('item-images', 'public')
             : null;
+        $userId = (int) $request->user()->id;
+        $assetCodeSeparator = $this->assetCodeSeparator();
 
         try {
-            DB::transaction(function () use ($data, $item, $request, $newImagePath): void {
+            DB::transaction(function () use ($data, $item, $request, $newImagePath, $userId, $assetCodeSeparator): void {
                 $values = [
                     'item_name' => $data['item_name'],
                     'category_id' => $data['category_id'],
@@ -330,6 +341,12 @@ class ItemController extends Controller
                 }
 
                 $item->update($values);
+                $this->synchronizeStock(
+                    $item,
+                    (float) $data['stock_quantity'],
+                    $userId,
+                    $assetCodeSeparator
+                );
 
                 if ($item->item_type === 'book') {
                     $item->unsetRelation('category');
@@ -355,6 +372,14 @@ class ItemController extends Controller
                         ->update($bookDetailValues);
                 }
             }, 3);
+        } catch (StockAdjustmentException $exception) {
+            if ($newImagePath !== null) {
+                Storage::disk('public')->delete($newImagePath);
+            }
+
+            return back()
+                ->withInput()
+                ->withErrors(['stock_quantity' => $exception->getMessage()]);
         } catch (Throwable $exception) {
             if ($newImagePath !== null) {
                 Storage::disk('public')->delete($newImagePath);
@@ -383,7 +408,7 @@ class ItemController extends Controller
 
         return redirect()
             ->route('inventory.items.show', $item)
-            ->with('success', 'Data barang dan foto berhasil diperbarui.');
+            ->with('success', 'Data barang, foto, dan stok berhasil diperbarui.');
     }
 
     public function toggleStatus(Item $item, Request $request): RedirectResponse
@@ -454,7 +479,7 @@ class ItemController extends Controller
                     ->from('assets')
                     ->selectRaw('COUNT(*)')
                     ->whereColumn('assets.item_id', 'items.id')
-                    ->where('assets.asset_status', 'available');
+                    ->whereIn('assets.asset_status', ['available', 'unprocessed']);
             }, 'available_assets_count')
             ->selectSub(function ($query): void {
                 $query
@@ -512,6 +537,261 @@ class ItemController extends Controller
             ->value('setting_value');
 
         return in_array($separator, ['-', '/', '.', '_'], true) ? $separator : '-';
+    }
+
+    private function currentStock(Item $item): float
+    {
+        if ($item->tracking_type === 'asset') {
+            return (float) $item->assets()
+                ->where('asset_status', '<>', 'disposed')
+                ->count();
+        }
+
+        return (float) $item->stockBalances()->sum('quantity');
+    }
+
+    private function synchronizeStock(
+        Item $item,
+        float $targetStock,
+        int $userId,
+        string $assetCodeSeparator
+    ): void {
+        if ($item->tracking_type === 'asset') {
+            $this->synchronizeAssetStock($item, (int) $targetStock, $userId, $assetCodeSeparator);
+
+            return;
+        }
+
+        $this->synchronizeQuantityStock($item, $targetStock, $userId);
+    }
+
+    private function synchronizeAssetStock(
+        Item $item,
+        int $targetStock,
+        int $userId,
+        string $assetCodeSeparator
+    ): void {
+        $assets = Asset::query()
+            ->where('item_id', $item->id)
+            ->orderByDesc('id')
+            ->lockForUpdate()
+            ->get();
+
+        $activeAssets = $assets
+            ->where('asset_status', '<>', 'disposed')
+            ->values();
+        $currentStock = $activeAssets->count();
+
+        if ($targetStock === $currentStock) {
+            return;
+        }
+
+        if ($targetStock < $currentStock) {
+            $removeCount = $currentStock - $targetStock;
+            $removableAssets = $activeAssets
+                ->reject(fn (Asset $asset): bool => in_array(
+                    $asset->asset_status,
+                    ['borrowed', 'reserved', 'maintenance'],
+                    true
+                ))
+                ->sortByDesc('id')
+                ->values();
+
+            if ($removableAssets->count() < $removeCount) {
+                $protectedCount = $currentStock - $removableAssets->count();
+
+                throw new StockAdjustmentException(
+                    "Stok tidak dapat dikurangi menjadi {$targetStock}. Masih ada {$protectedCount} unit yang dipinjam, dipesan, atau dalam pemeliharaan."
+                );
+            }
+
+            foreach ($removableAssets->take($removeCount) as $asset) {
+                $fromLocationId = $asset->current_location_id;
+
+                $asset->update([
+                    'asset_status' => 'disposed',
+                    'current_shelf_id' => null,
+                    'updated_by' => $userId,
+                    'updated_at' => now(),
+                ]);
+
+                DB::table('stock_movements')->insert([
+                    'movement_code' => 'MOV-'.str_replace('-', '', (string) Str::uuid()),
+                    'item_id' => $item->id,
+                    'asset_id' => $asset->id,
+                    'movement_type' => 'adjustment_out',
+                    'quantity' => 1,
+                    'from_location_id' => $fromLocationId,
+                    'reference_type' => 'item_stock_edit',
+                    'reference_id' => $item->id,
+                    'movement_date' => now(),
+                    'created_by' => $userId,
+                    'notes' => 'Pengurangan stok melalui Edit Barang.',
+                    'created_at' => now(),
+                ]);
+            }
+
+            return;
+        }
+
+        $addCount = $targetStock - $currentStock;
+        $template = $activeAssets->first() ?: $assets->first();
+        $shelfTemplate = $activeAssets->first(fn (Asset $asset): bool => $asset->current_shelf_id !== null);
+        $maximumSequence = $assets
+            ->map(function (Asset $asset): int {
+                return preg_match('/(\d+)$/', $asset->asset_code, $matches) === 1
+                    ? (int) $matches[1]
+                    : 0;
+            })
+            ->max() ?? 0;
+        $completionStatus = $item->item_type === 'book'
+            ? (string) DB::table('book_details')->where('item_id', $item->id)->value('completion_status')
+            : null;
+        $shelfId = $shelfTemplate?->current_shelf_id;
+        $canUseShelf = $shelfId !== null
+            && DB::table('library_shelves')->where('id', $shelfId)->where('status', 'active')->exists();
+
+        for ($offset = 1; $offset <= $addCount; $offset++) {
+            $sequence = $maximumSequence + $offset;
+            $assetCode = $item->item_code.$assetCodeSeparator.str_pad((string) $sequence, 3, '0', STR_PAD_LEFT);
+
+            $asset = Asset::query()->create([
+                'item_id' => $item->id,
+                'asset_code' => $assetCode,
+                'barcode' => $assetCode,
+                'condition_status' => 'good',
+                'asset_status' => 'available',
+                'acquisition_date' => $template?->acquisition_date,
+                'acquisition_source' => $template?->acquisition_source ?: 'other',
+                'acquisition_price' => $template?->acquisition_price,
+                'supplier_id' => $template?->supplier_id,
+                'current_location_id' => $template?->current_location_id,
+                'current_shelf_id' => null,
+                'notes' => 'Ditambahkan melalui perubahan stok barang.',
+                'created_by' => $userId,
+                'updated_by' => $userId,
+            ]);
+
+            if (
+                $item->item_type === 'book'
+                && in_array($completionStatus, ['complete', 'verified'], true)
+                && $canUseShelf
+            ) {
+                $asset->update([
+                    'current_shelf_id' => $shelfId,
+                    'asset_status' => 'available',
+                    'updated_by' => $userId,
+                    'updated_at' => now(),
+                ]);
+            }
+
+            DB::table('stock_movements')->insert([
+                'movement_code' => 'MOV-'.str_replace('-', '', (string) Str::uuid()),
+                'item_id' => $item->id,
+                'asset_id' => $asset->id,
+                'movement_type' => 'adjustment_in',
+                'quantity' => 1,
+                'to_location_id' => $asset->current_location_id,
+                'reference_type' => 'item_stock_edit',
+                'reference_id' => $item->id,
+                'movement_date' => now(),
+                'created_by' => $userId,
+                'notes' => 'Penambahan stok melalui Edit Barang.',
+                'created_at' => now(),
+            ]);
+        }
+    }
+
+    private function synchronizeQuantityStock(Item $item, float $targetStock, int $userId): void
+    {
+        $targetStock = round($targetStock, 2);
+        $balances = DB::table('stock_balances')
+            ->where('item_id', $item->id)
+            ->orderByDesc('quantity')
+            ->lockForUpdate()
+            ->get();
+        $currentStock = round((float) $balances->sum('quantity'), 2);
+        $difference = round($targetStock - $currentStock, 2);
+
+        if (abs($difference) < 0.005) {
+            return;
+        }
+
+        if ($difference > 0) {
+            $balance = $balances->first();
+            $locationId = $balance?->location_id
+                ?: Location::query()->where('status', 'active')->orderBy('id')->value('id');
+
+            if ($locationId === null) {
+                throw new StockAdjustmentException('Stok belum dapat ditambah karena belum ada lokasi aktif.');
+            }
+
+            DB::table('stock_balances')->updateOrInsert(
+                ['item_id' => $item->id, 'location_id' => $locationId],
+                ['quantity' => round((float) ($balance?->quantity ?? 0) + $difference, 2), 'updated_at' => now()]
+            );
+
+            DB::table('stock_movements')->insert([
+                'movement_code' => 'MOV-'.str_replace('-', '', (string) Str::uuid()),
+                'item_id' => $item->id,
+                'asset_id' => null,
+                'movement_type' => 'adjustment_in',
+                'quantity' => $difference,
+                'to_location_id' => $locationId,
+                'reference_type' => 'item_stock_edit',
+                'reference_id' => $item->id,
+                'movement_date' => now(),
+                'created_by' => $userId,
+                'notes' => 'Penambahan stok berbasis jumlah melalui Edit Barang.',
+                'created_at' => now(),
+            ]);
+
+            return;
+        }
+
+        $remainingReduction = abs($difference);
+
+        foreach ($balances as $balance) {
+            if ($remainingReduction < 0.005) {
+                break;
+            }
+
+            $available = round((float) $balance->quantity, 2);
+            $reduction = min($available, $remainingReduction);
+
+            if ($reduction <= 0) {
+                continue;
+            }
+
+            DB::table('stock_balances')
+                ->where('item_id', $item->id)
+                ->where('location_id', $balance->location_id)
+                ->update([
+                    'quantity' => round($available - $reduction, 2),
+                    'updated_at' => now(),
+                ]);
+
+            DB::table('stock_movements')->insert([
+                'movement_code' => 'MOV-'.str_replace('-', '', (string) Str::uuid()),
+                'item_id' => $item->id,
+                'asset_id' => null,
+                'movement_type' => 'adjustment_out',
+                'quantity' => $reduction,
+                'from_location_id' => $balance->location_id,
+                'reference_type' => 'item_stock_edit',
+                'reference_id' => $item->id,
+                'movement_date' => now(),
+                'created_by' => $userId,
+                'notes' => 'Pengurangan stok berbasis jumlah melalui Edit Barang.',
+                'created_at' => now(),
+            ]);
+
+            $remainingReduction = round($remainingReduction - $reduction, 2);
+        }
+
+        if ($remainingReduction >= 0.005) {
+            throw new StockAdjustmentException('Jumlah stok tidak dapat dikurangi melebihi stok yang tersedia.');
+        }
     }
 
     private function canDeactivate(Item $item): bool
