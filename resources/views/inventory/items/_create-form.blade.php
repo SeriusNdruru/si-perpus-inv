@@ -42,7 +42,7 @@
                 type="text"
                 maxlength="220"
                 value="{{ old('item_name') }}"
-                placeholder="Contoh: Dasar Pemrograman Web"
+                placeholder="Contoh: Meja"
                 required
             >
         </div>
