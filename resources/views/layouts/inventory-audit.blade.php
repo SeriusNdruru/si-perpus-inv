@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Audit Inventaris') | {{ $systemBrand['institution.name'] ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=49">
+    @include('shared.favicon-links')
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=59">
 </head>
 <body class="portal-page inventory-audit-page">
     <header class="portal-header inventory-audit-header">
@@ -14,7 +15,7 @@
                 href="{{ \Illuminate\Support\Facades\Route::has('public.inventory.audit') ? route('public.inventory.audit') : url('/inventaris/audit') }}"
                 class="portal-brand inventory-audit-brand"
             >
-                <span>AUD</span>
+                <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'audit inventaris'])</span>
                 <div>
                     <strong>Audit Inventaris {{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
                     <small>Pemeriksaan kondisi dan lokasi setiap aset</small>
@@ -54,7 +55,7 @@
         <div class="portal-container inventory-audit-footer-grid">
             <div>
                 <div class="portal-brand portal-brand-footer inventory-audit-brand">
-                    <span>AUD</span>
+                    <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'audit inventaris'])</span>
                     <div>
                         <strong>Audit Inventaris {{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
                         <small>Dashboard audit berdiri sendiri</small>

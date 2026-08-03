@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login Pengguna | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
+    @include('shared.favicon-links')
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/login.js') }}" defer></script>
 </head>
@@ -12,11 +13,7 @@
     <main class="login-shell">
         <section class="login-visual" aria-labelledby="application-title">
             <div class="brand-mark" aria-hidden="true">
-                <svg viewBox="0 0 64 64" role="img">
-                    <path d="M14 13h17c5 0 9 4 9 9v30H23c-5 0-9-4-9-9V13Z"/>
-                    <path d="M50 13H33c-5 0-9 4-9 9v30h17c5 0 9-4 9-9V13Z"/>
-                    <path d="M24 22c3-2 7-3 12-1"/>
-                </svg>
+                @include('shared.brand-logo', ['class' => 'brand-logo-image', 'width' => 64, 'height' => 64, 'alt' => 'login'])
             </div>
             <div>
                 <p class="eyebrow">{{ $systemBrand['institution.name'] ?? 'Sistem Terintegrasi' }}</p>

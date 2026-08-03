@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Inventaris Umum') | {{ $systemBrand['institution.name'] ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=58">
+    @include('shared.favicon-links')
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=59">
 </head>
 <body class="portal-page inventory-public-page inventory-general-page">
     <header class="portal-header inventory-public-header">
@@ -14,7 +15,7 @@
                 href="{{ \Illuminate\Support\Facades\Route::has('public.inventory.general') ? route('public.inventory.general') : url('/inventaris/umum') }}"
                 class="portal-brand inventory-public-brand"
             >
-                <span>INV</span>
+                <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'inventaris umum'])</span>
                 <div>
                     <strong>Inventaris Umum {{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
                     <small>Informasi barang, buku, dan laporan kerusakan</small>
@@ -75,7 +76,7 @@
         <div class="portal-container portal-footer-grid inventory-general-footer-grid">
             <div>
                 <div class="portal-brand portal-brand-footer inventory-public-brand">
-                    <span>INV</span>
+                    <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'inventaris umum'])</span>
                     <div>
                         <strong>Inventaris Umum {{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
                         <small>Informasi inventaris sekolah tanpa login</small>
@@ -107,7 +108,7 @@
         </div>
     </footer>
     @include('shared.photo-preview-modal')
-    <script src="{{ asset('js/portal-menu.js') }}?v=58" defer></script>
+    <script src="{{ asset('js/portal-menu.js') }}?v=59" defer></script>
     <script src="{{ asset('js/portal-photo-preview.js') }}?v=48" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
 </body>

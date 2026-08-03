@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=49">
+    @include('shared.favicon-links')
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=59">
 </head>
 <body class="app-page">
     @php
@@ -20,7 +21,7 @@
     <div class="app-shell">
         <aside class="sidebar">
             <a href="{{ route($dashboardRoute) }}" class="sidebar-brand">
-                <span class="sidebar-logo">{{ $systemBrand['application.short_name'] ?? 'IP' }}</span>
+                <span class="sidebar-logo">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'sidebar'])</span>
                 <span>
                     <strong>{{ $systemBrand['institution.name'] ?? 'Rius Library' }}</strong>
                     <small>{{ $currentUser->primaryRoleLabel() }}</small>

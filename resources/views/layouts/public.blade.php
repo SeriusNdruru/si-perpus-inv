@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Portal') | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=58">
+    @include('shared.favicon-links')
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=59">
 </head>
 <body class="portal-page">
     <header class="portal-header">
         <div class="portal-container portal-nav">
             <a href="{{ \Illuminate\Support\Facades\Route::has('public.home') ? route('public.home') : url('/perpustakaan') }}" class="portal-brand">
-                <span>{{ $systemBrand['application.short_name'] ?? 'SIP' }}</span>
+                <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'portal'])</span>
                 <div>
                     <strong>{{ $systemBrand['institution.name'] ?? 'Perpustakaan' }}</strong>
                     <small>Portal layanan perpustakaan</small>
@@ -66,7 +67,7 @@
         <div class="portal-container portal-footer-grid">
             <div>
                 <div class="portal-brand portal-brand-footer">
-                    <span>{{ $systemBrand['application.short_name'] ?? 'SIP' }}</span>
+                    <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'portal'])</span>
                     <div>
                         <strong>{{ $systemBrand['institution.name'] ?? 'Perpustakaan' }}</strong>
                         <small>{{ $systemBrand['application.name'] ?? 'Sistem Inventaris dan Perpustakaan' }}</small>
@@ -92,7 +93,7 @@
             <span>Layanan perpustakaan untuk siswa dan masyarakat sekolah</span>
         </div>
     </footer>
-    <script src="{{ asset('js/portal-menu.js') }}?v=58" defer></script>
+    <script src="{{ asset('js/portal-menu.js') }}?v=59" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
 </body>
 </html>

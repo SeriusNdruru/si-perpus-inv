@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=49">
+    @include('shared.favicon-links')
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=59">
 </head>
 <body class="member-page">
     @php
@@ -19,7 +20,7 @@
     <div class="member-shell">
         <aside class="member-sidebar">
             <a href="{{ route('dashboard.member') }}" class="member-brand">
-                <span>{{ $systemBrand['application.short_name'] ?? 'SIP' }}</span>
+                <span class="member-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'dashboard siswa'])</span>
                 <div>
                     <strong>{{ $systemBrand['institution.name'] ?? 'Perpustakaan' }}</strong>
                     <small>Dashboard siswa</small>

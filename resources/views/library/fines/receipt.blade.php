@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Kuitansi {{ $finePayment->payment_code }}</title>
+    @include('shared.favicon-links')
     <style>
         * { box-sizing: border-box; }
         body { margin: 0; padding: 32px; color: #142033; background: #eef2f4; font-family: Arial, sans-serif; }
