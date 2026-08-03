@@ -78,12 +78,14 @@
                 </div>
 
                 <div class="form-field">
-                    <label for="status">Status <span>*</span></label>
-                    <select id="status" name="status" required>
-                        <option value="active" @selected(old('status', $item->status) === 'active')>Aktif</option>
-                        <option value="inactive" @selected(old('status', $item->status) === 'inactive')>Tidak aktif</option>
-                    </select>
-                    <small>Barang yang masih mempunyai aset aktif atau stok tidak dapat dinonaktifkan.</small>
+                    <label>Status</label>
+                    <input type="hidden" name="status" value="{{ old('status', $item->status) }}">
+                    <div>
+                        <span class="badge {{ $item->status === 'active' ? 'badge-success' : 'badge-muted' }}">
+                            {{ $item->status === 'active' ? 'Aktif' : 'Dihapus' }}
+                        </span>
+                    </div>
+                    <small>Gunakan tombol Hapus pada Daftar Barang atau tombol Pulihkan pada Daftar Hapus untuk mengubah status.</small>
                 </div>
 
                 <div class="form-field form-field-full">

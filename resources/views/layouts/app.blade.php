@@ -54,6 +54,7 @@
 
                     <p class="sidebar-section">Inventaris</p>
                     <a href="{{ route('inventory.items.index') }}" class="{{ request()->routeIs('inventory.items.*') ? 'active' : '' }}">Data Barang</a>
+                    <a href="{{ route('inventory.deleted-items.index') }}" class="{{ request()->routeIs('inventory.deleted-items.*') ? 'active' : '' }}">Daftar Hapus</a>
                     <a href="{{ route('inventory.stock-opnames.index') }}" class="{{ request()->routeIs('inventory.stock-opnames.*') ? 'active' : '' }}">Stock Opname</a>
                     <a href="{{ route('inventory.maintenance-records.index') }}" class="{{ request()->routeIs('inventory.maintenance-records.*') ? 'active' : '' }}">Pemeliharaan Aset</a>
                     <a href="{{ route('inventory.disposals.index') }}" class="{{ request()->routeIs('inventory.disposals.*') ? 'active' : '' }}">Penghapusan Aset</a>

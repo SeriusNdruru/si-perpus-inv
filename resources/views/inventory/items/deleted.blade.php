@@ -1,41 +1,27 @@
 @extends('layouts.app')
 
-@section('title', 'Data Barang')
-@section('page-title', 'Inventaris Barang')
+@section('title', 'Daftar Hapus Barang')
+@section('page-title', 'Daftar Hapus Barang')
 
 @section('content')
-    <div class="stat-grid stat-grid-four">
+    <div class="stat-grid">
         <article class="stat-card">
-            <span>Total barang aktif</span>
-            <strong>{{ number_format($summary['active']) }}</strong>
-        </article>
-        <article class="stat-card">
-            <span>Barang di Daftar Hapus</span>
-            <strong>{{ number_format($summary['deleted']) }}</strong>
-        </article>
-        <article class="stat-card">
-            <span>Judul buku aktif</span>
-            <strong>{{ number_format($summary['books']) }}</strong>
-        </article>
-        <article class="stat-card {{ $summary['unprocessed_books'] > 0 ? 'stat-warning' : '' }}">
-            <span>Eksemplar belum diproses</span>
-            <strong>{{ number_format($summary['unprocessed_books']) }}</strong>
+            <span>Total barang dihapus</span>
+            <strong>{{ number_format($deletedCount) }}</strong>
         </article>
     </div>
 
     <section class="panel">
         <div class="panel-header panel-header-wrap">
             <div>
-                <p class="eyebrow">Inventaris terintegrasi</p>
-                <h2>Daftar Barang</h2>
+                <p class="eyebrow">Arsip barang</p>
+                <h2>Daftar Hapus</h2>
+                <p class="panel-description">Barang yang dihapus tidak tampil lagi pada Daftar Barang, tetapi riwayat dan relasinya tetap aman.</p>
             </div>
-            <div class="panel-header-actions">
-                <a href="{{ route('inventory.deleted-items.index') }}" class="button-secondary">Daftar Hapus</a>
-                <a href="{{ route('inventory.items.create') }}" class="button-primary button-link">Tambah barang</a>
-            </div>
+            <a href="{{ route('inventory.items.index') }}" class="button-secondary">Kembali ke Daftar Barang</a>
         </div>
 
-        <form method="GET" action="{{ route('inventory.items.index') }}" class="filter-bar filter-bar-items">
+        <form method="GET" action="{{ route('inventory.deleted-items.index') }}" class="filter-bar filter-bar-items">
             <div class="filter-field filter-search">
                 <label for="search">Pencarian</label>
                 <input
@@ -69,7 +55,7 @@
 
             <div class="filter-actions">
                 <button type="submit" class="button-primary">Terapkan</button>
-                <a href="{{ route('inventory.items.index') }}" class="button-secondary">Reset</a>
+                <a href="{{ route('inventory.deleted-items.index') }}" class="button-secondary">Reset</a>
             </div>
         </form>
 
@@ -112,30 +98,25 @@
                                     <div class="table-secondary">Stok berbasis jumlah</div>
                                 @endif
                             </td>
-                            <td>
-                                <span class="badge {{ $item->status === 'active' ? 'badge-success' : 'badge-muted' }}">
-                                    {{ $item->status === 'active' ? 'Aktif' : 'Tidak aktif' }}
-                                </span>
-                            </td>
+                            <td><span class="badge badge-muted">Dihapus</span></td>
                             <td>
                                 <div class="row-actions">
                                     <a href="{{ route('inventory.items.show', $item) }}" class="action-link">Detail</a>
-                                    <a href="{{ route('inventory.items.edit', $item) }}" class="action-link">Edit</a>
                                     <form
                                         method="POST"
-                                        action="{{ route('inventory.items.toggle-status', $item) }}"
-                                        onsubmit="return confirm('Hapus barang ini dari Daftar Barang dan pindahkan ke Daftar Hapus?');"
+                                        action="{{ route('inventory.deleted-items.restore', $item) }}"
+                                        onsubmit="return confirm('Pulihkan barang ini ke Daftar Barang?');"
                                     >
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="action-button">Hapus</button>
+                                        <button type="submit" class="action-button">Pulihkan</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada barang aktif yang sesuai dengan filter.</td>
+                            <td colspan="7" class="empty-state">Belum ada barang di Daftar Hapus.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -146,7 +127,7 @@
             <div class="pagination-bar">
                 <span>
                     Menampilkan {{ $items->firstItem() }} sampai {{ $items->lastItem() }}
-                    dari {{ $items->total() }} barang
+                    dari {{ $items->total() }} barang dihapus
                 </span>
                 <div class="pagination-actions">
                     @if ($items->onFirstPage())

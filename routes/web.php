@@ -286,6 +286,11 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
         Route::get('/inventaris', fn () => redirect()->route('inventory.items.index'))
             ->name('inventory.index');
 
+        Route::get('/inventaris/daftar-hapus', [ItemController::class, 'deleted'])
+            ->name('inventory.deleted-items.index');
+        Route::patch('/inventaris/daftar-hapus/{item}/pulihkan', [ItemController::class, 'restore'])
+            ->name('inventory.deleted-items.restore');
+
         Route::resource('/inventaris/barang', ItemController::class)
             ->parameters(['barang' => 'item'])
             ->except(['destroy'])

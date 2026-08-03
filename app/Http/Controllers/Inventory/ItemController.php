@@ -54,66 +54,46 @@ class ItemController extends Controller
 
     public function index(Request $request): View
     {
-        $search = trim((string) $request->query('search'));
-        $itemType = (string) $request->query('item_type');
-        $trackingType = (string) $request->query('tracking_type');
-        $status = (string) $request->query('status');
-
-        $items = Item::query()
-            ->with([
-                'category:id,category_code,category_name',
-                'unit:id,unit_code,unit_name',
-                'bookDetail:item_id,completion_status',
-            ])
-            ->select('items.*')
-            ->selectSub(function ($query): void {
-                $query
-                    ->from('assets')
-                    ->selectRaw('COUNT(*)')
-                    ->whereColumn('assets.item_id', 'items.id')
-                    ->whereNotIn('assets.asset_status', ['disposed']);
-            }, 'assets_count')
-            ->selectSub(function ($query): void {
-                $query
-                    ->from('assets')
-                    ->selectRaw('COUNT(*)')
-                    ->whereColumn('assets.item_id', 'items.id')
-                    ->where('assets.asset_status', 'available');
-            }, 'available_assets_count')
-            ->selectSub(function ($query): void {
-                $query
-                    ->from('stock_balances')
-                    ->selectRaw('COALESCE(SUM(quantity), 0)')
-                    ->whereColumn('stock_balances.item_id', 'items.id');
-            }, 'quantity_stock')
-            ->when($search !== '', function ($query) use ($search): void {
-                $query->where(function ($subQuery) use ($search): void {
-                    $subQuery
-                        ->where('item_code', 'like', "%{$search}%")
-                        ->orWhere('item_name', 'like', "%{$search}%")
-                        ->orWhere('description', 'like', "%{$search}%");
-                });
-            })
-            ->when(array_key_exists($itemType, self::ITEM_TYPES), fn ($query) => $query->where('item_type', $itemType))
-            ->when(array_key_exists($trackingType, self::TRACKING_TYPES), fn ($query) => $query->where('tracking_type', $trackingType))
-            ->when(in_array($status, ['active', 'inactive'], true), fn ($query) => $query->where('status', $status))
+        $items = $this->filteredItemsQuery($request)
+            ->where('items.status', 'active')
             ->orderByDesc('items.created_at')
             ->paginate(10)
             ->withQueryString();
 
         $summary = [
-            'total' => Item::query()->count(),
             'active' => Item::query()->where('status', 'active')->count(),
-            'books' => Item::query()->where('item_type', 'book')->count(),
+            'deleted' => Item::query()->where('status', 'inactive')->count(),
+            'books' => Item::query()
+                ->where('item_type', 'book')
+                ->where('status', 'active')
+                ->count(),
             'unprocessed_books' => Asset::query()
                 ->where('asset_status', 'unprocessed')
-                ->whereHas('item', fn ($query) => $query->where('item_type', 'book'))
+                ->whereHas('item', fn ($query) => $query
+                    ->where('item_type', 'book')
+                    ->where('status', 'active'))
                 ->count(),
         ];
 
         return view('inventory.items.index', [
             'items' => $items,
             'summary' => $summary,
+            'itemTypes' => self::ITEM_TYPES,
+            'trackingTypes' => self::TRACKING_TYPES,
+        ]);
+    }
+
+    public function deleted(Request $request): View
+    {
+        $items = $this->filteredItemsQuery($request)
+            ->where('items.status', 'inactive')
+            ->orderByDesc('items.updated_at')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('inventory.items.deleted', [
+            'items' => $items,
+            'deletedCount' => Item::query()->where('status', 'inactive')->count(),
             'itemTypes' => self::ITEM_TYPES,
             'trackingTypes' => self::TRACKING_TYPES,
         ]);
@@ -277,7 +257,7 @@ class ItemController extends Controller
             return back()
                 ->withInput()
                 ->withErrors([
-                    'status' => 'Barang tidak dapat dinonaktifkan karena masih memiliki aset aktif atau stok yang belum kosong.',
+                    'status' => 'Barang tidak dapat dihapus karena masih memiliki aset aktif atau stok yang belum kosong.',
                 ]);
         }
 
@@ -286,6 +266,12 @@ class ItemController extends Controller
             'updated_by' => $request->user()->id,
         ]);
 
+        if ($item->status === 'inactive') {
+            return redirect()
+                ->route('inventory.deleted-items.index')
+                ->with('success', 'Data barang berhasil diperbarui dan tetap berada di Daftar Hapus.');
+        }
+
         return redirect()
             ->route('inventory.items.show', $item)
             ->with('success', 'Data barang berhasil diperbarui.');
@@ -293,24 +279,90 @@ class ItemController extends Controller
 
     public function toggleStatus(Item $item, Request $request): RedirectResponse
     {
-        $newStatus = $item->status === 'active' ? 'inactive' : 'active';
+        if ($item->status === 'inactive') {
+            return redirect()
+                ->route('inventory.deleted-items.index')
+                ->with('error', 'Barang tersebut sudah berada di Daftar Hapus.');
+        }
 
-        if ($newStatus === 'inactive' && ! $this->canDeactivate($item)) {
+        if (! $this->canDeactivate($item)) {
             return back()->with(
                 'error',
-                'Barang tidak dapat dinonaktifkan karena masih memiliki aset aktif atau stok yang belum kosong.'
+                'Barang tidak dapat dihapus karena masih memiliki aset aktif atau stok yang belum kosong.'
             );
         }
 
         $item->update([
-            'status' => $newStatus,
+            'status' => 'inactive',
             'updated_by' => $request->user()->id,
         ]);
 
-        return back()->with(
-            'success',
-            $newStatus === 'active' ? 'Barang berhasil diaktifkan.' : 'Barang berhasil dinonaktifkan.'
-        );
+        return redirect()
+            ->route('inventory.items.index')
+            ->with('success', 'Barang berhasil dihapus dari daftar aktif dan dipindahkan ke Daftar Hapus.');
+    }
+
+    public function restore(Item $item, Request $request): RedirectResponse
+    {
+        if ($item->status === 'active') {
+            return redirect()
+                ->route('inventory.items.index')
+                ->with('error', 'Barang tersebut sudah aktif.');
+        }
+
+        $item->update([
+            'status' => 'active',
+            'updated_by' => $request->user()->id,
+        ]);
+
+        return redirect()
+            ->route('inventory.deleted-items.index')
+            ->with('success', 'Barang berhasil dipulihkan ke Daftar Barang.');
+    }
+
+    private function filteredItemsQuery(Request $request)
+    {
+        $search = trim((string) $request->query('search'));
+        $itemType = (string) $request->query('item_type');
+        $trackingType = (string) $request->query('tracking_type');
+
+        return Item::query()
+            ->with([
+                'category:id,category_code,category_name',
+                'unit:id,unit_code,unit_name',
+                'bookDetail:item_id,completion_status',
+            ])
+            ->select('items.*')
+            ->selectSub(function ($query): void {
+                $query
+                    ->from('assets')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('assets.item_id', 'items.id')
+                    ->whereNotIn('assets.asset_status', ['disposed']);
+            }, 'assets_count')
+            ->selectSub(function ($query): void {
+                $query
+                    ->from('assets')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('assets.item_id', 'items.id')
+                    ->where('assets.asset_status', 'available');
+            }, 'available_assets_count')
+            ->selectSub(function ($query): void {
+                $query
+                    ->from('stock_balances')
+                    ->selectRaw('COALESCE(SUM(quantity), 0)')
+                    ->whereColumn('stock_balances.item_id', 'items.id');
+            }, 'quantity_stock')
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($subQuery) use ($search): void {
+                    $subQuery
+                        ->where('item_code', 'like', "%{$search}%")
+                        ->orWhere('item_name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->when(array_key_exists($itemType, self::ITEM_TYPES), fn ($query) => $query->where('item_type', $itemType))
+            ->when(array_key_exists($trackingType, self::TRACKING_TYPES), fn ($query) => $query->where('tracking_type', $trackingType));
     }
 
     /**
