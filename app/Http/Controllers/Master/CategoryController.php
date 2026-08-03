@@ -16,7 +16,6 @@ class CategoryController extends Controller
     {
         $search = trim((string) $request->query('search'));
         $scope = (string) $request->query('scope');
-        $status = (string) $request->query('status');
 
         $categories = Category::query()
             ->with('parent:id,category_name')
@@ -31,9 +30,7 @@ class CategoryController extends Controller
             ->when(in_array($scope, ['inventory', 'library', 'both'], true), function ($query) use ($scope): void {
                 $query->where('scope', $scope);
             })
-            ->when(in_array($status, ['active', 'inactive'], true), function ($query) use ($status): void {
-                $query->where('status', $status);
-            })
+            ->where('categories.status', 'active')
             ->orderBy('category_name')
             ->paginate(10)
             ->withQueryString();
@@ -46,6 +43,29 @@ class CategoryController extends Controller
         ];
 
         return view('master.categories.index', compact('categories', 'summary'));
+    }
+
+    public function deleted(Request $request): View
+    {
+        $search = trim((string) $request->query('search'));
+        $scope = (string) $request->query('scope');
+
+        $categories = Category::query()
+            ->with('parent:id,category_name,status')
+            ->withCount('children')
+            ->where('categories.status', 'inactive')
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($subQuery) use ($search): void {
+                    $subQuery->where('category_code', 'like', "%{$search}%")
+                        ->orWhere('category_name', 'like', "%{$search}%");
+                });
+            })
+            ->when(in_array($scope, ['inventory', 'library', 'both'], true), fn ($query) => $query->where('scope', $scope))
+            ->orderByDesc('updated_at')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('master.categories.deleted', compact('categories'));
     }
 
     public function create(): View
@@ -93,19 +113,22 @@ class CategoryController extends Controller
 
     public function toggleStatus(Category $category): RedirectResponse
     {
-        $newStatus = $category->status === 'active' ? 'inactive' : 'active';
-
-        if ($newStatus === 'inactive' && $category->children()->where('status', 'active')->exists()) {
-            return back()->with('error', 'Kategori tidak dapat dinonaktifkan karena masih memiliki kategori turunan yang aktif.');
+        if ($category->children()->where('status', 'active')->exists()) {
+            return back()->with('error', 'Kategori belum dapat dihapus karena masih memiliki kategori turunan yang aktif.');
         }
 
-        $category->update(['status' => $newStatus]);
+        $category->update(['status' => 'inactive']);
 
-        $message = $newStatus === 'active'
-            ? 'Kategori berhasil diaktifkan.'
-            : 'Kategori berhasil dinonaktifkan.';
+        return redirect()->route('categories.index')->with('success', 'Kategori dipindahkan ke Daftar Hapus.');
+    }
 
-        return back()->with('success', $message);
+    public function restore(Category $category): RedirectResponse
+    {
+        if ($category->parent_id !== null && $category->parent()->where('status', '!=', 'active')->exists()) {
+            return back()->with('error', 'Pulihkan kategori induk terlebih dahulu.');
+        }
+        $category->update(['status' => 'active']);
+        return back()->with('success', 'Kategori berhasil dipulihkan.');
     }
 
     private function parentOptions(?Category $excludedCategory = null)

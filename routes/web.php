@@ -252,6 +252,9 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
         });
 
     Route::middleware('role:SUPER_ADMIN,INVENTORY_ADMIN')->group(function (): void {
+        Route::get('/master/kategori/daftar-hapus', [CategoryController::class, 'deleted'])->name('categories.deleted.index');
+        Route::patch('/master/kategori/daftar-hapus/{category}/pulihkan', [CategoryController::class, 'restore'])->name('categories.deleted.restore');
+
         Route::resource('/master/kategori', CategoryController::class)
             ->parameters(['kategori' => 'category'])
             ->except(['show', 'destroy'])
@@ -259,6 +262,9 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
 
         Route::patch('/master/kategori/{category}/status', [CategoryController::class, 'toggleStatus'])
             ->name('categories.toggle-status');
+
+        Route::get('/master/satuan/daftar-hapus', [UnitController::class, 'deleted'])->name('units.deleted.index');
+        Route::patch('/master/satuan/daftar-hapus/{unit}/pulihkan', [UnitController::class, 'restore'])->name('units.deleted.restore');
 
         Route::resource('/master/satuan', UnitController::class)
             ->parameters(['satuan' => 'unit'])
@@ -268,12 +274,18 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
         Route::patch('/master/satuan/{unit}/status', [UnitController::class, 'toggleStatus'])
             ->name('units.toggle-status');
 
+        Route::get('/master/supplier/daftar-hapus', [SupplierController::class, 'deleted'])->name('suppliers.deleted.index');
+        Route::patch('/master/supplier/daftar-hapus/{supplier}/pulihkan', [SupplierController::class, 'restore'])->name('suppliers.deleted.restore');
+
         Route::resource('/master/supplier', SupplierController::class)
             ->except(['show', 'destroy'])
             ->names('suppliers');
 
         Route::patch('/master/supplier/{supplier}/status', [SupplierController::class, 'toggleStatus'])
             ->name('suppliers.toggle-status');
+
+        Route::get('/master/lokasi/daftar-hapus', [LocationController::class, 'deleted'])->name('locations.deleted.index');
+        Route::patch('/master/lokasi/daftar-hapus/{location}/pulihkan', [LocationController::class, 'restore'])->name('locations.deleted.restore');
 
         Route::resource('/master/lokasi', LocationController::class)
             ->parameters(['lokasi' => 'location'])
@@ -387,6 +399,9 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
         Route::put('/perpustakaan/buku/{book}/katalog', [BookCatalogController::class, 'update'])
             ->name('library.books.update');
 
+
+        Route::get('/perpustakaan/rak/daftar-hapus', [ShelfController::class, 'deleted'])->name('library.shelves.deleted.index');
+        Route::patch('/perpustakaan/rak/daftar-hapus/{shelf}/pulihkan', [ShelfController::class, 'restore'])->name('library.shelves.deleted.restore');
 
         Route::resource('/perpustakaan/rak', ShelfController::class)
             ->parameters(['rak' => 'shelf'])

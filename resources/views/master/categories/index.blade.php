@@ -29,7 +29,13 @@
                 <p class="eyebrow">Data bersama</p>
                 <h2>Daftar Kategori</h2>
             </div>
-            <a href="{{ route('categories.create') }}" class="button-primary button-link">Tambah kategori</a>
+            <div class="panel-header-actions">
+
+                <a href="{{ route('categories.deleted.index') }}" class="button-secondary">Daftar Hapus</a>
+
+                <a href="{{ route('categories.create') }}" class="button-primary button-link">Tambah kategori</a>
+
+            </div>
         </div>
 
         <form method="GET" action="{{ route('categories.index') }}" class="filter-bar">
@@ -51,15 +57,6 @@
                     <option value="inventory" @selected(request('scope') === 'inventory')>Inventaris</option>
                     <option value="library" @selected(request('scope') === 'library')>Perpustakaan</option>
                     <option value="both" @selected(request('scope') === 'both')>Bersama</option>
-                </select>
-            </div>
-
-            <div class="filter-field">
-                <label for="status">Status</label>
-                <select id="status" name="status">
-                    <option value="">Semua status</option>
-                    <option value="active" @selected(request('status') === 'active')>Aktif</option>
-                    <option value="inactive" @selected(request('status') === 'inactive')>Tidak aktif</option>
                 </select>
             </div>
 
@@ -111,11 +108,11 @@
                             <td>
                                 <div class="row-actions">
                                     <a href="{{ route('categories.edit', $category) }}" class="action-link">Edit</a>
-                                    <form method="POST" action="{{ route('categories.toggle-status', $category) }}">
+                                    <form method="POST" action="{{ route('categories.toggle-status', $category) }}" onsubmit="return confirm('Hapus kategori ini dari daftar aktif dan pindahkan ke Daftar Hapus?');">
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" class="action-button">
-                                            {{ $category->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
+                                            Hapus
                                         </button>
                                     </form>
                                 </div>

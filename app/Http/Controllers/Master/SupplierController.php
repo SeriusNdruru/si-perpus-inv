@@ -15,7 +15,6 @@ class SupplierController extends Controller
     public function index(Request $request): View
     {
         $search = trim((string) $request->query('search'));
-        $status = (string) $request->query('status');
 
         $suppliers = Supplier::query()
             ->select('suppliers.*')
@@ -35,9 +34,7 @@ class SupplierController extends Controller
                         ->orWhere('email', 'like', "%{$search}%");
                 });
             })
-            ->when(in_array($status, ['active', 'inactive'], true), function ($query) use ($status): void {
-                $query->where('status', $status);
-            })
+            ->where('suppliers.status', 'active')
             ->orderBy('supplier_name')
             ->paginate(10)
             ->withQueryString();
@@ -57,6 +54,18 @@ class SupplierController extends Controller
         ];
 
         return view('master.suppliers.index', compact('suppliers', 'summary'));
+    }
+
+    public function deleted(Request $request): View
+    {
+        $search = trim((string) $request->query('search'));
+        $suppliers = Supplier::query()
+            ->select('suppliers.*')
+            ->selectSub(fn ($query) => $query->from('assets')->selectRaw('COUNT(*)')->whereColumn('assets.supplier_id', 'suppliers.id'), 'assets_count')
+            ->where('suppliers.status', 'inactive')
+            ->when($search !== '', fn ($query) => $query->where(fn ($subQuery) => $subQuery->where('supplier_code', 'like', "%{$search}%")->orWhere('supplier_name', 'like', "%{$search}%")->orWhere('contact_person', 'like', "%{$search}%")->orWhere('phone', 'like', "%{$search}%")->orWhere('email', 'like', "%{$search}%")))
+            ->orderByDesc('updated_at')->paginate(10)->withQueryString();
+        return view('master.suppliers.deleted', compact('suppliers'));
     }
 
     public function create(): View
@@ -89,14 +98,13 @@ class SupplierController extends Controller
 
     public function toggleStatus(Supplier $supplier): RedirectResponse
     {
-        $newStatus = $supplier->status === 'active' ? 'inactive' : 'active';
+        $supplier->update(['status' => 'inactive']);
+        return redirect()->route('suppliers.index')->with('success', 'Supplier dipindahkan ke Daftar Hapus. Riwayat aset tetap tersimpan.');
+    }
 
-        $supplier->update(['status' => $newStatus]);
-
-        $message = $newStatus === 'active'
-            ? 'Supplier berhasil diaktifkan.'
-            : 'Supplier berhasil dinonaktifkan. Data riwayat aset tetap tersimpan.';
-
-        return back()->with('success', $message);
+    public function restore(Supplier $supplier): RedirectResponse
+    {
+        $supplier->update(['status' => 'active']);
+        return back()->with('success', 'Supplier berhasil dipulihkan.');
     }
 }

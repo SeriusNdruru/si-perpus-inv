@@ -29,7 +29,13 @@
                 <p class="eyebrow">Data bersama</p>
                 <h2>Daftar Lokasi</h2>
             </div>
-            <a href="{{ route('locations.create') }}" class="button-primary button-link">Tambah lokasi</a>
+            <div class="panel-header-actions">
+
+                <a href="{{ route('locations.deleted.index') }}" class="button-secondary">Daftar Hapus</a>
+
+                <a href="{{ route('locations.create') }}" class="button-primary button-link">Tambah lokasi</a>
+
+            </div>
         </div>
 
         <form method="GET" action="{{ route('locations.index') }}" class="filter-bar filter-bar-compact">
@@ -51,15 +57,6 @@
                     @foreach ($typeLabels as $typeValue => $typeLabel)
                         <option value="{{ $typeValue }}" @selected(request('type') === $typeValue)>{{ $typeLabel }}</option>
                     @endforeach
-                </select>
-            </div>
-
-            <div class="filter-field">
-                <label for="status">Status</label>
-                <select id="status" name="status">
-                    <option value="">Semua status</option>
-                    <option value="active" @selected(request('status') === 'active')>Aktif</option>
-                    <option value="inactive" @selected(request('status') === 'inactive')>Tidak aktif</option>
                 </select>
             </div>
 
@@ -116,11 +113,11 @@
                             <td>
                                 <div class="row-actions">
                                     <a href="{{ route('locations.edit', $location) }}" class="action-link">Edit</a>
-                                    <form method="POST" action="{{ route('locations.toggle-status', $location) }}">
+                                    <form method="POST" action="{{ route('locations.toggle-status', $location) }}" onsubmit="return confirm('Hapus lokasi ini dari daftar aktif dan pindahkan ke Daftar Hapus?');">
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" class="action-button">
-                                            {{ $location->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
+                                            Hapus
                                         </button>
                                     </form>
                                 </div>

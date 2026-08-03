@@ -16,7 +16,6 @@ class UnitController extends Controller
     public function index(Request $request): View
     {
         $search = trim((string) $request->query('search'));
-        $status = (string) $request->query('status');
 
         $units = Unit::query()
             ->select('units.*')
@@ -33,9 +32,7 @@ class UnitController extends Controller
                         ->orWhere('unit_name', 'like', "%{$search}%");
                 });
             })
-            ->when(in_array($status, ['active', 'inactive'], true), function ($query) use ($status): void {
-                $query->where('status', $status);
-            })
+            ->where('units.status', 'active')
             ->orderBy('unit_name')
             ->paginate(10)
             ->withQueryString();
@@ -55,6 +52,18 @@ class UnitController extends Controller
         ];
 
         return view('master.units.index', compact('units', 'summary'));
+    }
+
+    public function deleted(Request $request): View
+    {
+        $search = trim((string) $request->query('search'));
+        $units = Unit::query()
+            ->select('units.*')
+            ->selectSub(fn ($query) => $query->from('items')->selectRaw('COUNT(*)')->whereColumn('items.unit_id', 'units.id'), 'items_count')
+            ->where('units.status', 'inactive')
+            ->when($search !== '', fn ($query) => $query->where(fn ($subQuery) => $subQuery->where('unit_code', 'like', "%{$search}%")->orWhere('unit_name', 'like', "%{$search}%")))
+            ->orderByDesc('updated_at')->paginate(10)->withQueryString();
+        return view('master.units.deleted', compact('units'));
     }
 
     public function create(): View
@@ -97,19 +106,17 @@ class UnitController extends Controller
 
     public function toggleStatus(Unit $unit): RedirectResponse
     {
-        $newStatus = $unit->status === 'active' ? 'inactive' : 'active';
-
-        if ($newStatus === 'inactive' && $this->hasActiveItems($unit)) {
-            return back()->with('error', 'Satuan tidak dapat dinonaktifkan karena masih digunakan oleh barang aktif.');
+        if ($this->hasActiveItems($unit)) {
+            return back()->with('error', 'Satuan belum dapat dihapus karena masih digunakan oleh barang aktif.');
         }
+        $unit->update(['status' => 'inactive']);
+        return redirect()->route('units.index')->with('success', 'Satuan dipindahkan ke Daftar Hapus.');
+    }
 
-        $unit->update(['status' => $newStatus]);
-
-        $message = $newStatus === 'active'
-            ? 'Satuan berhasil diaktifkan.'
-            : 'Satuan berhasil dinonaktifkan.';
-
-        return back()->with('success', $message);
+    public function restore(Unit $unit): RedirectResponse
+    {
+        $unit->update(['status' => 'active']);
+        return back()->with('success', 'Satuan berhasil dipulihkan.');
     }
 
     private function hasActiveItems(Unit $unit): bool

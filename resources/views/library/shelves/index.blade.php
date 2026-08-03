@@ -30,7 +30,13 @@
                 <h2>Daftar Rak</h2>
                 <p class="panel-description">Atur identitas rak, lokasi ruangan, rentang klasifikasi, dan kapasitas buku.</p>
             </div>
-            <a href="{{ route('library.shelves.create') }}" class="button-primary button-link">Tambah rak</a>
+            <div class="panel-header-actions">
+
+                <a href="{{ route('library.shelves.deleted.index') }}" class="button-secondary">Daftar Hapus</a>
+
+                <a href="{{ route('library.shelves.create') }}" class="button-primary button-link">Tambah rak</a>
+
+            </div>
         </div>
 
         <form method="GET" action="{{ route('library.shelves.index') }}" class="filter-bar filter-bar-shelves">
@@ -54,15 +60,6 @@
                             {{ $location->location_code }} - {{ $location->location_name }}
                         </option>
                     @endforeach
-                </select>
-            </div>
-
-            <div class="filter-field">
-                <label for="status">Status</label>
-                <select id="status" name="status">
-                    <option value="">Semua status</option>
-                    <option value="active" @selected(request('status') === 'active')>Aktif</option>
-                    <option value="inactive" @selected(request('status') === 'inactive')>Tidak aktif</option>
                 </select>
             </div>
 
@@ -135,11 +132,11 @@
                             <td>
                                 <div class="row-actions">
                                     <a href="{{ route('library.shelves.edit', $shelf) }}" class="action-link">Edit</a>
-                                    <form method="POST" action="{{ route('library.shelves.toggle-status', $shelf) }}">
+                                    <form method="POST" action="{{ route('library.shelves.toggle-status', $shelf) }}" onsubmit="return confirm('Hapus rak ini dari daftar aktif dan pindahkan ke Daftar Hapus?');">
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" class="action-button">
-                                            {{ $shelf->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
+                                            Hapus
                                         </button>
                                     </form>
                                 </div>

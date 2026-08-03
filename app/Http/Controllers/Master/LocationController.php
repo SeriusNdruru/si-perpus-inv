@@ -29,7 +29,6 @@ class LocationController extends Controller
     {
         $search = trim((string) $request->query('search'));
         $type = (string) $request->query('type');
-        $status = (string) $request->query('status');
 
         $locations = Location::query()
             ->with('parent:id,location_code,location_name')
@@ -64,9 +63,7 @@ class LocationController extends Controller
             ->when(array_key_exists($type, self::TYPE_LABELS), function ($query) use ($type): void {
                 $query->where('location_type', $type);
             })
-            ->when(in_array($status, ['active', 'inactive'], true), function ($query) use ($status): void {
-                $query->where('status', $status);
-            })
+            ->where('locations.status', 'active')
             ->orderBy('location_name')
             ->paginate(10)
             ->withQueryString();
@@ -97,6 +94,55 @@ class LocationController extends Controller
         return view('master.locations.index', [
             'locations' => $locations,
             'summary' => $summary,
+            'typeLabels' => self::TYPE_LABELS,
+        ]);
+    }
+
+    public function deleted(Request $request): View
+    {
+        $search = trim((string) $request->query('search'));
+        $type = (string) $request->query('type');
+
+        $locations = Location::query()
+            ->with('parent:id,location_code,location_name')
+            ->select('locations.*')
+            ->selectSub(function ($query): void {
+                $query
+                    ->from('locations as children')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('children.parent_id', 'locations.id');
+            }, 'children_count')
+            ->selectSub(function ($query): void {
+                $query
+                    ->from('assets')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('assets.current_location_id', 'locations.id')
+                    ->whereNotIn('assets.asset_status', ['disposed', 'lost']);
+            }, 'assets_count')
+            ->selectSub(function ($query): void {
+                $query
+                    ->from('library_shelves')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('library_shelves.location_id', 'locations.id');
+            }, 'shelves_count')
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($subQuery) use ($search): void {
+                    $subQuery
+                        ->where('location_code', 'like', "%{$search}%")
+                        ->orWhere('location_name', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->when(array_key_exists($type, self::TYPE_LABELS), function ($query) use ($type): void {
+                $query->where('location_type', $type);
+            })
+            ->where('locations.status', 'inactive')
+            ->orderBy('location_name')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('master.locations.deleted', [
+            'locations' => $locations,
             'typeLabels' => self::TYPE_LABELS,
         ]);
     }
@@ -158,23 +204,21 @@ class LocationController extends Controller
 
     public function toggleStatus(Location $location): RedirectResponse
     {
-        $newStatus = $location->status === 'active' ? 'inactive' : 'active';
-
-        if ($newStatus === 'inactive') {
-            $blockingMessage = $this->deactivationBlockMessage($location);
-
-            if ($blockingMessage !== null) {
-                return back()->with('error', $blockingMessage);
-            }
+        $blockingMessage = $this->deactivationBlockMessage($location);
+        if ($blockingMessage !== null) {
+            return back()->with('error', str_replace('dinonaktifkan', 'dihapus', $blockingMessage));
         }
+        $location->update(['status' => 'inactive']);
+        return redirect()->route('locations.index')->with('success', 'Lokasi dipindahkan ke Daftar Hapus.');
+    }
 
-        $location->update(['status' => $newStatus]);
-
-        $message = $newStatus === 'active'
-            ? 'Lokasi berhasil diaktifkan.'
-            : 'Lokasi berhasil dinonaktifkan.';
-
-        return back()->with('success', $message);
+    public function restore(Location $location): RedirectResponse
+    {
+        if ($location->parent_id !== null && $location->parent()->where('status', '!=', 'active')->exists()) {
+            return back()->with('error', 'Pulihkan lokasi induk terlebih dahulu.');
+        }
+        $location->update(['status' => 'active']);
+        return back()->with('success', 'Lokasi berhasil dipulihkan.');
     }
 
     private function deactivationBlockMessage(Location $location): ?string

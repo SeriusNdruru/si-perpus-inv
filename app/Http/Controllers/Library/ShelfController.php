@@ -18,7 +18,6 @@ class ShelfController extends Controller
     {
         $search = trim((string) $request->query('search'));
         $locationId = $request->filled('location_id') ? (int) $request->query('location_id') : null;
-        $status = (string) $request->query('status');
 
         $shelves = LibraryShelf::query()
             ->with('location:id,parent_id,location_code,location_name,location_type')
@@ -45,7 +44,7 @@ class ShelfController extends Controller
                 });
             })
             ->when($locationId !== null, fn ($query) => $query->where('location_id', $locationId))
-            ->when(in_array($status, ['active', 'inactive'], true), fn ($query) => $query->where('status', $status))
+            ->where('library_shelves.status', 'active')
             ->orderBy('shelf_code')
             ->paginate(10)
             ->withQueryString();
@@ -63,6 +62,47 @@ class ShelfController extends Controller
         return view('library.shelves.index', [
             'shelves' => $shelves,
             'summary' => $summary,
+            'locations' => $this->locationOptions(),
+        ]);
+    }
+
+    public function deleted(Request $request): View
+    {
+        $search = trim((string) $request->query('search'));
+        $locationId = $request->filled('location_id') ? (int) $request->query('location_id') : null;
+
+        $shelves = LibraryShelf::query()
+            ->with('location:id,parent_id,location_code,location_name,location_type')
+            ->select('library_shelves.*')
+            ->selectSub(function ($query): void {
+                $query->from('assets')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('assets.current_shelf_id', 'library_shelves.id')
+                    ->whereNotIn('assets.asset_status', ['disposed', 'lost']);
+            }, 'occupied_count')
+            ->selectSub(function ($query): void {
+                $query->from('assets')
+                    ->selectRaw('COUNT(*)')
+                    ->whereColumn('assets.current_shelf_id', 'library_shelves.id')
+                    ->where('assets.asset_status', 'available');
+            }, 'available_count')
+            ->when($search !== '', function ($query) use ($search): void {
+                $query->where(function ($subQuery) use ($search): void {
+                    $subQuery
+                        ->where('shelf_code', 'like', "%{$search}%")
+                        ->orWhere('shelf_name', 'like', "%{$search}%")
+                        ->orWhere('classification_range', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->when($locationId !== null, fn ($query) => $query->where('location_id', $locationId))
+            ->where('library_shelves.status', 'inactive')
+            ->orderBy('shelf_code')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('library.shelves.deleted', [
+            'shelves' => $shelves,
             'locations' => $this->locationOptions(),
         ]);
     }
@@ -129,20 +169,20 @@ class ShelfController extends Controller
 
     public function toggleStatus(LibraryShelf $shelf): RedirectResponse
     {
-        $newStatus = $shelf->status === 'active' ? 'inactive' : 'active';
-
-        if ($newStatus === 'inactive' && $shelf->assets()->whereNotIn('asset_status', ['disposed', 'lost'])->exists()) {
-            return back()->with('error', 'Rak tidak dapat dinonaktifkan karena masih ditempati eksemplar buku.');
+        if ($shelf->assets()->whereNotIn('asset_status', ['disposed', 'lost'])->exists()) {
+            return back()->with('error', 'Rak belum dapat dihapus karena masih ditempati eksemplar buku.');
         }
+        $shelf->update(['status' => 'inactive']);
+        return redirect()->route('library.shelves.index')->with('success', 'Rak perpustakaan dipindahkan ke Daftar Hapus.');
+    }
 
-        $shelf->update(['status' => $newStatus]);
-
-        return back()->with(
-            'success',
-            $newStatus === 'active'
-                ? 'Rak perpustakaan berhasil diaktifkan.'
-                : 'Rak perpustakaan berhasil dinonaktifkan.'
-        );
+    public function restore(LibraryShelf $shelf): RedirectResponse
+    {
+        if ($shelf->location()->where('status', '!=', 'active')->exists()) {
+            return back()->with('error', 'Pulihkan lokasi rak terlebih dahulu.');
+        }
+        $shelf->update(['status' => 'active']);
+        return back()->with('success', 'Rak perpustakaan berhasil dipulihkan.');
     }
 
     /**

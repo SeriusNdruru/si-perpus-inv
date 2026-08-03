@@ -14,7 +14,7 @@
             <strong>{{ number_format($summary['active']) }}</strong>
         </article>
         <article class="stat-card">
-            <span>Tidak aktif</span>
+            <span>Di Daftar Hapus</span>
             <strong>{{ number_format($summary['inactive']) }}</strong>
         </article>
         <article class="stat-card">
@@ -29,7 +29,13 @@
                 <p class="eyebrow">Data bersama</p>
                 <h2>Daftar Supplier</h2>
             </div>
-            <a href="{{ route('suppliers.create') }}" class="button-primary button-link">Tambah supplier</a>
+            <div class="panel-header-actions">
+
+                <a href="{{ route('suppliers.deleted.index') }}" class="button-secondary">Daftar Hapus</a>
+
+                <a href="{{ route('suppliers.create') }}" class="button-primary button-link">Tambah supplier</a>
+
+            </div>
         </div>
 
         <form method="GET" action="{{ route('suppliers.index') }}" class="filter-bar filter-bar-compact">
@@ -42,15 +48,6 @@
                     value="{{ request('search') }}"
                     placeholder="Kode, nama, kontak, telepon, atau email"
                 >
-            </div>
-
-            <div class="filter-field">
-                <label for="status">Status</label>
-                <select id="status" name="status">
-                    <option value="">Semua status</option>
-                    <option value="active" @selected(request('status') === 'active')>Aktif</option>
-                    <option value="inactive" @selected(request('status') === 'inactive')>Tidak aktif</option>
-                </select>
             </div>
 
             <div class="filter-actions">
@@ -98,11 +95,11 @@
                             <td>
                                 <div class="row-actions">
                                     <a href="{{ route('suppliers.edit', $supplier) }}" class="action-link">Edit</a>
-                                    <form method="POST" action="{{ route('suppliers.toggle-status', $supplier) }}">
+                                    <form method="POST" action="{{ route('suppliers.toggle-status', $supplier) }}" onsubmit="return confirm('Hapus supplier ini dari daftar aktif dan pindahkan ke Daftar Hapus?');">
                                         @csrf
                                         @method('PATCH')
                                         <button type="submit" class="action-button">
-                                            {{ $supplier->status === 'active' ? 'Nonaktifkan' : 'Aktifkan' }}
+                                            Hapus
                                         </button>
                                     </form>
                                 </div>
