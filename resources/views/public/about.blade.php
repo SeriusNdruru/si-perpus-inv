@@ -27,6 +27,11 @@
             $videoProvider = 'Vimeo';
         }
     }
+
+    $aboutContent = trim((string) ($systemBrand['portal.about_content'] ?? ''));
+    $aboutParagraphs = $aboutContent === ''
+        ? []
+        : (preg_split('/(?:\r\n|\r|\n){2,}/', $aboutContent) ?: []);
 @endphp
 
 <section class="portal-page-hero">
@@ -40,7 +45,13 @@
 <section class="portal-section">
     <div class="portal-container portal-about-grid">
         <article class="portal-prose">
-            <div class="portal-about-copy">{{ $systemBrand['portal.about_content'] ?? '' }}</div>
+            <div class="portal-about-copy">
+                @forelse ($aboutParagraphs as $paragraph)
+                    <p>{!! nl2br(e(trim($paragraph))) !!}</p>
+                @empty
+                    <p>-</p>
+                @endforelse
+            </div>
         </article>
 
         <aside>
