@@ -167,8 +167,8 @@
                 <div class="form-section-heading">
                     <span>2</span>
                     <div>
-                        <h3>Penulis dan kode katalog otomatis</h3>
-                        <p>Tulis satu nama penulis pada setiap baris. Kode klasifikasi dan nomor panggil dibuat otomatis saat katalog disimpan.</p>
+                        <h3>Penulis dan kode katalog</h3>
+                        <p>Tulis satu nama penulis pada setiap baris. Kode klasifikasi dan nomor panggil dibuat saat katalog disimpan.</p>
                     </div>
                 </div>
 
@@ -185,7 +185,7 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="classification_code_preview">Kode klasifikasi otomatis</label>
+                        <label for="classification_code_preview">Kode klasifikasi</label>
                         <input
                             id="classification_code_preview"
                             type="text"
@@ -197,7 +197,7 @@
                     </div>
 
                     <div class="form-field">
-                        <label for="call_number_preview">Nomor panggil otomatis</label>
+                        <label for="call_number_preview">Nomor panggil</label>
                         <input
                             id="call_number_preview"
                             type="text"
@@ -244,8 +244,8 @@
             </div>
 
             <div class="inline-notice">
-                <strong>Status katalog dihitung otomatis.</strong>
-                <p>Katalog menjadi lengkap jika memiliki ISBN, penerbit, tahun terbit, kategori kelas, dan minimal satu penulis. Kode klasifikasi serta nomor panggil dibuat otomatis saat disimpan. Eksemplar tetap belum diproses sampai rak ditentukan.</p>
+                <strong>Status katalog dihitung oleh sistem.</strong>
+                <p>Katalog menjadi lengkap jika memiliki ISBN, penerbit, tahun terbit, kategori kelas, dan minimal satu penulis. Kode klasifikasi serta nomor panggil dibuat saat disimpan. Eksemplar tetap belum diproses sampai rak ditentukan.</p>
             </div>
 
             <div class="form-actions">

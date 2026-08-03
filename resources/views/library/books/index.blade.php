@@ -82,6 +82,7 @@
             <table>
                 <thead>
                     <tr><th class="table-number-heading">No.</th>
+                        <th>Foto</th>
                         <th>Kode</th>
                         <th>Judul dan penulis</th>
                         <th>Katalog</th>
@@ -97,6 +98,23 @@
                             $authors = $book->authors->pluck('author_name')->join(', ');
                         @endphp
                         <tr><td class="table-number">{{ (is_object($books) && method_exists($books, 'firstItem') && $books->firstItem() !== null ? $books->firstItem() : 1) + $loop->index }}</td>
+                            <td>
+                                @php($bookImagePath = $book->bookDetail?->cover_path ?: $book->image_path)
+                                @if ($bookImagePath)
+                                    <button
+                                        type="button"
+                                        class="item-table-photo item-photo-preview-button"
+                                        data-photo-preview
+                                        data-photo-src="{{ asset('storage/'.$bookImagePath) }}"
+                                        data-photo-title="{{ $book->item_name }}"
+                                        aria-label="Lihat cover {{ $book->item_name }}"
+                                    >
+                                        <img src="{{ asset('storage/'.$bookImagePath) }}" alt="Cover {{ $book->item_name }}">
+                                    </button>
+                                @else
+                                    <div class="item-table-photo">{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</div>
+                                @endif
+                            </td>
                             <td><strong>{{ $book->item_code }}</strong></td>
                             <td>
                                 <div class="table-primary">{{ $book->item_name }}</div>
@@ -136,7 +154,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="empty-state">Belum ada buku yang sesuai dengan filter.</td>
+                            <td colspan="8" class="empty-state">Belum ada buku yang sesuai dengan filter.</td>
                         </tr>
                     @endforelse
                 </tbody>
