@@ -111,7 +111,8 @@ a { color: inherit; }
 .sidebar-nav a { padding: 12px 14px; border-radius: 11px; color: rgba(255,255,255,.7); text-decoration: none; font-size: 14px; font-weight: 700; }
 .sidebar-nav a:hover, .sidebar-nav a.active { color: #fff; background: rgba(255,255,255,.1); }
 .sidebar-user { flex: 0 0 auto; display: flex; align-items: center; gap: 11px; margin-top: 12px; padding: 14px 10px 2px; border-top: 1px solid rgba(255,255,255,.12); }
-.avatar { flex: 0 0 auto; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; color: #0c3540; background: #d8f0ec; font-weight: 900; }
+.avatar { flex: 0 0 auto; width: 38px; height: 38px; display: grid; place-items: center; padding: 3px; overflow: hidden; border-radius: 50%; background: #ffffff; box-shadow: 0 8px 18px rgba(6, 40, 51, .20); }
+.avatar .brand-logo-image { width: 100%; height: 100%; object-fit: contain; }
 .app-main { width: 100%; min-width: 0; margin: 0; }
 .topbar { min-height: 104px; display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 24px 34px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.82); backdrop-filter: blur(12px); }
 .topbar h1 { margin: 0; font-size: 27px; letter-spacing: -.035em; }

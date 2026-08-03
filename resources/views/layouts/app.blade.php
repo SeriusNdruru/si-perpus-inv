@@ -111,7 +111,7 @@
             </nav>
 
             <div class="sidebar-user">
-                <span class="avatar">{{ strtoupper(substr($currentUser->full_name, 0, 1)) }}</span>
+                <span class="avatar">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'width' => 38, 'height' => 38, 'alt' => 'profil admin'])</span>
                 <div>
                     <strong>{{ $currentUser->full_name }}</strong>
                     <small>{{ $currentUser->primaryRoleLabel() }}</small>
