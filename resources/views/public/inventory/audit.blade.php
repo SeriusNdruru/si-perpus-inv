@@ -34,11 +34,27 @@
         <div class="portal-table-wrap">
             <table class="portal-table portal-table-audit">
                 <thead>
-                    <tr><th>Kode aset</th><th>Barang/buku</th><th>Kategori</th><th>Kondisi</th><th>Status</th><th>Lokasi</th><th>Rak</th></tr>
+                    <tr><th>Foto</th><th>Kode aset</th><th>Barang/buku</th><th>Kategori</th><th>Kondisi</th><th>Status</th><th>Lokasi</th><th>Rak</th></tr>
                 </thead>
                 <tbody>
                     @forelse ($assets as $asset)
                         <tr>
+                            <td>
+                                @if ($asset->image_path)
+                                    <button
+                                        type="button"
+                                        class="portal-photo-thumbnail"
+                                        data-photo-preview
+                                        data-photo-src="{{ asset('storage/'.$asset->image_path) }}"
+                                        data-photo-title="{{ $asset->item_name }} - {{ $asset->asset_code }}"
+                                        aria-label="Lihat foto {{ $asset->item_name }}"
+                                    >
+                                        <img src="{{ asset('storage/'.$asset->image_path) }}" alt="Foto {{ $asset->item_name }}" loading="lazy">
+                                    </button>
+                                @else
+                                    <span class="portal-photo-empty">Tanpa foto</span>
+                                @endif
+                            </td>
                             <td><strong>{{ $asset->asset_code }}</strong><small>{{ $asset->item_code }}</small></td>
                             <td>{{ $asset->item_name }}</td>
                             <td>{{ $asset->category_name ?: '-' }}</td>
@@ -72,7 +88,7 @@
                             <td>{{ $asset->shelf_code ?: '-' }}</td>
                         </tr>
                     @empty
-                        <tr><td colspan="7">Tidak ada aset sesuai filter.</td></tr>
+                        <tr><td colspan="8">Tidak ada aset sesuai filter.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -89,16 +105,38 @@
         </div>
         <div class="portal-table-wrap">
             <table class="portal-table">
-                <thead><tr><th>Kode</th><th>Barang</th><th>Lokasi</th><th>Jumlah</th></tr></thead>
+                <thead><tr><th>Foto</th><th>Kode</th><th>Barang</th><th>Lokasi</th><th>Jumlah</th></tr></thead>
                 <tbody>
                     @forelse ($stockBalances as $stock)
-                        <tr><td>{{ $stock->item_code }}</td><td>{{ $stock->item_name }}</td><td>{{ $stock->location_name }}</td><td>{{ number_format((float) $stock->quantity, 2) }}</td></tr>
+                        <tr>
+                            <td>
+                                @if ($stock->image_path)
+                                    <button
+                                        type="button"
+                                        class="portal-photo-thumbnail"
+                                        data-photo-preview
+                                        data-photo-src="{{ asset('storage/'.$stock->image_path) }}"
+                                        data-photo-title="{{ $stock->item_name }}"
+                                        aria-label="Lihat foto {{ $stock->item_name }}"
+                                    >
+                                        <img src="{{ asset('storage/'.$stock->image_path) }}" alt="Foto {{ $stock->item_name }}" loading="lazy">
+                                    </button>
+                                @else
+                                    <span class="portal-photo-empty">Tanpa foto</span>
+                                @endif
+                            </td>
+                            <td>{{ $stock->item_code }}</td>
+                            <td>{{ $stock->item_name }}</td>
+                            <td>{{ $stock->location_name }}</td>
+                            <td>{{ number_format((float) $stock->quantity, 2) }}</td>
+                        </tr>
                     @empty
-                        <tr><td colspan="4">Tidak ada saldo barang berbasis jumlah.</td></tr>
+                        <tr><td colspan="5">Tidak ada saldo barang berbasis jumlah.</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
 </section>
+@include('shared.photo-preview-modal')
 @endsection

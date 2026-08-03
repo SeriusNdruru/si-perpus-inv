@@ -104,5 +104,6 @@
             <span>Dashboard inventaris umum sekolah</span>
         </div>
     </footer>
+    <script src="{{ asset('js/portal-photo-preview.js') }}" defer></script>
 </body>
 </html>

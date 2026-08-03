@@ -31,7 +31,17 @@
         </div>
         <div class="item-photo-detail">
             @if ($itemImagePath)
-                <img src="{{ asset('storage/'.$itemImagePath) }}" alt="Foto {{ $item->item_name }}">
+                <button
+                    type="button"
+                    class="item-photo-detail-button"
+                    data-photo-preview
+                    data-photo-src="{{ asset('storage/'.$itemImagePath) }}"
+                    data-photo-title="{{ $item->item_name }}"
+                    aria-label="Perbesar foto {{ $item->item_name }}"
+                >
+                    <img src="{{ asset('storage/'.$itemImagePath) }}" alt="Foto {{ $item->item_name }}">
+                    <span>Klik foto untuk memperbesar</span>
+                </button>
             @else
                 <span>Foto belum tersedia</span>
             @endif

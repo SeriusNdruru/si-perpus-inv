@@ -19,6 +19,7 @@ class PublicInventoryController extends Controller
 
         $items = DB::table('items')
             ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
+            ->leftJoin('book_details', 'book_details.item_id', '=', 'items.id')
             ->where('items.status', 'active')
             ->when($search !== '', fn ($query) => $query->where(function ($subQuery) use ($search): void {
                 $subQuery
@@ -33,6 +34,7 @@ class PublicInventoryController extends Controller
                 'items.item_type',
                 'items.tracking_type',
                 'categories.category_name',
+                DB::raw('COALESCE(items.image_path, book_details.cover_path) AS image_path'),
             ])
             ->selectSub(function ($query): void {
                 $query->from('assets')
@@ -74,6 +76,7 @@ class PublicInventoryController extends Controller
         $assets = DB::table('assets')
             ->join('items', 'items.id', '=', 'assets.item_id')
             ->leftJoin('categories', 'categories.id', '=', 'items.category_id')
+            ->leftJoin('book_details', 'book_details.item_id', '=', 'items.id')
             ->leftJoin('locations', 'locations.id', '=', 'assets.current_location_id')
             ->leftJoin('library_shelves', 'library_shelves.id', '=', 'assets.current_shelf_id')
             ->where('assets.asset_status', '<>', 'disposed')
@@ -97,6 +100,7 @@ class PublicInventoryController extends Controller
                 'items.item_name',
                 'items.item_type',
                 'categories.category_name',
+                DB::raw('COALESCE(items.image_path, book_details.cover_path) AS image_path'),
                 'locations.location_name',
                 'library_shelves.shelf_code',
                 'assets.updated_at',
@@ -108,6 +112,7 @@ class PublicInventoryController extends Controller
 
         $stockBalances = DB::table('stock_balances')
             ->join('items', 'items.id', '=', 'stock_balances.item_id')
+            ->leftJoin('book_details', 'book_details.item_id', '=', 'items.id')
             ->join('locations', 'locations.id', '=', 'stock_balances.location_id')
             ->where('items.status', 'active')
             ->where('items.tracking_type', 'quantity')
@@ -122,6 +127,7 @@ class PublicInventoryController extends Controller
             ->get([
                 'items.item_code',
                 'items.item_name',
+                DB::raw('COALESCE(items.image_path, book_details.cover_path) AS image_path'),
                 'locations.location_name',
                 'stock_balances.quantity',
             ]);

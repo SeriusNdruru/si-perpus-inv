@@ -31,10 +31,26 @@
 
         <div class="portal-table-wrap">
             <table class="portal-table">
-                <thead><tr><th>Barang</th><th>Jenis</th><th>Kategori</th><th>Jumlah</th><th>Masalah kondisi</th></tr></thead>
+                <thead><tr><th>Foto</th><th>Barang</th><th>Jenis</th><th>Kategori</th><th>Jumlah</th><th>Masalah kondisi</th></tr></thead>
                 <tbody>
                     @forelse ($items as $item)
                         <tr>
+                            <td>
+                                @if ($item->image_path)
+                                    <button
+                                        type="button"
+                                        class="portal-photo-thumbnail"
+                                        data-photo-preview
+                                        data-photo-src="{{ asset('storage/'.$item->image_path) }}"
+                                        data-photo-title="{{ $item->item_name }}"
+                                        aria-label="Lihat foto {{ $item->item_name }}"
+                                    >
+                                        <img src="{{ asset('storage/'.$item->image_path) }}" alt="Foto {{ $item->item_name }}" loading="lazy">
+                                    </button>
+                                @else
+                                    <span class="portal-photo-empty">Tanpa foto</span>
+                                @endif
+                            </td>
                             <td><strong>{{ $item->item_name }}</strong><small>{{ $item->item_code }}</small></td>
                             <td>{{ ucfirst($item->item_type) }}</td>
                             <td>{{ $item->category_name ?: '-' }}</td>
@@ -50,7 +66,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5">Data tidak ditemukan.</td></tr>
+                        <tr><td colspan="6">Data tidak ditemukan.</td></tr>
                     @endforelse
                 </tbody>
             </table>
@@ -63,4 +79,5 @@
         </div>
     </div>
 </section>
+@include('shared.photo-preview-modal')
 @endsection

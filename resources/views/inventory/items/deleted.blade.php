@@ -78,13 +78,22 @@
                         <tr>
                             @php($itemImagePath = $item->image_path ?: $item->bookDetail?->cover_path)
                             <td>
-                                <div class="item-table-photo">
-                                    @if ($itemImagePath)
-                                        <img src="{{ asset('storage/'.$itemImagePath) }}" alt="Foto {{ $item->item_name }}">
-                                    @else
+                                @if ($itemImagePath)
+                                    <button
+                                        type="button"
+                                        class="item-table-photo item-photo-preview-button"
+                                        data-photo-preview
+                                        data-photo-src="{{ asset('storage/'.$itemImagePath) }}"
+                                        data-photo-title="{{ $item->item_name }}"
+                                        aria-label="Lihat foto {{ $item->item_name }}"
+                                    >
+                                        <img src="{{ asset('storage/'.$itemImagePath) }}" alt="Foto {{ $item->item_name }}" loading="lazy">
+                                    </button>
+                                @else
+                                    <div class="item-table-photo">
                                         <span>{{ mb_strtoupper(mb_substr($item->item_name, 0, 2)) }}</span>
-                                    @endif
-                                </div>
+                                    </div>
+                                @endif
                             </td>
                             <td><strong>{{ $item->item_code }}</strong></td>
                             <td>

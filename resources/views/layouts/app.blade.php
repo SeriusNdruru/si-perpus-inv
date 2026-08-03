@@ -143,5 +143,7 @@
             </section>
         </main>
     </div>
+    @include('shared.photo-preview-modal')
+    <script src="{{ asset('js/portal-photo-preview.js') }}" defer></script>
 </body>
 </html>

@@ -1080,3 +1080,177 @@ img { max-width: 100%; display: block; }
     font-size: 11px;
     line-height: 1.9;
 }
+
+/* Tahap 46: thumbnail dan pratinjau foto inventaris umum/audit */
+.portal-photo-thumbnail {
+    width: 58px;
+    height: 58px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--portal-line);
+    border-radius: 12px;
+    background: #f4f8f9;
+    cursor: zoom-in;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.portal-photo-thumbnail:hover,
+.portal-photo-thumbnail:focus-visible {
+    transform: translateY(-2px);
+    border-color: #6d969f;
+    box-shadow: 0 8px 18px rgba(17, 57, 66, .14);
+    outline: none;
+}
+
+.portal-photo-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.portal-photo-empty {
+    display: inline-flex;
+    width: 58px;
+    min-height: 58px;
+    padding: 7px;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed var(--portal-line);
+    border-radius: 12px;
+    color: var(--portal-muted);
+    background: #f8fbfb;
+    font-size: 9px;
+    font-weight: 800;
+    line-height: 1.25;
+    text-align: center;
+}
+
+.portal-photo-modal[hidden] {
+    display: none;
+}
+
+.portal-photo-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+}
+
+.portal-photo-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(7, 20, 24, .78);
+    backdrop-filter: blur(4px);
+}
+
+.portal-photo-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(920px, 96vw);
+    max-height: 92vh;
+    overflow: hidden;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, .34);
+}
+
+.portal-photo-modal-dialog:focus {
+    outline: none;
+}
+
+.portal-photo-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--portal-line);
+}
+
+.portal-photo-modal-header h2 {
+    margin: 3px 0 0;
+    font-size: clamp(18px, 2.5vw, 26px);
+}
+
+.portal-photo-modal-close {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border: 1px solid var(--portal-line);
+    border-radius: 50%;
+    background: #fff;
+    color: #173941;
+    font-size: 29px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.portal-photo-modal-close:hover,
+.portal-photo-modal-close:focus-visible {
+    background: #eef5f6;
+    outline: none;
+}
+
+.portal-photo-modal-body {
+    min-height: 240px;
+    max-height: calc(92vh - 88px);
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: auto;
+    background: #eef3f4;
+}
+
+.portal-photo-modal-body img {
+    display: block;
+    max-width: 100%;
+    max-height: calc(92vh - 124px);
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 14px;
+    background: #fff;
+}
+
+body.portal-modal-open {
+    overflow: hidden;
+}
+
+@media (max-width: 640px) {
+    .portal-photo-modal {
+        padding: 10px;
+    }
+
+    .portal-photo-modal-dialog {
+        width: 100%;
+        max-height: 95vh;
+        border-radius: 16px;
+    }
+
+    .portal-photo-modal-header {
+        padding: 14px 15px;
+    }
+
+    .portal-photo-modal-body {
+        padding: 10px;
+        max-height: calc(95vh - 76px);
+    }
+
+    .portal-photo-modal-body img {
+        max-height: calc(95vh - 102px);
+    }
+}
+
+@media print {
+    .portal-photo-modal,
+    .portal-photo-modal[hidden] {
+        display: none !important;
+    }
+}
