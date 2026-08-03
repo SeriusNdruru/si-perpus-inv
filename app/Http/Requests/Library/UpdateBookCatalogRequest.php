@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Library;
 
+use App\Models\BookDetail;
 use App\Models\Item;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -45,6 +46,9 @@ class UpdateBookCatalogRequest extends FormRequest
         $book = $this->route('book');
         $itemId = $book instanceof Item ? $book->id : $book;
 
+        $hasStoredCover = $book instanceof Item
+            && ($book->image_path !== null || $book->bookDetail()->whereNotNull('cover_path')->exists());
+
         return [
             'isbn_10' => [
                 'nullable',
@@ -59,6 +63,7 @@ class UpdateBookCatalogRequest extends FormRequest
             'publisher_id' => ['nullable', 'integer', 'exists:publishers,id'],
             'new_publisher_name' => ['nullable', 'string', 'max:180'],
             'publication_year' => ['nullable', 'integer', 'between:1000,2200'],
+            'grade_level' => ['required', Rule::in(array_keys(BookDetail::GRADE_LEVELS))],
             'edition' => ['nullable', 'string', 'max:80'],
             'language' => ['required', 'string', 'max:50'],
             'page_count' => ['nullable', 'integer', 'min:1', 'max:100000'],
@@ -68,8 +73,8 @@ class UpdateBookCatalogRequest extends FormRequest
             'authors_text' => ['nullable', 'string', 'max:4000'],
             'authors' => ['array', 'max:20'],
             'authors.*' => ['string', 'max:180', 'distinct:ignore_case'],
-            'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
-            'remove_cover' => ['nullable', 'boolean'],
+            'cover_image' => [Rule::requiredIf(! $hasStoredCover), 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
+            'remove_cover' => ['prohibited'],
         ];
     }
 
@@ -85,8 +90,11 @@ class UpdateBookCatalogRequest extends FormRequest
             'isbn_13.unique' => 'ISBN-13 sudah digunakan oleh buku lain.',
             'publisher_id.exists' => 'Penerbit yang dipilih tidak ditemukan.',
             'publication_year.between' => 'Tahun terbit harus berada antara 1000 dan 2200.',
+            'grade_level.required' => 'Kategori kelas buku wajib dipilih.',
+            'grade_level.in' => 'Kategori kelas buku tidak valid.',
             'authors.max' => 'Maksimal 20 penulis dapat disimpan dalam satu buku.',
             'authors.*.distinct' => 'Nama penulis tidak boleh ditulis lebih dari satu kali.',
+            'cover_image.required' => 'Cover buku wajib tersedia.',
             'cover_image.image' => 'File cover harus berupa gambar.',
             'cover_image.mimes' => 'Cover hanya mendukung JPG, PNG, atau WEBP.',
             'cover_image.max' => 'Ukuran cover maksimal 3 MB.',

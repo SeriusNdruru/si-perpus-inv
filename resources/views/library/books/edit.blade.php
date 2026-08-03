@@ -115,6 +115,17 @@
                     </div>
 
                     <div class="form-field">
+                        <label for="grade_level">Kategori kelas <span>*</span></label>
+                        <select id="grade_level" name="grade_level" required>
+                            <option value="">Pilih peruntukan kelas</option>
+                            @foreach ($gradeLevels as $value => $label)
+                                <option value="{{ $value }}" @selected(old('grade_level', $book->bookDetail?->grade_level ?? 'umum') === $value)>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        <small>Pilih kelas utama yang sesuai. Gunakan Umum / Semua Kelas untuk buku yang dapat dibaca seluruh siswa.</small>
+                    </div>
+
+                    <div class="form-field">
                         <label for="edition">Edisi</label>
                         <input
                             id="edition"
@@ -234,7 +245,7 @@
 
             <div class="inline-notice">
                 <strong>Status katalog dihitung otomatis.</strong>
-                <p>Katalog menjadi lengkap jika memiliki ISBN, penerbit, tahun terbit, minimal satu penulis, kode klasifikasi, dan nomor panggil. Eksemplar tetap belum diproses sampai rak ditentukan.</p>
+                <p>Katalog menjadi lengkap jika memiliki ISBN, penerbit, tahun terbit, kategori kelas, minimal satu penulis, kode klasifikasi, dan nomor panggil. Eksemplar tetap belum diproses sampai rak ditentukan.</p>
             </div>
 
             <div class="form-actions">

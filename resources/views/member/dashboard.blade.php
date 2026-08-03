@@ -67,7 +67,7 @@
                     @if ($book->cover_path)<img src="{{ asset('storage/'.$book->cover_path) }}" alt="">@else<span>{{ mb_strtoupper(mb_substr($book->item_name, 0, 2)) }}</span>@endif
                 </div>
                 <h3>{{ $book->item_name }}</h3>
-                <p>{{ $book->publication_year ?: 'Tahun belum dicantumkan' }}</p>
+                <p>{{ $book->publication_year ?: 'Tahun belum dicantumkan' }} · {{ \App\Models\BookDetail::GRADE_LEVELS[$book->grade_level ?? 'umum'] ?? 'Umum / Semua Kelas' }}</p>
             </article>
         @empty
             <div class="member-empty">Belum ada buku yang dapat direkomendasikan.</div>

@@ -15,6 +15,7 @@ use App\Models\Unit;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Throwable;
@@ -109,9 +110,10 @@ class ItemController extends Controller
         $data = $request->validated();
         $userId = (int) $request->user()->id;
         $assetCodeSeparator = $this->assetCodeSeparator();
+        $imagePath = $request->file('item_image')->store('item-images', 'public');
 
         try {
-            $itemId = DB::transaction(function () use ($data, $userId, $assetCodeSeparator): int {
+            $itemId = DB::transaction(function () use ($data, $userId, $assetCodeSeparator, $imagePath): int {
                 $item = Item::query()->create([
                     'item_code' => $data['item_code'],
                     'item_name' => $data['item_name'],
@@ -120,11 +122,22 @@ class ItemController extends Controller
                     'category_id' => $data['category_id'],
                     'unit_id' => $data['unit_id'],
                     'description' => $data['description'] ?? null,
+                    'image_path' => $imagePath,
                     'minimum_stock' => $data['minimum_stock'],
                     'status' => 'active',
                     'created_by' => $userId,
                     'updated_by' => $userId,
                 ]);
+
+                if ($item->item_type === 'book') {
+                    DB::table('book_details')
+                        ->where('item_id', $item->id)
+                        ->update([
+                            'cover_path' => $imagePath,
+                            'updated_by' => $userId,
+                            'updated_at' => now(),
+                        ]);
+                }
 
                 if ($data['tracking_type'] === 'asset') {
                     $quantity = (int) $data['quantity'];
@@ -189,6 +202,8 @@ class ItemController extends Controller
                 return (int) $item->id;
             }, 3);
         } catch (Throwable $exception) {
+            Storage::disk('public')->delete($imagePath);
+
             return back()
                 ->withInput()
                 ->withErrors(['database' => $this->databaseMessage($exception)]);
@@ -196,7 +211,7 @@ class ItemController extends Controller
 
         return redirect()
             ->route('inventory.items.show', $itemId)
-            ->with('success', 'Barang dan stok awal berhasil ditambahkan.');
+            ->with('success', 'Barang, foto, dan stok awal berhasil ditambahkan.');
     }
 
     public function show(Item $item): View
@@ -204,7 +219,7 @@ class ItemController extends Controller
         $item->load([
             'category:id,category_code,category_name',
             'unit:id,unit_code,unit_name',
-            'bookDetail:item_id,completion_status,isbn_10,isbn_13,publication_year,classification_code,call_number',
+            'bookDetail:item_id,completion_status,isbn_10,isbn_13,publication_year,grade_level,classification_code,call_number,cover_path',
             'creator:id,full_name',
         ]);
 
@@ -261,10 +276,60 @@ class ItemController extends Controller
                 ]);
         }
 
-        $item->update([
-            ...$data,
-            'updated_by' => $request->user()->id,
-        ]);
+        $item->loadMissing('bookDetail');
+        $oldItemImagePath = $item->image_path;
+        $oldBookCoverPath = $item->bookDetail?->cover_path;
+        $newImagePath = $request->hasFile('item_image')
+            ? $request->file('item_image')->store('item-images', 'public')
+            : null;
+
+        try {
+            DB::transaction(function () use ($data, $item, $request, $newImagePath): void {
+                $values = [
+                    'item_name' => $data['item_name'],
+                    'category_id' => $data['category_id'],
+                    'unit_id' => $data['unit_id'],
+                    'description' => $data['description'] ?? null,
+                    'minimum_stock' => $data['minimum_stock'],
+                    'status' => $data['status'],
+                    'updated_by' => $request->user()->id,
+                ];
+
+                if ($newImagePath !== null) {
+                    $values['image_path'] = $newImagePath;
+                }
+
+                $item->update($values);
+
+                if ($newImagePath !== null && $item->item_type === 'book') {
+                    DB::table('book_details')
+                        ->where('item_id', $item->id)
+                        ->update([
+                            'cover_path' => $newImagePath,
+                            'updated_by' => $request->user()->id,
+                            'updated_at' => now(),
+                        ]);
+                }
+            }, 3);
+        } catch (Throwable $exception) {
+            if ($newImagePath !== null) {
+                Storage::disk('public')->delete($newImagePath);
+            }
+
+            return back()
+                ->withInput()
+                ->withErrors(['database' => $this->databaseMessage($exception)]);
+        }
+
+        if ($newImagePath !== null) {
+            $oldPaths = array_unique(array_filter([$oldItemImagePath, $oldBookCoverPath]));
+
+            foreach ($oldPaths as $oldPath) {
+                if ($oldPath !== $newImagePath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
+        }
 
         if ($item->status === 'inactive') {
             return redirect()
@@ -274,7 +339,7 @@ class ItemController extends Controller
 
         return redirect()
             ->route('inventory.items.show', $item)
-            ->with('success', 'Data barang berhasil diperbarui.');
+            ->with('success', 'Data barang dan foto berhasil diperbarui.');
     }
 
     public function toggleStatus(Item $item, Request $request): RedirectResponse
@@ -330,7 +395,7 @@ class ItemController extends Controller
             ->with([
                 'category:id,category_code,category_name',
                 'unit:id,unit_code,unit_name',
-                'bookDetail:item_id,completion_status',
+                'bookDetail:item_id,completion_status,cover_path',
             ])
             ->select('items.*')
             ->selectSub(function ($query): void {

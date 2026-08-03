@@ -136,7 +136,7 @@ class ReportController extends Controller
         $books = (clone $baseQuery)
             ->with([
                 'category:id,category_code,category_name',
-                'bookDetail:item_id,isbn_10,isbn_13,publisher_id,publication_year,classification_code,call_number,completion_status',
+                'bookDetail:item_id,isbn_10,isbn_13,publisher_id,publication_year,grade_level,classification_code,call_number,completion_status',
                 'bookDetail.publisher:id,publisher_name',
                 'authors:id,author_name',
             ])
@@ -168,7 +168,7 @@ class ReportController extends Controller
         $query = $this->collectionBaseQuery($filters)
             ->with([
                 'category:id,category_code,category_name',
-                'bookDetail:item_id,isbn_10,isbn_13,publisher_id,publication_year,classification_code,call_number,completion_status',
+                'bookDetail:item_id,isbn_10,isbn_13,publisher_id,publication_year,grade_level,classification_code,call_number,completion_status',
                 'bookDetail.publisher:id,publisher_name',
                 'authors:id,author_name',
             ])
@@ -184,7 +184,7 @@ class ReportController extends Controller
 
         return $this->csvDownload(
             'laporan-koleksi-buku-'.now()->format('Ymd-His').'.csv',
-            ['Kode', 'Judul', 'ISBN', 'Penulis', 'Penerbit', 'Tahun', 'Kategori', 'Klasifikasi', 'Nomor panggil', 'Status katalog', 'Total eksemplar', 'Tersedia', 'Dipinjam', 'Belum diproses', 'Tanpa rak', 'Reservasi aktif'],
+            ['Kode', 'Judul', 'ISBN', 'Penulis', 'Penerbit', 'Tahun', 'Kategori kelas', 'Kategori', 'Klasifikasi', 'Nomor panggil', 'Status katalog', 'Total eksemplar', 'Tersedia', 'Dipinjam', 'Belum diproses', 'Tanpa rak', 'Reservasi aktif'],
             $query->lazy(500),
             fn (Item $book): array => [
                 $book->item_code,
@@ -193,6 +193,7 @@ class ReportController extends Controller
                 $book->authors->pluck('author_name')->join(', '),
                 $book->bookDetail?->publisher?->publisher_name,
                 $book->bookDetail?->publication_year,
+                $book->bookDetail?->grade_level_label,
                 $book->category?->category_name,
                 $book->bookDetail?->classification_code,
                 $book->bookDetail?->call_number,
@@ -524,6 +525,7 @@ class ReportController extends Controller
         return $request->validate([
             'search' => ['nullable', 'string', 'max:120'],
             'completion_status' => ['nullable', 'in:incomplete,complete,verified'],
+            'grade_level' => ['nullable', 'in:umum,kelas_1,kelas_2,kelas_3,kelas_4,kelas_5,kelas_6'],
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'shelf_id' => ['nullable', 'integer', 'exists:library_shelves,id'],
             'availability' => ['nullable', 'in:available,borrowed,unprocessed,without_shelf'],
@@ -549,6 +551,7 @@ class ReportController extends Controller
                 });
             })
             ->when($filters['completion_status'] ?? null, fn (Builder $query, string $status) => $query->whereHas('bookDetail', fn (Builder $bookQuery) => $bookQuery->where('completion_status', $status)))
+            ->when($filters['grade_level'] ?? null, fn (Builder $query, string $grade) => $query->whereHas('bookDetail', fn (Builder $bookQuery) => $bookQuery->where('grade_level', $grade)))
             ->when($filters['category_id'] ?? null, fn (Builder $query, int|string $categoryId) => $query->where('items.category_id', $categoryId))
             ->when($filters['shelf_id'] ?? null, fn (Builder $query, int|string $shelfId) => $query->whereHas('assets', fn (Builder $assetQuery) => $assetQuery->where('current_shelf_id', $shelfId)))
             ->when($filters['availability'] ?? null, function (Builder $query, string $availability): void {

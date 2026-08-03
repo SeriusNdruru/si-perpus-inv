@@ -53,6 +53,10 @@
                     <dd>{{ $detail?->publication_year ?? '-' }}</dd>
                 </div>
                 <div>
+                    <dt>Kategori kelas</dt>
+                    <dd>{{ $detail?->grade_level_label ?? 'Umum / Semua Kelas' }}</dd>
+                </div>
+                <div>
                     <dt>Edisi</dt>
                     <dd>{{ $detail?->edition ?? '-' }}</dd>
                 </div>

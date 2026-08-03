@@ -93,6 +93,7 @@
                 <div><dt>ISBN-10</dt><dd>{{ $item->bookDetail?->isbn_10 ?: '-' }}</dd></div>
                 <div><dt>ISBN-13</dt><dd>{{ $item->bookDetail?->isbn_13 ?: '-' }}</dd></div>
                 <div><dt>Tahun terbit</dt><dd>{{ $item->bookDetail?->publication_year ?: '-' }}</dd></div>
+                <div><dt>Kategori kelas</dt><dd>{{ $item->bookDetail?->grade_level_label ?? 'Umum / Semua Kelas' }}</dd></div>
                 <div><dt>Klasifikasi</dt><dd>{{ $item->bookDetail?->classification_code ?: '-' }}</dd></div>
                 <div><dt>Nomor panggil</dt><dd>{{ $item->bookDetail?->call_number ?: '-' }}</dd></div>
                 <div><dt>Status</dt><dd>{{ ucfirst($item->bookDetail?->completion_status ?? 'incomplete') }}</dd></div>

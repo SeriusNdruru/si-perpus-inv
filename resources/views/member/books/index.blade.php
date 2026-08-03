@@ -17,6 +17,12 @@
             <option value="{{ $category->id }}" @selected((int) request('category') === $category->id)>{{ $category->category_name }}</option>
         @endforeach
     </select>
+    <select name="grade_level">
+        <option value="">Semua kelas</option>
+        @foreach ($gradeLevels as $value => $label)
+            <option value="{{ $value }}" @selected(request('grade_level') === $value)>{{ $label }}</option>
+        @endforeach
+    </select>
     <button type="submit" class="member-button member-button-primary">Cari</button>
     <a href="{{ route('member.books.index') }}" class="member-button member-button-soft">Reset</a>
 </form>
@@ -31,6 +37,7 @@
             <small>{{ $book->author_names ?: 'Penulis belum dicantumkan' }}</small>
             <h3>{{ $book->item_name }}</h3>
             <p>{{ $book->publisher_name ?: '-' }}{{ $book->publication_year ? ' · '.$book->publication_year : '' }}</p>
+            <p><strong>{{ \App\Models\BookDetail::GRADE_LEVELS[$book->grade_level ?? 'umum'] ?? 'Umum / Semua Kelas' }}</strong></p>
             <div class="member-book-actions">
                 @if ($cart->contains($book->id))
                     <form method="POST" action="{{ route('member.books.cart.remove', $book->id) }}">@csrf @method('DELETE')<button class="member-button member-button-soft" type="submit">Hapus dari keranjang</button></form>

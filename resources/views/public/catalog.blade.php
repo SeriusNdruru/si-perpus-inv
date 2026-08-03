@@ -21,6 +21,12 @@
                     <option value="{{ $category->id }}" @selected((int) request('category') === $category->id)>{{ $category->category_name }}</option>
                 @endforeach
             </select>
+            <select name="grade_level">
+                <option value="">Semua kelas</option>
+                @foreach ($gradeLevels as $value => $label)
+                    <option value="{{ $value }}" @selected(request('grade_level') === $value)>{{ $label }}</option>
+                @endforeach
+            </select>
             <button class="portal-button portal-button-primary" type="submit">Cari</button>
             <a href="{{ route('public.catalog') }}" class="portal-button portal-button-soft">Reset</a>
         </form>
@@ -42,6 +48,7 @@
                         <small>{{ $book->author_names ?: 'Penulis belum dicantumkan' }}</small>
                         <h3>{{ $book->item_name }}</h3>
                         <p>{{ $book->publisher_name ?: '-' }}{{ $book->publication_year ? ' · '.$book->publication_year : '' }}</p>
+                        <p><strong>{{ \App\Models\BookDetail::GRADE_LEVELS[$book->grade_level ?? 'umum'] ?? 'Umum / Semua Kelas' }}</strong></p>
                         <div class="portal-book-meta">
                             <span>{{ $book->call_number ?: 'Tanpa nomor panggil' }}</span>
                             <span>{{ $book->isbn_13 ?: ($book->isbn_10 ?: 'Tanpa ISBN') }}</span>

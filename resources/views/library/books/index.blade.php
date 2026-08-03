@@ -54,6 +54,16 @@
             </div>
 
             <div class="filter-field">
+                <label for="grade_level">Kategori kelas</label>
+                <select id="grade_level" name="grade_level">
+                    <option value="">Semua kelas</option>
+                    @foreach ($gradeLevels as $value => $label)
+                        <option value="{{ $value }}" @selected(request('grade_level') === $value)>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="filter-field">
                 <label for="copy_status">Status eksemplar</label>
                 <select id="copy_status" name="copy_status">
                     <option value="">Semua eksemplar</option>
@@ -103,6 +113,7 @@
                                 </span>
                                 <div class="table-secondary">
                                     {{ $book->bookDetail?->publisher?->publisher_name ?? 'Penerbit belum diisi' }}
+                                    · {{ $book->bookDetail?->grade_level_label ?? 'Umum / Semua Kelas' }}
                                 </div>
                             </td>
                             <td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
+use App\Models\BookDetail;
 use App\Models\Item;
 use App\Services\Library\MemberAccountService;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +22,7 @@ class MemberBookController extends Controller
         $member = $this->memberAccounts->memberFor($request->user());
         $search = trim((string) $request->query('search'));
         $category = (int) $request->query('category');
+        $gradeLevel = (string) $request->query('grade_level');
         $cart = collect($request->session()->get('member.loan_request_cart', []))
             ->map(static fn ($id): int => (int) $id)
             ->unique()
@@ -50,6 +52,7 @@ class MemberBookController extends Controller
                 });
             })
             ->when($category > 0, fn ($query) => $query->where('items.category_id', $category))
+            ->when(array_key_exists($gradeLevel, BookDetail::GRADE_LEVELS), fn ($query) => $query->where('book_details.grade_level', $gradeLevel))
             ->select([
                 'items.id',
                 'items.item_code',
@@ -58,6 +61,7 @@ class MemberBookController extends Controller
                 'book_details.isbn_10',
                 'book_details.isbn_13',
                 'book_details.publication_year',
+                'book_details.grade_level',
                 'book_details.call_number',
                 'book_details.cover_path',
                 'publishers.publisher_name',
@@ -86,7 +90,13 @@ class MemberBookController extends Controller
             ->orderBy('category_name')
             ->get(['id', 'category_name']);
 
-        return view('member.books.index', compact('member', 'books', 'categories', 'cart'));
+        return view('member.books.index', [
+            'member' => $member,
+            'books' => $books,
+            'categories' => $categories,
+            'cart' => $cart,
+            'gradeLevels' => BookDetail::GRADE_LEVELS,
+        ]);
     }
 
     public function addToCart(Request $request, Item $book): RedirectResponse

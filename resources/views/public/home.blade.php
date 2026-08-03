@@ -79,6 +79,7 @@
                         <small>{{ $book->author_names ?: 'Penulis belum dicantumkan' }}</small>
                         <h3>{{ $book->item_name }}</h3>
                         <p>{{ $book->publisher_name ?: 'Penerbit belum dicantumkan' }}{{ $book->publication_year ? ' · '.$book->publication_year : '' }}</p>
+                        <p><strong>{{ \App\Models\BookDetail::GRADE_LEVELS[$book->grade_level ?? 'umum'] ?? 'Umum / Semua Kelas' }}</strong></p>
                     </div>
                 </article>
             @empty

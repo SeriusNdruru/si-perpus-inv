@@ -7,6 +7,19 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BookDetail extends Model
 {
+    /**
+     * @var array<string, string>
+     */
+    public const GRADE_LEVELS = [
+        'umum' => 'Umum / Semua Kelas',
+        'kelas_1' => 'Kelas 1',
+        'kelas_2' => 'Kelas 2',
+        'kelas_3' => 'Kelas 3',
+        'kelas_4' => 'Kelas 4',
+        'kelas_5' => 'Kelas 5',
+        'kelas_6' => 'Kelas 6',
+    ];
+
     protected $primaryKey = 'item_id';
 
     public $incrementing = false;
@@ -17,6 +30,7 @@ class BookDetail extends Model
         'isbn_13',
         'publisher_id',
         'publication_year',
+        'grade_level',
         'edition',
         'language',
         'page_count',
@@ -34,6 +48,11 @@ class BookDetail extends Model
             'publication_year' => 'integer',
             'page_count' => 'integer',
         ];
+    }
+
+    public function getGradeLevelLabelAttribute(): string
+    {
+        return self::GRADE_LEVELS[$this->grade_level ?? 'umum'] ?? 'Umum / Semua Kelas';
     }
 
     public function item(): BelongsTo

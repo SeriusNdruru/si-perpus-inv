@@ -32,6 +32,7 @@ class BookCatalogController extends Controller
         $search = trim((string) $request->query('search'));
         $completionStatus = (string) $request->query('completion_status');
         $copyStatus = (string) $request->query('copy_status');
+        $gradeLevel = (string) $request->query('grade_level');
 
         $books = Item::query()
             ->where('item_type', 'book')
@@ -78,6 +79,10 @@ class BookCatalogController extends Controller
                 array_key_exists($completionStatus, self::COMPLETION_STATUSES),
                 fn ($query) => $query->whereHas('bookDetail', fn ($detailQuery) => $detailQuery->where('completion_status', $completionStatus))
             )
+            ->when(
+                array_key_exists($gradeLevel, BookDetail::GRADE_LEVELS),
+                fn ($query) => $query->whereHas('bookDetail', fn ($detailQuery) => $detailQuery->where('grade_level', $gradeLevel))
+            )
             ->when($copyStatus === 'unprocessed', function ($query): void {
                 $query->whereHas('assets', fn ($assetQuery) => $assetQuery->where('asset_status', 'unprocessed'));
             })
@@ -110,6 +115,7 @@ class BookCatalogController extends Controller
             'books' => $books,
             'summary' => $summary,
             'completionStatuses' => self::COMPLETION_STATUSES,
+            'gradeLevels' => BookDetail::GRADE_LEVELS,
         ]);
     }
 
@@ -161,6 +167,7 @@ class BookCatalogController extends Controller
         return view('library.books.edit', [
             'book' => $book,
             'publishers' => Publisher::query()->orderBy('publisher_name')->get(['id', 'publisher_name', 'city']),
+            'gradeLevels' => BookDetail::GRADE_LEVELS,
         ]);
     }
 
@@ -172,14 +179,12 @@ class BookCatalogController extends Controller
         $data = $request->validated();
         $userId = (int) $request->user()->id;
         $oldCoverPath = $book->bookDetail?->cover_path;
+        $oldItemImagePath = $book->image_path;
         $newCoverPath = null;
         $coverChanged = false;
 
         if ($request->hasFile('cover_image')) {
             $newCoverPath = $request->file('cover_image')->store('book-covers', 'public');
-            $coverChanged = true;
-        } elseif ($request->boolean('remove_cover')) {
-            $newCoverPath = null;
             $coverChanged = true;
         }
 
@@ -240,6 +245,7 @@ class BookCatalogController extends Controller
                     'isbn_13' => $data['isbn_13'] ?? null,
                     'publisher_id' => $publisherId,
                     'publication_year' => $data['publication_year'] ?? null,
+                    'grade_level' => $data['grade_level'],
                     'edition' => $data['edition'] ?? null,
                     'language' => $data['language'],
                     'page_count' => $data['page_count'] ?? null,
@@ -255,6 +261,13 @@ class BookCatalogController extends Controller
                 }
 
                 $bookDetail->fill($values)->save();
+
+                if ($coverChanged && $newCoverPath !== null) {
+                    $book->update([
+                        'image_path' => $newCoverPath,
+                        'updated_by' => $userId,
+                    ]);
+                }
 
                 if ($completionStatus === 'incomplete') {
                     Asset::query()
@@ -277,8 +290,14 @@ class BookCatalogController extends Controller
                 ->withErrors(['database' => $this->databaseMessage($exception)]);
         }
 
-        if ($coverChanged && $oldCoverPath !== null && $oldCoverPath !== $newCoverPath) {
-            Storage::disk('public')->delete($oldCoverPath);
+        if ($coverChanged && $newCoverPath !== null) {
+            $oldPaths = array_unique(array_filter([$oldCoverPath, $oldItemImagePath]));
+
+            foreach ($oldPaths as $oldPath) {
+                if ($oldPath !== $newCoverPath) {
+                    Storage::disk('public')->delete($oldPath);
+                }
+            }
         }
 
         return redirect()
@@ -300,6 +319,7 @@ class BookCatalogController extends Controller
         return ! empty($data['isbn_10'] ?? $data['isbn_13'] ?? null)
             && ! empty($publisherId)
             && ! empty($data['publication_year'])
+            && ! empty($data['grade_level'])
             && $authorIds !== []
             && ! empty($data['classification_code'])
             && ! empty($data['call_number']);

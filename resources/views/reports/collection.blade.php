@@ -39,6 +39,15 @@
                 </select>
             </div>
             <div class="filter-field">
+                <label for="grade_level">Kategori kelas</label>
+                <select id="grade_level" name="grade_level">
+                    <option value="">Semua kelas</option>
+                    @foreach (\App\Models\BookDetail::GRADE_LEVELS as $value => $label)
+                        <option value="{{ $value }}" @selected(request('grade_level') === $value)>{{ $label }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="filter-field">
                 <label for="category_id">Kategori</label>
                 <select id="category_id" name="category_id">
                     <option value="">Semua kategori</option>
@@ -82,7 +91,7 @@
                                 <div class="table-primary">{{ $book->authors->pluck('author_name')->join(', ') ?: 'Penulis belum diisi' }}</div>
                                 <div class="table-secondary">ISBN {{ $book->bookDetail?->isbn_13 ?: ($book->bookDetail?->isbn_10 ?: '-') }} · {{ $book->bookDetail?->publication_year ?: '-' }}</div>
                             </td>
-                            <td>{{ $book->category?->category_name ?? '-' }}<div class="table-secondary">{{ $book->bookDetail?->call_number ?: '-' }}</div></td>
+                            <td>{{ $book->category?->category_name ?? '-' }}<div class="table-secondary">{{ $book->bookDetail?->grade_level_label ?? 'Umum / Semua Kelas' }} · {{ $book->bookDetail?->call_number ?: '-' }}</div></td>
                             <td><span class="badge {{ in_array($book->bookDetail?->completion_status, ['complete', 'verified'], true) ? 'badge-success' : 'badge-warning' }}">{{ match ($book->bookDetail?->completion_status) { 'verified' => 'Terverifikasi', 'complete' => 'Lengkap', default => 'Belum lengkap' } }}</span></td>
                             <td>{{ number_format((int) $book->total_copies) }}</td>
                             <td>{{ number_format((int) $book->available_copies) }}</td>

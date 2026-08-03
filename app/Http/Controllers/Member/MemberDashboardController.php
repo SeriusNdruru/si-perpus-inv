@@ -96,6 +96,7 @@ class MemberDashboardController extends Controller
                 'items.item_name',
                 'book_details.cover_path',
                 'book_details.publication_year',
+                'book_details.grade_level',
             ]);
 
         return view('member.dashboard', compact(
