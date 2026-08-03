@@ -40,14 +40,7 @@
 <section class="portal-section">
     <div class="portal-container portal-about-grid">
         <article class="portal-prose">
-            <h2>Layanan yang terhubung</h2>
-            <p style="white-space: pre-line;">{{ $systemBrand['portal.about_content'] ?? '' }}</p>
-
-            <div class="portal-feature-list">
-                <div><span>📚</span><strong>Katalog dan sirkulasi</strong><p>Daftar buku, pengajuan, pengambilan, pengembalian, dan denda berada dalam satu rekam data.</p></div>
-                <div><span>🔔</span><strong>Notifikasi anggota</strong><p>Siswa menerima pesan otomatis sebelum jatuh tempo dan saat status pengajuan berubah.</p></div>
-                <div><span>📦</span><strong>Inventaris transparan</strong><p>Kondisi dan lokasi barang dapat diperiksa melalui dashboard umum tanpa login.</p></div>
-            </div>
+            <div class="portal-about-copy">{{ $systemBrand['portal.about_content'] ?? '' }}</div>
         </article>
 
         <aside>
