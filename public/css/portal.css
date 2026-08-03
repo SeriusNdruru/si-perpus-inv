@@ -151,6 +151,8 @@ img { max-width: 100%; display: block; }
 .portal-feature-list p { margin:5px 0 0; color:var(--portal-muted); font-size:12px; line-height:1.55; }
 .portal-video { position:relative; overflow:hidden; aspect-ratio:16/9; border-radius:20px; box-shadow:var(--portal-shadow); background:#102033; }
 .portal-video iframe { width:100%; height:100%; border:0; }
+.portal-video-link { display:inline-flex; margin-top:10px; color:var(--portal-primary); font-size:12px; font-weight:850; text-decoration:none; }
+.portal-video-link:hover,.portal-video-link:focus-visible { text-decoration:underline; }
 .portal-video-placeholder { min-height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:30px; border-radius:20px; color:#fff; background:linear-gradient(145deg,#0c525c,#163f57); }
 .portal-video-placeholder > span { width:58px;height:58px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.14);font-size:22px; }
 .portal-video-placeholder strong { margin-top:18px; font-size:20px; }

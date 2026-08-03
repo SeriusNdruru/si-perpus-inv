@@ -6,11 +6,25 @@
 @php
     $videoUrl = trim((string) ($systemBrand['portal.about_video_url'] ?? ''));
     $embedUrl = null;
+    $videoProvider = null;
+
     if ($videoUrl !== '') {
-        if (preg_match('~(?:youtube\.com/watch\?v=|youtu\.be/)([A-Za-z0-9_-]{6,})~', $videoUrl, $matches)) {
-            $embedUrl = 'https://www.youtube-nocookie.com/embed/'.$matches[1];
-        } elseif (preg_match('~vimeo\.com/(\d+)~', $videoUrl, $matches)) {
+        $youtubePatterns = [
+            '~(?:youtube\.com/(?:watch\?(?:[^#]*&)?v=|embed/|shorts/|live/)|youtu\.be/)([A-Za-z0-9_-]{6,})~i',
+            '~youtube\.com/watch\?.*?[?&]v=([A-Za-z0-9_-]{6,})~i',
+        ];
+
+        foreach ($youtubePatterns as $pattern) {
+            if (preg_match($pattern, $videoUrl, $matches)) {
+                $embedUrl = 'https://www.youtube-nocookie.com/embed/'.$matches[1].'?rel=0';
+                $videoProvider = 'YouTube';
+                break;
+            }
+        }
+
+        if ($embedUrl === null && preg_match('~vimeo\.com/(?:video/)?(\d+)~i', $videoUrl, $matches)) {
             $embedUrl = 'https://player.vimeo.com/video/'.$matches[1];
+            $videoProvider = 'Vimeo';
         }
     }
 @endphp
@@ -39,8 +53,18 @@
         <aside>
             @if ($embedUrl)
                 <div class="portal-video">
-                    <iframe src="{{ $embedUrl }}" title="Video tentang perpustakaan" loading="lazy" allowfullscreen></iframe>
+                    <iframe
+                        src="{{ $embedUrl }}"
+                        title="Video tentang perpustakaan"
+                        loading="lazy"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                    ></iframe>
                 </div>
+                <a class="portal-video-link" href="{{ $videoUrl }}" target="_blank" rel="noopener noreferrer">
+                    Buka video di {{ $videoProvider ?? 'situs asal' }}
+                </a>
             @else
                 <div class="portal-video-placeholder">
                     <span>▶</span>
