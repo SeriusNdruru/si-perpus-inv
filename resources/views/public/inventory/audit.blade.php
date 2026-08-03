@@ -43,16 +43,18 @@
                                 @if ($asset->image_path)
                                     <button
                                         type="button"
-                                        class="portal-photo-thumbnail"
+                                        class="item-table-photo item-photo-preview-button"
                                         data-photo-preview
                                         data-photo-src="{{ asset('storage/'.$asset->image_path) }}"
-                                        data-photo-title="{{ $asset->item_name }} - {{ $asset->asset_code }}"
+                                        data-photo-title="{{ $asset->item_name }}"
                                         aria-label="Lihat foto {{ $asset->item_name }}"
                                     >
                                         <img src="{{ asset('storage/'.$asset->image_path) }}" alt="Foto {{ $asset->item_name }}" loading="lazy">
                                     </button>
                                 @else
-                                    <span class="portal-photo-empty">Tanpa foto</span>
+                                    <div class="item-table-photo" aria-label="Tidak ada foto {{ $asset->item_name }}">
+                                        <span>{{ mb_strtoupper(mb_substr($asset->item_name, 0, 2)) }}</span>
+                                    </div>
                                 @endif
                             </td>
                             <td><strong>{{ $asset->asset_code }}</strong><small>{{ $asset->item_code }}</small></td>
@@ -113,7 +115,7 @@
                                 @if ($stock->image_path)
                                     <button
                                         type="button"
-                                        class="portal-photo-thumbnail"
+                                        class="item-table-photo item-photo-preview-button"
                                         data-photo-preview
                                         data-photo-src="{{ asset('storage/'.$stock->image_path) }}"
                                         data-photo-title="{{ $stock->item_name }}"
@@ -122,7 +124,9 @@
                                         <img src="{{ asset('storage/'.$stock->image_path) }}" alt="Foto {{ $stock->item_name }}" loading="lazy">
                                     </button>
                                 @else
-                                    <span class="portal-photo-empty">Tanpa foto</span>
+                                    <div class="item-table-photo" aria-label="Tidak ada foto {{ $stock->item_name }}">
+                                        <span>{{ mb_strtoupper(mb_substr($stock->item_name, 0, 2)) }}</span>
+                                    </div>
                                 @endif
                             </td>
                             <td>{{ $stock->item_code }}</td>
@@ -138,5 +142,4 @@
         </div>
     </div>
 </section>
-@include('shared.photo-preview-modal')
 @endsection

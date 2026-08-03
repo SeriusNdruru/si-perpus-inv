@@ -39,7 +39,7 @@
                                 @if ($item->image_path)
                                     <button
                                         type="button"
-                                        class="portal-photo-thumbnail"
+                                        class="item-table-photo item-photo-preview-button"
                                         data-photo-preview
                                         data-photo-src="{{ asset('storage/'.$item->image_path) }}"
                                         data-photo-title="{{ $item->item_name }}"
@@ -48,7 +48,9 @@
                                         <img src="{{ asset('storage/'.$item->image_path) }}" alt="Foto {{ $item->item_name }}" loading="lazy">
                                     </button>
                                 @else
-                                    <span class="portal-photo-empty">Tanpa foto</span>
+                                    <div class="item-table-photo" aria-label="Tidak ada foto {{ $item->item_name }}">
+                                        <span>{{ mb_strtoupper(mb_substr($item->item_name, 0, 2)) }}</span>
+                                    </div>
                                 @endif
                             </td>
                             <td><strong>{{ $item->item_name }}</strong><small>{{ $item->item_code }}</small></td>
@@ -79,5 +81,4 @@
         </div>
     </div>
 </section>
-@include('shared.photo-preview-modal')
 @endsection
