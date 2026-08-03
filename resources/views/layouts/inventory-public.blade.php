@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Inventaris Umum') | {{ $systemBrand['institution.name'] ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=49">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=58">
 </head>
 <body class="portal-page inventory-public-page inventory-general-page">
     <header class="portal-header inventory-public-header">
@@ -24,11 +24,13 @@
             <button
                 class="portal-menu-button"
                 type="button"
-                onclick="document.querySelector('.inventory-general-links').classList.toggle('is-open')"
+                data-portal-menu-toggle
+                aria-controls="inventory-general-links"
+                aria-expanded="false"
                 aria-label="Buka menu"
-            >☰</button>
+            ><span aria-hidden="true">☰</span></button>
 
-            <nav class="portal-links inventory-public-links inventory-general-links">
+            <nav id="inventory-general-links" class="portal-links inventory-public-links inventory-general-links" data-portal-menu>
                 <a
                     href="{{ \Illuminate\Support\Facades\Route::has('public.inventory.general') ? route('public.inventory.general') : url('/inventaris/umum') }}"
                     class="{{ request()->routeIs('public.inventory.general') ? 'active' : '' }}"
@@ -105,6 +107,7 @@
         </div>
     </footer>
     @include('shared.photo-preview-modal')
+    <script src="{{ asset('js/portal-menu.js') }}?v=58" defer></script>
     <script src="{{ asset('js/portal-photo-preview.js') }}?v=48" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
 </body>

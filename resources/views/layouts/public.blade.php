@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Portal') | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=56">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=58">
 </head>
 <body class="portal-page">
     <header class="portal-header">
@@ -18,9 +18,16 @@
                 </div>
             </a>
 
-            <button class="portal-menu-button" type="button" onclick="document.querySelector('.portal-links').classList.toggle('is-open')" aria-label="Buka menu">☰</button>
+            <button
+                class="portal-menu-button"
+                type="button"
+                data-portal-menu-toggle
+                aria-controls="portal-main-links"
+                aria-expanded="false"
+                aria-label="Buka menu"
+            ><span aria-hidden="true">☰</span></button>
 
-            <nav class="portal-links">
+            <nav id="portal-main-links" class="portal-links" data-portal-menu>
                 <a href="{{ route('public.home') }}" class="{{ request()->routeIs('public.home') ? 'active' : '' }}">Home</a>
                 <a href="{{ route('public.catalog') }}" class="{{ request()->routeIs('public.catalog') ? 'active' : '' }}">Katalog</a>
                 <a href="{{ route('public.about') }}" class="{{ request()->routeIs('public.about') ? 'active' : '' }}">Tentang</a>
@@ -85,6 +92,7 @@
             <span>Layanan perpustakaan untuk siswa dan masyarakat sekolah</span>
         </div>
     </footer>
+    <script src="{{ asset('js/portal-menu.js') }}?v=58" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
 </body>
 </html>

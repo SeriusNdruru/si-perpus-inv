@@ -45,7 +45,31 @@ img { max-width: 100%; display: block; }
 .portal-links { display: flex; align-items: center; gap: 7px; }
 .portal-links > a:not(.portal-button) { padding: 10px 11px; color: #49616a; border-radius: 12px; font-size: 13px; font-weight: 750; }
 .portal-links > a:not(.portal-button):hover, .portal-links > a.active { color: var(--portal-primary); background: #eaf5f3; }
-.portal-menu-button { display: none; border: 0; background: transparent; font-size: 25px; }
+.portal-menu-button {
+    width: 46px;
+    height: 46px;
+    display: none;
+    flex: 0 0 46px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 13px;
+    color: var(--portal-primary);
+    background: transparent;
+    cursor: pointer;
+    font-size: 27px;
+    line-height: 1;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+.portal-menu-button:hover,
+.portal-menu-button:focus-visible,
+.portal-menu-button[aria-expanded="true"] {
+    border-color: #cce1df;
+    background: #eef8f6;
+    outline: none;
+}
 .portal-button {
     min-height: 42px; padding: 10px 16px; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     border: 1px solid transparent; border-radius: 13px; cursor: pointer; font-size: 13px; font-weight: 850; transition: .2s ease;
@@ -353,7 +377,7 @@ img { max-width: 100%; display: block; }
 @media (max-width: 1000px) {
     .portal-links { display:none; position:absolute; top:70px; left:20px; right:20px; flex-direction:column; align-items:stretch; padding:15px; border:1px solid var(--portal-line); border-radius:16px; background:#fff; box-shadow:var(--portal-shadow); }
     .portal-links.is-open { display:flex; }
-    .portal-menu-button { display:block; }
+    .portal-menu-button { display:flex; }
     .portal-hero-grid,.portal-about-grid,.portal-contact-grid,.portal-register-grid,.portal-split-card { grid-template-columns:1fr; }
     .portal-hero-visual { display:none; }
     .portal-book-grid,.portal-book-grid-large { grid-template-columns:repeat(3,1fr); }
