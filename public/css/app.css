@@ -1456,3 +1456,32 @@ body.portal-modal-open {
         display: none !important;
     }
 }
+
+
+/* Tahap 48: kunci ukuran thumbnail daftar barang dan daftar hapus */
+.data-table .item-table-photo,
+.table-responsive .item-table-photo {
+    box-sizing: border-box;
+    width: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    max-height: 58px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    display: grid !important;
+    place-items: center !important;
+}
+
+.data-table .item-table-photo img,
+.table-responsive .item-table-photo img {
+    width: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    max-height: 58px !important;
+    object-fit: cover !important;
+    display: block !important;
+}

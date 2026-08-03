@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Audit Inventaris') | {{ $systemBrand['institution.name'] ?? config('app.name') }}</title>
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=48">
 </head>
 <body class="portal-page inventory-audit-page">
     <header class="portal-header inventory-audit-header">
@@ -76,6 +76,6 @@
         </div>
     </footer>
     @include('shared.photo-preview-modal')
-    <script src="{{ asset('js/portal-photo-preview.js') }}" defer></script>
+    <script src="{{ asset('js/portal-photo-preview.js') }}?v=48" defer></script>
 </body>
 </html>

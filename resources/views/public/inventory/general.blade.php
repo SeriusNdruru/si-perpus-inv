@@ -45,7 +45,7 @@
                                         data-photo-title="{{ $item->item_name }}"
                                         aria-label="Lihat foto {{ $item->item_name }}"
                                     >
-                                        <img src="{{ asset('storage/'.$item->image_path) }}" alt="Foto {{ $item->item_name }}" loading="lazy">
+                                        <img src="{{ asset('storage/'.$item->image_path) }}" alt="Foto {{ $item->item_name }}" width="58" height="58" loading="eager" decoding="async">
                                     </button>
                                 @else
                                     <div class="item-table-photo" aria-label="Tidak ada foto {{ $item->item_name }}">

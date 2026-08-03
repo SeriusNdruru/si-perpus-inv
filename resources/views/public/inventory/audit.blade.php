@@ -49,7 +49,7 @@
                                         data-photo-title="{{ $asset->item_name }}"
                                         aria-label="Lihat foto {{ $asset->item_name }}"
                                     >
-                                        <img src="{{ asset('storage/'.$asset->image_path) }}" alt="Foto {{ $asset->item_name }}" loading="lazy">
+                                        <img src="{{ asset('storage/'.$asset->image_path) }}" alt="Foto {{ $asset->item_name }}" width="58" height="58" loading="eager" decoding="async">
                                     </button>
                                 @else
                                     <div class="item-table-photo" aria-label="Tidak ada foto {{ $asset->item_name }}">
@@ -121,7 +121,7 @@
                                         data-photo-title="{{ $stock->item_name }}"
                                         aria-label="Lihat foto {{ $stock->item_name }}"
                                     >
-                                        <img src="{{ asset('storage/'.$stock->image_path) }}" alt="Foto {{ $stock->item_name }}" loading="lazy">
+                                        <img src="{{ asset('storage/'.$stock->image_path) }}" alt="Foto {{ $stock->item_name }}" width="58" height="58" loading="eager" decoding="async">
                                     </button>
                                 @else
                                     <div class="item-table-photo" aria-label="Tidak ada foto {{ $stock->item_name }}">

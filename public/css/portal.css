@@ -1257,3 +1257,36 @@ body.portal-modal-open {
         display: none !important;
     }
 }
+
+
+/* Tahap 48: kunci ukuran thumbnail agar konsisten dan tidak terpengaruh cache lama */
+.portal-table td:first-child {
+    width: 90px;
+}
+
+.portal-table .item-table-photo {
+    box-sizing: border-box;
+    width: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    max-height: 58px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    display: grid !important;
+    place-items: center !important;
+    flex: 0 0 58px;
+}
+
+.portal-table .item-table-photo img {
+    box-sizing: border-box;
+    width: 58px !important;
+    min-width: 58px !important;
+    max-width: 58px !important;
+    height: 58px !important;
+    min-height: 58px !important;
+    max-height: 58px !important;
+    object-fit: cover !important;
+    display: block !important;
+}
