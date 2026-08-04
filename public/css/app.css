@@ -1511,3 +1511,87 @@ body.portal-modal-open {
     font-weight: 800;
     vertical-align: middle;
 }
+
+/* Tahap 62: rapikan seluruh baris filter agar tombol aksi tetap sejajar */
+@media (min-width: 1101px) {
+    .filter-bar,
+    .filter-bar-compact,
+    .filter-bar-items,
+    .filter-bar-library-books,
+    .filter-bar-shelves,
+    .filter-bar-shelf-assignments,
+    .filter-bar-members,
+    .filter-bar-loans,
+    .filter-bar-returns,
+    .filter-bar-fines,
+    .filter-bar-reservations,
+    .audit-filter-grid,
+    .email-log-filter {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: flex-end;
+        gap: 10px;
+    }
+
+    .filter-bar > .filter-field,
+    .filter-bar > .form-field {
+        flex: 1 1 140px;
+        min-width: 0;
+    }
+
+    .filter-bar > .filter-search {
+        flex: 1.45 1 210px;
+        min-width: 170px;
+    }
+
+    .filter-bar > .filter-actions {
+        flex: 0 0 auto;
+        align-self: flex-end;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+    }
+
+    .filter-bar > .filter-actions > * {
+        flex: 0 0 auto;
+        width: auto;
+    }
+
+    .filter-bar input,
+    .filter-bar select {
+        min-width: 0;
+    }
+}
+
+@media (min-width: 701px) and (max-width: 1100px) {
+    .filter-bar .filter-search,
+    .filter-bar-items .filter-search,
+    .filter-bar-library-books .filter-search,
+    .filter-bar-shelves .filter-search,
+    .filter-bar-shelf-assignments .filter-search,
+    .filter-bar-members .filter-search,
+    .filter-bar-loans .filter-search,
+    .filter-bar-returns .filter-search,
+    .filter-bar-fines .filter-search,
+    .filter-bar-reservations .filter-search,
+    .audit-filter-grid .filter-search {
+        grid-column: auto;
+    }
+
+    .filter-actions {
+        align-self: end;
+        flex-wrap: nowrap;
+    }
+}
+
+@media (max-width: 700px) {
+    .filter-actions {
+        display: flex;
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .filter-actions > * {
+        flex: 1 1 0;
+        width: auto;
+    }
+}

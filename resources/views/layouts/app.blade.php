@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=61">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=62">
 </head>
 <body class="app-page">
     @php
