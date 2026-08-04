@@ -114,7 +114,7 @@
         </div>
 
         <div class="form-field">
-            <label for="email">Email</label>
+            <label for="email">Email login siswa <span>*</span></label>
             <input
                 id="email"
                 name="email"
@@ -122,7 +122,9 @@
                 maxlength="150"
                 value="{{ old('email', $member?->email) }}"
                 placeholder="anggota@example.com"
+                required
             >
+            <small>Email ini digunakan siswa untuk login dan pemulihan password.</small>
         </div>
 
         <div class="form-field form-field-full">
@@ -135,6 +137,61 @@
 <div class="form-section">
     <div class="form-section-heading">
         <span>3</span>
+        <div>
+            <h3>Akun login anggota</h3>
+            <p>Akun dibuat oleh admin perpustakaan. Pendaftaran mandiri dari portal publik sudah dinonaktifkan.</p>
+        </div>
+    </div>
+
+    <div class="form-grid">
+        <div class="form-field form-field-full">
+            <label for="account_username">Username akun <span>*</span></label>
+            <input
+                id="account_username"
+                name="account_username"
+                type="text"
+                minlength="4"
+                maxlength="60"
+                value="{{ old('account_username', $member?->user?->username) }}"
+                placeholder="Contoh: siswa.nama"
+                autocomplete="off"
+                required
+            >
+            <small>Gunakan huruf kecil, angka, titik, garis bawah, atau tanda hubung. Siswa tetap login memakai email.</small>
+        </div>
+
+        <div class="form-field">
+            <label for="account_password">{{ $member?->user ? 'Password baru (opsional)' : 'Password awal' }} @if (! $member?->user)<span>*</span>@endif</label>
+            <input
+                id="account_password"
+                name="account_password"
+                type="password"
+                minlength="8"
+                maxlength="255"
+                autocomplete="new-password"
+                @required(! $member?->user)
+            >
+            <small>{{ $member?->user ? 'Kosongkan jika password tidak diubah.' : 'Minimal 8 karakter serta memuat huruf dan angka.' }}</small>
+        </div>
+
+        <div class="form-field">
+            <label for="account_password_confirmation">Konfirmasi password @if (! $member?->user)<span>*</span>@endif</label>
+            <input
+                id="account_password_confirmation"
+                name="account_password_confirmation"
+                type="password"
+                minlength="8"
+                maxlength="255"
+                autocomplete="new-password"
+                @required(! $member?->user)
+            >
+        </div>
+    </div>
+</div>
+
+<div class="form-section">
+    <div class="form-section-heading">
+        <span>4</span>
         <div>
             <h3>Masa keanggotaan</h3>
             <p>Status aktif hanya dapat digunakan selama masa berlaku belum berakhir.</p>

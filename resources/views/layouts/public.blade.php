@@ -38,7 +38,6 @@
                     <a href="{{ auth()->user()->hasRole('MEMBER') ? route('dashboard.member') : route('dashboard') }}" class="portal-button portal-button-soft">Dashboard</a>
                 @else
                     <a href="{{ route('student.login') }}" class="portal-button portal-button-soft">Login siswa</a>
-                    <a href="{{ route('register') }}" class="portal-button portal-button-primary">Daftar siswa</a>
                 @endauth
             </nav>
         </div>

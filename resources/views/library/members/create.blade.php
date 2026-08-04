@@ -8,12 +8,12 @@
         <div class="panel-header">
             <div>
                 <p class="eyebrow">Keanggotaan baru</p>
-                <h2>Formulir Anggota</h2>
+                <h2>Formulir Anggota dan Akun Login</h2>
             </div>
         </div>
         <form method="POST" action="{{ route('library.members.store') }}" class="data-form">
             @csrf
-            @include('library.members._form', ['member' => null, 'submitLabel' => 'Simpan anggota'])
+            @include('library.members._form', ['member' => null, 'submitLabel' => 'Simpan anggota dan akun'])
         </form>
     </section>
 @endsection

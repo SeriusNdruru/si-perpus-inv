@@ -9,7 +9,7 @@
             <span class="portal-kicker">Akses khusus siswa</span>
             <h1>Masuk dengan email siswa.</h1>
             <p>
-                Dashboard siswa berdiri sendiri dari dashboard admin. Gunakan email aktif yang terdaftar agar akun siap digunakan sebagai tujuan notifikasi email pada pengembangan berikutnya.
+                Akun siswa dibuat dan diaktifkan oleh admin perpustakaan. Gunakan email serta password yang diberikan untuk masuk ke dashboard siswa.
             </p>
 
             <div class="student-login-points">
@@ -69,8 +69,7 @@
             <div class="student-login-links">
                 <a href="{{ route('student.password.request') }}">Lupa password?</a>
                 <p class="student-register-prompt">
-                    <span>Belum punya akun?</span>
-                    <a href="{{ \Illuminate\Support\Facades\Route::has('register') ? route('register') : url('/siswa/daftar') }}">Daftar siswa</a>
+                    <span>Belum memiliki akun? Hubungi admin perpustakaan.</span>
                 </p>
             </div>
         </div>

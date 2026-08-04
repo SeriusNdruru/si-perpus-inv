@@ -2,9 +2,10 @@
 
 namespace App\Http\Requests\Library;
 
-use App\Services\SchoolClassOptionsService;
 use App\Models\Member;
+use App\Services\SchoolClassOptionsService;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UpdateMemberRequest extends StoreMemberRequest
 {
@@ -12,6 +13,7 @@ class UpdateMemberRequest extends StoreMemberRequest
     {
         /** @var Member $member */
         $member = $this->route('member');
+        $userId = $member->user_id;
 
         return [
             'member_code' => [
@@ -37,15 +39,35 @@ class UpdateMemberRequest extends StoreMemberRequest
             ],
             'phone' => ['nullable', 'string', 'max:30', 'regex:/^[0-9+()\-.\s]+$/'],
             'email' => [
-                'nullable',
+                'required',
                 'email:rfc',
                 'max:150',
                 Rule::unique('members', 'email')->ignore($member->id),
+                Rule::unique('users', 'email')->ignore($userId),
             ],
             'address' => ['nullable', 'string', 'max:2000'],
             'join_date' => ['required', 'date'],
             'expiry_date' => ['nullable', 'date', 'after_or_equal:join_date'],
             'status' => ['required', Rule::in(['active', 'suspended', 'inactive', 'expired'])],
+            'account_username' => [
+                'required',
+                'string',
+                'min:4',
+                'max:60',
+                'regex:/^[a-z0-9._-]+$/',
+                Rule::unique('users', 'username')->ignore($userId),
+            ],
+            'account_password' => $userId === null
+                ? [
+                    'required',
+                    'confirmed',
+                    Password::min(8)->letters()->numbers(),
+                ]
+                : [
+                    'nullable',
+                    'confirmed',
+                    Password::min(8)->letters()->numbers(),
+                ],
         ];
     }
 }

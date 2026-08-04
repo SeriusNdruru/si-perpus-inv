@@ -6,6 +6,7 @@ use App\Services\SchoolClassOptionsService;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Validator;
 
 class StoreMemberRequest extends FormRequest
@@ -32,6 +33,7 @@ class StoreMemberRequest extends FormRequest
             'email' => $this->nullableLowerString('email'),
             'address' => $this->nullableString('address'),
             'expiry_date' => $this->filled('expiry_date') ? $this->input('expiry_date') : null,
+            'account_username' => Str::lower(trim((string) $this->input('account_username'))),
         ]);
     }
 
@@ -55,11 +57,30 @@ class StoreMemberRequest extends FormRequest
                 Rule::in(app(SchoolClassOptionsService::class)->options()),
             ],
             'phone' => ['nullable', 'string', 'max:30', 'regex:/^[0-9+()\-.\s]+$/'],
-            'email' => ['nullable', 'email:rfc', 'max:150', Rule::unique('members', 'email')],
+            'email' => [
+                'required',
+                'email:rfc',
+                'max:150',
+                Rule::unique('members', 'email'),
+                Rule::unique('users', 'email'),
+            ],
             'address' => ['nullable', 'string', 'max:2000'],
             'join_date' => ['required', 'date'],
             'expiry_date' => ['nullable', 'date', 'after_or_equal:join_date'],
             'status' => ['required', Rule::in(['active', 'suspended', 'inactive', 'expired'])],
+            'account_username' => [
+                'required',
+                'string',
+                'min:4',
+                'max:60',
+                'regex:/^[a-z0-9._-]+$/',
+                Rule::unique('users', 'username'),
+            ],
+            'account_password' => [
+                'required',
+                'confirmed',
+                Password::min(8)->letters()->numbers(),
+            ],
         ];
     }
 
@@ -91,8 +112,9 @@ class StoreMemberRequest extends FormRequest
             'department.in' => 'Pilihan kelas tidak valid. Pilih Kelas 1 sampai Kelas 6.',
             'phone.regex' => 'Format nomor telepon tidak valid.',
             'phone.max' => 'Nomor telepon maksimal 30 karakter.',
+            'email.required' => 'Email login siswa wajib diisi.',
             'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah digunakan oleh anggota lain.',
+            'email.unique' => 'Email sudah digunakan oleh anggota atau pengguna lain.',
             'email.max' => 'Email maksimal 150 karakter.',
             'address.max' => 'Alamat maksimal 2.000 karakter.',
             'join_date.required' => 'Tanggal bergabung wajib diisi.',
@@ -101,6 +123,13 @@ class StoreMemberRequest extends FormRequest
             'expiry_date.after_or_equal' => 'Tanggal berakhir tidak boleh lebih awal dari tanggal bergabung.',
             'status.required' => 'Status anggota wajib dipilih.',
             'status.in' => 'Status anggota tidak valid.',
+            'account_username.required' => 'Username akun wajib diisi.',
+            'account_username.min' => 'Username minimal 4 karakter.',
+            'account_username.regex' => 'Username hanya boleh berisi huruf kecil, angka, titik, garis bawah, dan tanda hubung.',
+            'account_username.unique' => 'Username sudah digunakan.',
+            'account_password.required' => 'Password awal wajib diisi.',
+            'account_password.confirmed' => 'Konfirmasi password tidak sama.',
+            'account_password.min' => 'Password minimal 8 karakter.',
         ];
     }
 

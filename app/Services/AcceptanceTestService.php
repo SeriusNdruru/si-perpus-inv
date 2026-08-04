@@ -291,7 +291,7 @@ class AcceptanceTestService
             'Pembatasan route sensitif',
             $problems === [] ? 'pass' : 'fail',
             $problems === []
-                ? 'Login, pendaftaran, verifikasi email, reset password, kontak, dan laporan kerusakan memakai method serta pembatasan yang sesuai.'
+                ? 'Login, akses akun siswa, verifikasi email, reset password, kontak, dan laporan kerusakan memakai method serta pembatasan yang sesuai.'
                 : implode('; ', $problems).'.',
             $problems === [] ? null : 'Periksa method, signed URL, dan middleware throttle pada route sensitif.',
         );

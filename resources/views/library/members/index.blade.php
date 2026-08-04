@@ -29,7 +29,7 @@
                 <p class="eyebrow">Keanggotaan</p>
                 <h2>Daftar Anggota</h2>
             </div>
-            <a href="{{ route('library.members.create') }}" class="button-primary button-link">Tambah anggota</a>
+            <a href="{{ route('library.members.create') }}" class="button-primary button-link">Tambah anggota dan akun</a>
         </div>
 
         <form method="GET" action="{{ route('library.members.index') }}" class="filter-bar filter-bar-members">

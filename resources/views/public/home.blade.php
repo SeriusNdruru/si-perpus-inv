@@ -14,10 +14,10 @@
                     <a href="{{ route('dashboard') }}" class="portal-button portal-button-primary">Buka dashboard</a>
                 @else
                     <a href="{{ route('student.login') }}" class="portal-button portal-button-primary">Login siswa</a>
-                    <a href="{{ route('register') }}" class="portal-button portal-button-outline">Buat akun siswa</a>
                 @endauth
             </div>
             <div class="portal-hero-notes">
+                <span>✓ Akun siswa dibuat oleh admin perpustakaan</span>
                 <span>✓ Pengajuan banyak buku</span>
                 <span>✓ Riwayat dan denda transparan</span>
                 <span>✓ Pengingat H-1 pengembalian</span>

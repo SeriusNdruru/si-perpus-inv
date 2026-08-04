@@ -38,7 +38,9 @@
                 <div><dt>Tanggal bergabung</dt><dd>{{ $member->join_date?->translatedFormat('d F Y') }}</dd></div>
                 <div><dt>Masa berlaku</dt><dd>{{ $member->expiry_date?->translatedFormat('d F Y') ?? 'Tidak dibatasi' }}</dd></div>
                 <div><dt>Dibuat oleh</dt><dd>{{ $member->creator?->full_name ?? '-' }}</dd></div>
-                <div><dt>Akun login</dt><dd>{{ $member->user?->username ?? 'Belum dihubungkan' }}</dd></div>
+                <div><dt>Username akun</dt><dd>{{ $member->user?->username ?? 'Belum dibuat' }}</dd></div>
+                <div><dt>Email login</dt><dd>{{ $member->user?->email ?? $member->email ?? '-' }}</dd></div>
+                <div><dt>Status akun</dt><dd>{{ $member->user?->status === 'active' ? 'Aktif' : ($member->user ? 'Tidak aktif' : 'Belum dibuat') }}</dd></div>
                 <div class="definition-full"><dt>Alamat</dt><dd>{{ $member->address ?: 'Alamat belum diisi.' }}</dd></div>
             </dl>
         </section>

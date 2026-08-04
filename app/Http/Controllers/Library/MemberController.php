@@ -7,10 +7,14 @@ use App\Http\Requests\Library\StoreMemberRequest;
 use App\Http\Requests\Library\UpdateMemberRequest;
 use App\Http\Requests\Library\UpdateMemberStatusRequest;
 use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use RuntimeException;
 
 class MemberController extends Controller
 {
@@ -75,24 +79,33 @@ class MemberController extends Controller
 
     public function store(StoreMemberRequest $request): RedirectResponse
     {
-        $member = DB::transaction(function () use ($request): Member {
-            $data = $request->validated();
-            $data['member_code'] = $data['member_code'] ?: $this->generateMemberCode();
-            $data['created_by'] = $request->user()?->id;
-            $data['status'] = $this->normalizedStatus($data['status'], $data['expiry_date'] ?? null);
+        $data = $request->validated();
 
-            return Member::query()->create($data);
-        });
+        $member = DB::transaction(function () use ($request, $data): Member {
+            $memberStatus = $this->normalizedStatus($data['status'], $data['expiry_date'] ?? null);
+            $user = $this->createMemberUser(
+                data: $data,
+                memberStatus: $memberStatus,
+            );
+
+            $memberData = $this->memberData($data);
+            $memberData['member_code'] = $memberData['member_code'] ?: $this->generateMemberCode();
+            $memberData['created_by'] = $request->user()?->id;
+            $memberData['status'] = $memberStatus;
+            $memberData['user_id'] = $user->id;
+
+            return Member::query()->create($memberData);
+        }, 3);
 
         return redirect()
             ->route('library.members.show', $member)
-            ->with('success', 'Anggota perpustakaan berhasil ditambahkan.');
+            ->with('success', 'Anggota dan akun login anggota berhasil ditambahkan.');
     }
 
     public function show(Member $member): View
     {
         $this->synchronizeMemberExpiry($member);
-        $member->load(['creator:id,full_name', 'user:id,full_name,username,email,status']);
+        $member->load(['creator:id,full_name', 'user:id,full_name,username,email,status,email_verified_at']);
 
         $loans = $member->loans()
             ->select('loans.*')
@@ -126,6 +139,7 @@ class MemberController extends Controller
     public function edit(Member $member): View
     {
         $this->synchronizeMemberExpiry($member);
+        $member->loadMissing('user');
 
         return view('library.members.edit', compact('member'));
     }
@@ -133,10 +147,10 @@ class MemberController extends Controller
     public function update(UpdateMemberRequest $request, Member $member): RedirectResponse
     {
         $data = $request->validated();
-        $data['status'] = $this->normalizedStatus($data['status'], $data['expiry_date'] ?? null);
+        $memberStatus = $this->normalizedStatus($data['status'], $data['expiry_date'] ?? null);
 
         if (
-            $data['status'] === 'inactive'
+            $memberStatus === 'inactive'
             && $member->loans()->whereIn('status', ['active', 'overdue'])->exists()
         ) {
             return back()
@@ -146,21 +160,44 @@ class MemberController extends Controller
                 ]);
         }
 
-        DB::transaction(function () use ($member, $data): void {
-            $member->update($data);
+        DB::transaction(function () use ($member, $data, $memberStatus): void {
+            $member->loadMissing('user');
 
-            if ($member->user_id !== null) {
-                $member->user()
-                    ->where('full_name', '!=', $member->member_name)
-                    ->update([
-                        'full_name' => $member->member_name,
-                    ]);
+            $memberData = $this->memberData($data);
+            $memberData['status'] = $memberStatus;
+            $member->update($memberData);
+
+            $user = $member->user;
+            if ($user === null) {
+                $user = $this->createMemberUser(
+                    data: $data,
+                    memberStatus: $memberStatus,
+                );
+                $member->update(['user_id' => $user->id]);
+
+                return;
             }
-        });
+
+            $userData = [
+                'full_name' => $member->member_name,
+                'username' => $data['account_username'],
+                'email' => $member->email,
+                'phone' => $member->phone,
+                'status' => $this->userStatus($memberStatus),
+                'email_verified_at' => $user->email_verified_at ?? now(),
+            ];
+
+            if (! empty($data['account_password'])) {
+                $userData['password_hash'] = Hash::make($data['account_password']);
+                $userData['password_changed_at'] = now();
+            }
+
+            $user->update($userData);
+        }, 3);
 
         return redirect()
             ->route('library.members.show', $member)
-            ->with('success', 'Data anggota berhasil diperbarui.');
+            ->with('success', 'Data anggota dan akun login berhasil diperbarui.');
     }
 
     public function updateStatus(UpdateMemberStatusRequest $request, Member $member): RedirectResponse
@@ -174,9 +211,73 @@ class MemberController extends Controller
             return back()->with('error', 'Anggota belum dapat dinonaktifkan karena masih memiliki peminjaman aktif. Gunakan status ditangguhkan jika akses peminjaman baru perlu diblokir.');
         }
 
-        $member->update(['status' => $newStatus]);
+        DB::transaction(function () use ($member, $newStatus): void {
+            $member->update(['status' => $newStatus]);
 
-        return back()->with('success', 'Status anggota berhasil diperbarui.');
+            if ($member->user_id !== null) {
+                User::query()
+                    ->whereKey($member->user_id)
+                    ->update(['status' => $this->userStatus($newStatus)]);
+            }
+        }, 3);
+
+        return back()->with('success', 'Status anggota dan akses akun berhasil diperbarui.');
+    }
+
+    /** @param array<string, mixed> $data */
+    private function createMemberUser(array $data, string $memberStatus): User
+    {
+        $roleId = DB::table('roles')
+            ->where('role_code', User::ROLE_MEMBER)
+            ->value('id');
+
+        if ($roleId === null) {
+            throw new RuntimeException('Role MEMBER belum tersedia.');
+        }
+
+        $user = User::query()->create([
+            'full_name' => $data['member_name'],
+            'username' => $data['account_username'],
+            'email' => $data['email'],
+            'email_verified_at' => now(),
+            'password_hash' => Hash::make($data['account_password']),
+            'password_changed_at' => now(),
+            'phone' => $data['phone'] ?? null,
+            'status' => $this->userStatus($memberStatus),
+        ]);
+
+        DB::table('user_roles')->insert([
+            'user_id' => $user->id,
+            'role_id' => $roleId,
+            'assigned_at' => now(),
+        ]);
+
+        return $user;
+    }
+
+    /** @param array<string, mixed> $data
+     *  @return array<string, mixed>
+     */
+    private function memberData(array $data): array
+    {
+        return Arr::only($data, [
+            'member_code',
+            'member_name',
+            'member_type',
+            'identity_number',
+            'department',
+            'phone',
+            'email',
+            'address',
+            'join_date',
+            'expiry_date',
+            'status',
+        ]);
+    }
+
+    private function userStatus(string $memberStatus): string
+    {
+        return $memberStatus === 'active' ? 'active' : 'inactive';
     }
 
     private function generateMemberCode(): string
@@ -202,7 +303,7 @@ class MemberController extends Controller
             }
         }
 
-        throw new \RuntimeException('Kode anggota otomatis tidak dapat dibuat.');
+        throw new RuntimeException('Kode anggota otomatis tidak dapat dibuat.');
     }
 
     private function normalizedStatus(string $status, mixed $expiryDate): string
@@ -216,11 +317,22 @@ class MemberController extends Controller
 
     private function synchronizeExpiredMembers(): void
     {
+        $expiredUserIds = Member::query()
+            ->where('status', 'active')
+            ->whereNotNull('expiry_date')
+            ->whereDate('expiry_date', '<', now()->toDateString())
+            ->whereNotNull('user_id')
+            ->pluck('user_id');
+
         Member::query()
             ->where('status', 'active')
             ->whereNotNull('expiry_date')
             ->whereDate('expiry_date', '<', now()->toDateString())
             ->update(['status' => 'expired']);
+
+        if ($expiredUserIds->isNotEmpty()) {
+            User::query()->whereIn('id', $expiredUserIds)->update(['status' => 'inactive']);
+        }
     }
 
     private function synchronizeMemberExpiry(Member $member): void
@@ -230,7 +342,14 @@ class MemberController extends Controller
             && $member->expiry_date !== null
             && $member->expiry_date->isBefore(now()->startOfDay())
         ) {
-            $member->update(['status' => 'expired']);
+            DB::transaction(function () use ($member): void {
+                $member->update(['status' => 'expired']);
+
+                if ($member->user_id !== null) {
+                    User::query()->whereKey($member->user_id)->update(['status' => 'inactive']);
+                }
+            }, 3);
+
             $member->refresh();
         }
     }
