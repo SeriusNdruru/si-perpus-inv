@@ -1595,3 +1595,135 @@ body.portal-modal-open {
         width: auto;
     }
 }
+
+
+/* Tahap 65: tata letak formulir anggota dan akun */
+.member-form-panel {
+    width: 100%;
+    max-width: none;
+}
+.member-account-form {
+    padding: 24px;
+    background: #f7fafb;
+}
+.member-account-form .form-section {
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(26, 55, 67, .035);
+}
+.member-account-form .form-section + .form-section {
+    margin-top: 18px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+}
+.member-account-form .form-section-heading {
+    margin-bottom: 20px;
+}
+.member-account-form .member-form-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: 20px;
+    row-gap: 18px;
+    align-items: start;
+}
+.member-account-form .form-field {
+    grid-column: span 6;
+    align-content: start;
+    min-width: 0;
+}
+.member-account-form .form-field-full {
+    grid-column: 1 / -1;
+}
+.member-account-form .form-field label {
+    min-height: 20px;
+    display: flex;
+    align-items: flex-end;
+}
+.member-account-form .form-field input,
+.member-account-form .form-field select {
+    height: 48px;
+    min-height: 48px;
+}
+.member-account-form .form-field textarea {
+    min-height: 116px;
+}
+.member-account-form .form-field small {
+    display: block;
+    margin: 0;
+}
+.member-form-grid-identity > .form-field:nth-child(3),
+.member-form-grid-identity > .form-field:nth-child(4),
+.member-form-grid-identity > .form-field:nth-child(5) {
+    grid-column: span 4;
+}
+.member-form-grid-contact > .form-field:nth-child(1) {
+    grid-column: span 4;
+}
+.member-form-grid-contact > .form-field:nth-child(2) {
+    grid-column: span 8;
+}
+.member-form-grid-contact > .form-field:nth-child(3) {
+    grid-column: 1 / -1;
+}
+.member-form-grid-account > .form-field:nth-child(1) {
+    grid-column: 1 / -1;
+}
+.member-form-grid-account > .form-field:nth-child(2),
+.member-form-grid-account > .form-field:nth-child(3) {
+    grid-column: span 6;
+}
+.member-form-grid-membership > .form-field {
+    grid-column: span 4;
+}
+.member-account-form .form-actions {
+    margin-top: 20px;
+    padding: 20px 4px 2px;
+}
+
+@media (max-width: 1100px) {
+    .member-account-form .member-form-grid > .form-field,
+    .member-form-grid-identity > .form-field:nth-child(3),
+    .member-form-grid-identity > .form-field:nth-child(4),
+    .member-form-grid-identity > .form-field:nth-child(5),
+    .member-form-grid-contact > .form-field:nth-child(1),
+    .member-form-grid-contact > .form-field:nth-child(2),
+    .member-form-grid-account > .form-field:nth-child(2),
+    .member-form-grid-account > .form-field:nth-child(3),
+    .member-form-grid-membership > .form-field {
+        grid-column: span 6;
+    }
+    .member-account-form .member-form-grid > .form-field-full,
+    .member-form-grid-contact > .form-field:nth-child(3),
+    .member-form-grid-account > .form-field:nth-child(1) {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .member-account-form {
+        padding: 14px;
+    }
+    .member-account-form .form-section {
+        padding: 18px;
+        border-radius: 14px;
+    }
+    .member-account-form .member-form-grid > .form-field,
+    .member-account-form .member-form-grid > .form-field-full,
+    .member-form-grid-identity > .form-field:nth-child(3),
+    .member-form-grid-identity > .form-field:nth-child(4),
+    .member-form-grid-identity > .form-field:nth-child(5),
+    .member-form-grid-contact > .form-field:nth-child(1),
+    .member-form-grid-contact > .form-field:nth-child(2),
+    .member-form-grid-contact > .form-field:nth-child(3),
+    .member-form-grid-account > .form-field:nth-child(1),
+    .member-form-grid-account > .form-field:nth-child(2),
+    .member-form-grid-account > .form-field:nth-child(3),
+    .member-form-grid-membership > .form-field {
+        grid-column: 1 / -1;
+    }
+    .member-account-form .form-actions {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="form-grid">
+    <div class="form-grid member-form-grid member-form-grid-identity">
         <div class="form-field">
             <label for="member_code">Kode anggota {{ $member ? '' : '(opsional)' }}</label>
             <input
@@ -100,7 +100,7 @@
         </div>
     </div>
 
-    <div class="form-grid">
+    <div class="form-grid member-form-grid member-form-grid-contact">
         <div class="form-field">
             <label for="phone">Nomor telepon</label>
             <input
@@ -143,7 +143,7 @@
         </div>
     </div>
 
-    <div class="form-grid">
+    <div class="form-grid member-form-grid member-form-grid-account">
         <div class="form-field form-field-full">
             <label for="account_username">Username akun <span>*</span></label>
             <input
@@ -198,7 +198,7 @@
         </div>
     </div>
 
-    <div class="form-grid">
+    <div class="form-grid member-form-grid member-form-grid-membership">
         <div class="form-field">
             <label for="join_date">Tanggal bergabung <span>*</span></label>
             <input
