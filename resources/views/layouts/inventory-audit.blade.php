@@ -17,7 +17,7 @@
             >
                 <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'audit inventaris'])</span>
                 <div>
-                    <strong>Audit Inventaris {{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
+                    <strong>{{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
                     <small>Pemeriksaan kondisi dan lokasi setiap aset</small>
                 </div>
             </a>
@@ -57,7 +57,7 @@
                 <div class="portal-brand portal-brand-footer inventory-audit-brand">
                     <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'audit inventaris'])</span>
                     <div>
-                        <strong>Audit Inventaris {{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
+                        <strong>{{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
                         <small>Dashboard audit berdiri sendiri</small>
                     </div>
                 </div>

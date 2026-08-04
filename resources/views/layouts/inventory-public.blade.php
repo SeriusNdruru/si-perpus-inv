@@ -17,7 +17,7 @@
             >
                 <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'inventaris umum'])</span>
                 <div>
-                    <strong>Inventaris Umum {{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
+                    <strong>{{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
                     <small>Informasi barang, buku, dan laporan kerusakan</small>
                 </div>
             </a>
@@ -78,7 +78,7 @@
                 <div class="portal-brand portal-brand-footer inventory-public-brand">
                     <span class="portal-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'inventaris umum'])</span>
                     <div>
-                        <strong>Inventaris Umum {{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
+                        <strong>{{ $systemBrand['institution.name'] ?? 'Sekolah' }}</strong>
                         <small>Informasi inventaris sekolah tanpa login</small>
                     </div>
                 </div>
