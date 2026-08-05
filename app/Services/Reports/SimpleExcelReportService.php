@@ -160,6 +160,11 @@ class SimpleExcelReportService
 
             fwrite($sheetHandle, '</sheetData>');
 
+            // Urutan elemen worksheet harus mengikuti skema Office Open XML.
+            // autoFilter wajib ditulis sebelum mergeCells. Jika terbalik,
+            // Microsoft Excel akan mencoba memperbaiki file saat dibuka.
+            fwrite($sheetHandle, '<autoFilter ref="A'.$headerRow.':'.$lastColumn.$lastDataRow.'"/>');
+
             $mergeCount = 2 + count($meta);
             fwrite($sheetHandle, '<mergeCells count="'.$mergeCount.'">');
             fwrite($sheetHandle, '<mergeCell ref="A1:'.$lastColumn.'1"/>');
@@ -168,8 +173,6 @@ class SimpleExcelReportService
                 fwrite($sheetHandle, '<mergeCell ref="A'.$row.':'.$lastColumn.$row.'"/>');
             }
             fwrite($sheetHandle, '</mergeCells>');
-
-            fwrite($sheetHandle, '<autoFilter ref="A'.$headerRow.':'.$lastColumn.$lastDataRow.'"/>');
             fwrite($sheetHandle, '<pageMargins left="0.25" right="0.25" top="0.5" bottom="0.5" header="0.2" footer="0.2"/>');
             fwrite($sheetHandle, '<pageSetup orientation="'.($columnCount > 7 ? 'landscape' : 'portrait').'" fitToWidth="1" fitToHeight="0" paperSize="9"/>');
             fwrite($sheetHandle, '</worksheet>');
