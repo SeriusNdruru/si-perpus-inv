@@ -3,8 +3,6 @@
 namespace App\Services\Reports;
 
 use DateTimeInterface;
-use Phar;
-use PharData;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Throwable;
@@ -112,6 +110,7 @@ class SimpleExcelReportService
             fwrite($sheetHandle, '<dimension ref="A1:'.$lastColumn.$lastDataRow.'"/>');
             fwrite($sheetHandle, '<sheetViews><sheetView workbookViewId="0">');
             fwrite($sheetHandle, '<pane ySplit="'.$headerRow.'" topLeftCell="A'.($headerRow + 1).'" activePane="bottomLeft" state="frozen"/>');
+            fwrite($sheetHandle, '<selection pane="bottomLeft" activeCell="A'.($headerRow + 1).'" sqref="A'.($headerRow + 1).'"/>');
             fwrite($sheetHandle, '</sheetView></sheetViews>');
             fwrite($sheetHandle, '<sheetFormatPr defaultRowHeight="18"/>');
             fwrite($sheetHandle, '<cols>');
@@ -181,16 +180,20 @@ class SimpleExcelReportService
         }
 
         try {
-            $archive = new PharData($zipPath, 0, null, Phar::ZIP);
-            $archive->addFromString('[Content_Types].xml', $this->contentTypesXml());
-            $archive->addFromString('_rels/.rels', $this->rootRelationshipsXml());
-            $archive->addFromString('docProps/app.xml', $this->appPropertiesXml());
-            $archive->addFromString('docProps/core.xml', $this->corePropertiesXml($title));
-            $archive->addFromString('xl/workbook.xml', $this->workbookXml($sheetName));
-            $archive->addFromString('xl/_rels/workbook.xml.rels', $this->workbookRelationshipsXml());
-            $archive->addFromString('xl/styles.xml', $this->stylesXml());
-            $archive->addFile($sheetPath, 'xl/worksheets/sheet1.xml');
-            unset($archive);
+            // Hindari PharData untuk XLSX. Arsip ZIP yang dibuat PharData dapat
+            // memiliki field versi 0.0 dan extra field Unix yang diterima oleh
+            // sebagian pembaca ZIP, tetapi dapat dianggap rusak oleh Excel desktop.
+            // Writer internal ini membuat ZIP standar tanpa extra field.
+            $this->writeStandardZip($zipPath, [
+                '[Content_Types].xml' => ['content' => $this->contentTypesXml()],
+                '_rels/.rels' => ['content' => $this->rootRelationshipsXml()],
+                'docProps/app.xml' => ['content' => $this->appPropertiesXml()],
+                'docProps/core.xml' => ['content' => $this->corePropertiesXml($title)],
+                'xl/workbook.xml' => ['content' => $this->workbookXml($sheetName)],
+                'xl/_rels/workbook.xml.rels' => ['content' => $this->workbookRelationshipsXml()],
+                'xl/styles.xml' => ['content' => $this->stylesXml()],
+                'xl/worksheets/sheet1.xml' => ['path' => $sheetPath],
+            ]);
 
             if (! @rename($zipPath, $xlsxPath)) {
                 throw new RuntimeException('Tidak dapat menyelesaikan file laporan Excel.');
@@ -205,6 +208,174 @@ class SimpleExcelReportService
         }
 
         return $xlsxPath;
+    }
+
+    /**
+     * Membuat arsip ZIP standar untuk file XLSX tanpa ketergantungan eksternal.
+     * Semua entry disimpan tanpa kompresi. Format ini sah untuk OOXML dan
+     * menghindari metadata ZIP nonstandar yang memicu repair pada Excel.
+     *
+     * @param array<string, array{content?: string, path?: string}> $entries
+     */
+    private function writeStandardZip(string $targetPath, array $entries): void
+    {
+        $handle = fopen($targetPath, 'wb');
+        if ($handle === false) {
+            throw new RuntimeException('Tidak dapat membuat arsip laporan Excel.');
+        }
+
+        [$dosTime, $dosDate] = $this->dosDateTime();
+        $centralDirectory = '';
+        $entryCount = 0;
+        $offset = 0;
+
+        try {
+            foreach ($entries as $name => $source) {
+                $name = str_replace('\\', '/', $name);
+                if ($name === '' || str_contains($name, '../')) {
+                    throw new RuntimeException('Nama entry XLSX tidak valid.');
+                }
+
+                $path = $source['path'] ?? null;
+                $content = $source['content'] ?? null;
+
+                if ($path !== null) {
+                    $size = filesize($path);
+                    if ($size === false) {
+                        throw new RuntimeException('Tidak dapat membaca ukuran komponen XLSX.');
+                    }
+                    $crcHex = hash_file('crc32b', $path);
+                    if ($crcHex === false) {
+                        throw new RuntimeException('Tidak dapat menghitung checksum komponen XLSX.');
+                    }
+                } else {
+                    $content = (string) $content;
+                    $size = strlen($content);
+                    $crcHex = hash('crc32b', $content);
+                }
+
+                if ($size > 0xFFFFFFFF || $offset > 0xFFFFFFFF) {
+                    throw new RuntimeException('Ukuran laporan Excel melebihi batas ZIP standar.');
+                }
+
+                $nameLength = strlen($name);
+                $flags = 0x0800; // Nama entry UTF-8.
+                $method = 0; // Stored, tanpa kompresi.
+                $crcBytes = $this->littleEndianCrc32($crcHex);
+
+                $localHeader = pack(
+                    'Vvvvvv',
+                    0x04034b50,
+                    10,
+                    $flags,
+                    $method,
+                    $dosTime,
+                    $dosDate,
+                ).$crcBytes.pack('VVvv', $size, $size, $nameLength, 0).$name;
+
+                if (fwrite($handle, $localHeader) !== strlen($localHeader)) {
+                    throw new RuntimeException('Gagal menulis header komponen XLSX.');
+                }
+
+                if ($path !== null) {
+                    $sourceHandle = fopen($path, 'rb');
+                    if ($sourceHandle === false) {
+                        throw new RuntimeException('Tidak dapat membuka komponen XLSX.');
+                    }
+
+                    try {
+                        while (! feof($sourceHandle)) {
+                            $chunk = fread($sourceHandle, 1024 * 1024);
+                            if ($chunk === false) {
+                                throw new RuntimeException('Gagal membaca komponen XLSX.');
+                            }
+                            if ($chunk !== '' && fwrite($handle, $chunk) !== strlen($chunk)) {
+                                throw new RuntimeException('Gagal menulis komponen XLSX.');
+                            }
+                        }
+                    } finally {
+                        fclose($sourceHandle);
+                    }
+                } elseif ($content !== '' && fwrite($handle, $content) !== $size) {
+                    throw new RuntimeException('Gagal menulis komponen XLSX.');
+                }
+
+                $centralDirectory .= pack(
+                    'Vvvvvvv',
+                    0x02014b50,
+                    20,
+                    10,
+                    $flags,
+                    $method,
+                    $dosTime,
+                    $dosDate,
+                ).$crcBytes.pack(
+                    'VVvvvvvVV',
+                    $size,
+                    $size,
+                    $nameLength,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0,
+                    $offset,
+                ).$name;
+
+                $offset += strlen($localHeader) + $size;
+                $entryCount++;
+            }
+
+            $centralOffset = $offset;
+            $centralSize = strlen($centralDirectory);
+
+            if (fwrite($handle, $centralDirectory) !== $centralSize) {
+                throw new RuntimeException('Gagal menulis direktori XLSX.');
+            }
+
+            $endRecord = pack(
+                'VvvvvVVv',
+                0x06054b50,
+                0,
+                0,
+                $entryCount,
+                $entryCount,
+                $centralSize,
+                $centralOffset,
+                0,
+            );
+
+            if (fwrite($handle, $endRecord) !== strlen($endRecord)) {
+                throw new RuntimeException('Gagal menyelesaikan arsip XLSX.');
+            }
+        } finally {
+            fclose($handle);
+        }
+    }
+
+    /** @return array{0: int, 1: int} */
+    private function dosDateTime(): array
+    {
+        $now = getdate();
+        $year = max(1980, min(2107, (int) $now['year']));
+        $dosTime = ((int) $now['hours'] << 11)
+            | ((int) $now['minutes'] << 5)
+            | intdiv((int) $now['seconds'], 2);
+        $dosDate = (($year - 1980) << 9)
+            | ((int) $now['mon'] << 5)
+            | (int) $now['mday'];
+
+        return [$dosTime, $dosDate];
+    }
+
+    private function littleEndianCrc32(string $hex): string
+    {
+        $binary = hex2bin(str_pad(strtolower($hex), 8, '0', STR_PAD_LEFT));
+        if ($binary === false || strlen($binary) !== 4) {
+            throw new RuntimeException('Checksum komponen XLSX tidak valid.');
+        }
+
+        return strrev($binary);
     }
 
     private function writeMergedTextRow($handle, int $row, string $lastColumn, string $text, int $style, int $height): void
