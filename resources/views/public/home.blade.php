@@ -6,7 +6,7 @@
 <section class="portal-hero">
     <div class="portal-container portal-hero-grid">
         <div class="portal-hero-copy">
-            <span class="portal-kicker">Perpustakaan digital dan inventaris terbuka</span>
+            <span class="portal-kicker">Perpustakaan digital</span>
             <h1>{{ $systemBrand['portal.hero_title'] ?? 'Perpustakaan yang dekat dengan siswa' }}</h1>
             <p>{{ $systemBrand['portal.hero_subtitle'] ?? '' }}</p>
             <div class="portal-hero-actions">
@@ -15,12 +15,6 @@
                 @else
                     <a href="{{ route('student.login') }}" class="portal-button portal-button-primary">Login siswa</a>
                 @endauth
-            </div>
-            <div class="portal-hero-notes">
-                <span>✓ Akun siswa dibuat oleh admin perpustakaan</span>
-                <span>✓ Pengajuan banyak buku</span>
-                <span>✓ Riwayat dan denda transparan</span>
-                <span>✓ Pengingat H-1 pengembalian</span>
             </div>
         </div>
 
