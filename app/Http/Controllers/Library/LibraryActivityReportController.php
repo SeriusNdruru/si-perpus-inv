@@ -10,7 +10,6 @@ use App\Services\Reports\SimplePdfReportService;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -60,17 +59,22 @@ class LibraryActivityReportController extends Controller
     public function loanRecords(Request $request): View
     {
         $filters = $this->loanFilters($request);
-        $query = $this->loanRecordQuery($filters);
+        $query = $this->studentLoanHistoryQuery($filters);
+        $summaryQuery = DB::query()->fromSub(clone $query, 'student_loan_history');
+
+        $students = (int) (clone $summaryQuery)->count();
+        $totalLoans = (int) (clone $summaryQuery)->sum('loan_count');
 
         $summary = [
-            'records' => (clone $query)->count(),
-            'students' => (clone $query)->distinct('loans.member_id')->count('loans.member_id'),
-            'active' => (clone $query)->where('loan_items.return_status', 'borrowed')->count(),
-            'returned' => (clone $query)->whereIn('loan_items.return_status', ['returned', 'damaged', 'lost'])->count(),
+            'students' => $students,
+            'loans' => $totalLoans,
+            'highest' => (int) ((clone $summaryQuery)->max('loan_count') ?? 0),
+            'average' => $students > 0 ? round($totalLoans / $students, 1) : 0,
         ];
 
         $records = $query
-            ->orderByDesc('loan_items.borrowed_at')
+            ->orderByDesc('loan_count')
+            ->orderBy('members.member_name')
             ->paginate(20)
             ->withQueryString();
 
@@ -159,39 +163,26 @@ class LibraryActivityReportController extends Controller
     public function loanRecordsPdf(Request $request): Response
     {
         $filters = $this->loanFilters($request);
-        $rows = $this->loanRecordQuery($filters)
-            ->orderByDesc('loan_items.borrowed_at')
+        $rows = $this->studentLoanHistoryQuery($filters)
+            ->orderByDesc('loan_count')
+            ->orderBy('members.member_name')
             ->get()
             ->values()
             ->map(fn ($row, int $index): array => [
                 $index + 1,
-                $row->loan_code,
                 $row->member_name,
-                $row->department ?: '-',
-                $row->item_name,
-                $row->asset_code,
-                $row->borrowed_at,
-                $row->due_date,
-                $row->returned_at ?: '-',
-                $this->returnStatusLabel($row->return_status),
+                $row->loan_count.' kali',
             ]);
 
         return $this->pdf->download(
-            'catatan-peminjaman-siswa-'.now()->format('Ymd-His').'.pdf',
+            'riwayat-peminjaman-siswa-'.now()->format('Ymd-His').'.pdf',
             $this->institutionName(),
-            'Catatan Peminjaman Siswa',
+            'Riwayat Peminjaman Siswa',
             $this->pdfMeta($filters),
             [
-                ['label' => 'No.', 'width' => 28],
-                ['label' => 'Transaksi', 'width' => 82],
-                ['label' => 'Nama Siswa', 'width' => 110],
-                ['label' => 'Kelas', 'width' => 60],
-                ['label' => 'Judul Buku', 'width' => 145],
-                ['label' => 'Kode Buku', 'width' => 75],
-                ['label' => 'Tanggal Pinjam', 'width' => 80],
-                ['label' => 'Jatuh Tempo', 'width' => 70],
-                ['label' => 'Tanggal Kembali', 'width' => 80],
-                ['label' => 'Status', 'width' => 70],
+                ['label' => 'No.', 'width' => 60],
+                ['label' => 'Nama Siswa', 'width' => 460],
+                ['label' => 'Jumlah Peminjaman', 'width' => 240],
             ],
             $rows,
         );
@@ -214,7 +205,6 @@ class LibraryActivityReportController extends Controller
         return $request->validate([
             'search' => ['nullable', 'string', 'max:120'],
             'class' => ['nullable', 'string', 'max:150'],
-            'status' => ['nullable', 'in:borrowed,returned,damaged,lost'],
             'date_from' => ['nullable', 'date'],
             'date_to' => ['nullable', 'date', 'after_or_equal:date_from'],
         ]);
@@ -288,42 +278,37 @@ class LibraryActivityReportController extends Controller
     }
 
     /** @param array<string, mixed> $filters */
-    private function loanRecordQuery(array $filters): Builder
+    private function studentLoanHistoryQuery(array $filters): Builder
     {
-        return DB::table('loan_items')
-            ->join('loans', 'loans.id', '=', 'loan_items.loan_id')
+        return DB::table('loans')
+            ->join('loan_items', 'loan_items.loan_id', '=', 'loans.id')
             ->join('members', 'members.id', '=', 'loans.member_id')
-            ->join('assets', 'assets.id', '=', 'loan_items.asset_id')
-            ->join('items', 'items.id', '=', 'assets.item_id')
             ->where('members.member_type', 'student')
             ->when($filters['search'] ?? null, function (Builder $query, string $search): void {
                 $query->where(function (Builder $searchQuery) use ($search): void {
                     $searchQuery->where('members.member_name', 'like', '%'.$search.'%')
                         ->orWhere('members.member_code', 'like', '%'.$search.'%')
-                        ->orWhere('members.identity_number', 'like', '%'.$search.'%')
-                        ->orWhere('loans.loan_code', 'like', '%'.$search.'%')
-                        ->orWhere('items.item_name', 'like', '%'.$search.'%')
-                        ->orWhere('assets.asset_code', 'like', '%'.$search.'%');
+                        ->orWhere('members.identity_number', 'like', '%'.$search.'%');
                 });
             })
             ->when($filters['class'] ?? null, fn (Builder $query, string $class) => $query->where('members.department', $class))
-            ->when($filters['status'] ?? null, fn (Builder $query, string $status) => $query->where('loan_items.return_status', $status))
             ->when($filters['date_from'] ?? null, fn (Builder $query, string $date) => $query->whereDate('loan_items.borrowed_at', '>=', $date))
             ->when($filters['date_to'] ?? null, fn (Builder $query, string $date) => $query->whereDate('loan_items.borrowed_at', '<=', $date))
-            ->select([
-                'loan_items.id',
-                'loan_items.borrowed_at',
-                'loan_items.due_date',
-                'loan_items.returned_at',
-                'loan_items.return_status',
-                'loans.loan_code',
+            ->groupBy([
+                'members.id',
                 'members.member_code',
                 'members.member_name',
                 'members.identity_number',
                 'members.department',
-                'assets.asset_code',
-                'items.item_name',
-            ]);
+            ])
+            ->select([
+                'members.id',
+                'members.member_code',
+                'members.member_name',
+                'members.identity_number',
+                'members.department',
+            ])
+            ->selectRaw('COUNT(DISTINCT loans.id) as loan_count');
     }
 
     private function classes()
@@ -359,14 +344,5 @@ class LibraryActivityReportController extends Controller
             ->value('setting_value') ?: 'SDN Mekarsari 08');
     }
 
-    private function returnStatusLabel(string $status): string
-    {
-        return match ($status) {
-            'borrowed' => 'Masih dipinjam',
-            'returned' => 'Dikembalikan',
-            'damaged' => 'Rusak',
-            'lost' => 'Hilang',
-            default => ucfirst($status),
-        };
-    }
+
 }
