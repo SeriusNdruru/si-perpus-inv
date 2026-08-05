@@ -540,8 +540,10 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
             Route::get('/kunjungan-siswa/pdf', [LibraryActivityReportController::class, 'visitsPdf'])->name('library-visits.pdf');
             Route::get('/siswa-sering-berkunjung', [LibraryActivityReportController::class, 'frequentVisitors'])->name('frequent-visitors');
             Route::get('/siswa-sering-berkunjung/pdf', [LibraryActivityReportController::class, 'frequentVisitorsPdf'])->name('frequent-visitors.pdf');
-            Route::get('/record-peminjaman', [LibraryActivityReportController::class, 'loanRecords'])->name('loan-records');
-            Route::get('/record-peminjaman/pdf', [LibraryActivityReportController::class, 'loanRecordsPdf'])->name('loan-records.pdf');
+            Route::get('/catatan-peminjaman-siswa', [LibraryActivityReportController::class, 'loanRecords'])->name('loan-records');
+            Route::get('/catatan-peminjaman-siswa/pdf', [LibraryActivityReportController::class, 'loanRecordsPdf'])->name('loan-records.pdf');
+            Route::redirect('/record-peminjaman', '/laporan/catatan-peminjaman-siswa', 301);
+            Route::redirect('/record-peminjaman/pdf', '/laporan/catatan-peminjaman-siswa/pdf', 301);
         });
 
     Route::post('/admin/logout', [LoginController::class, 'destroy'])

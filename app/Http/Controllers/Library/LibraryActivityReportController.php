@@ -177,9 +177,9 @@ class LibraryActivityReportController extends Controller
             ]);
 
         return $this->pdf->download(
-            'record-peminjaman-buku-'.now()->format('Ymd-His').'.pdf',
+            'catatan-peminjaman-siswa-'.now()->format('Ymd-His').'.pdf',
             $this->institutionName(),
-            'Record Peminjaman Buku Siswa',
+            'Catatan Peminjaman Siswa',
             $this->pdfMeta($filters),
             [
                 ['label' => 'No.', 'width' => 28],

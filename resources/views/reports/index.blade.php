@@ -47,10 +47,10 @@
             </a>
 
             <a href="{{ route('reports.loan-records') }}" class="report-link-card">
-                <span class="report-card-code">RCD</span>
+                <span class="report-card-code">CPS</span>
                 <div>
-                    <strong>Record Buku yang Dipinjam</strong>
-                    <p>Riwayat setiap judul dan eksemplar buku yang dipinjam siswa.</p>
+                    <strong>Catatan Peminjaman Siswa</strong>
+                    <p>Riwayat transaksi dan buku yang dipinjam oleh setiap siswa.</p>
                     <small>Dapat difilter dan diunduh sebagai PDF</small>
                 </div>
             </a>

@@ -1,21 +1,21 @@
 @extends('layouts.app')
 
-@section('title', 'Record Peminjaman Buku')
-@section('page-title', 'Record Peminjaman Buku')
+@section('title', 'Catatan Peminjaman Siswa')
+@section('page-title', 'Catatan Peminjaman Siswa')
 
 @section('content')
 @include('reports._tabs')
 
 <div class="report-stat-grid report-stat-grid-four">
-    <article class="stat-card"><span>Record buku</span><strong>{{ number_format($summary['records']) }}</strong></article>
-    <article class="stat-card"><span>Siswa berbeda</span><strong>{{ number_format($summary['students']) }}</strong></article>
+    <article class="stat-card"><span>Total catatan</span><strong>{{ number_format($summary['records']) }}</strong></article>
+    <article class="stat-card"><span>Siswa peminjam</span><strong>{{ number_format($summary['students']) }}</strong></article>
     <article class="stat-card stat-warning"><span>Masih dipinjam</span><strong>{{ number_format($summary['active']) }}</strong></article>
-    <article class="stat-card"><span>Sudah diproses</span><strong>{{ number_format($summary['returned']) }}</strong></article>
+    <article class="stat-card"><span>Peminjaman selesai</span><strong>{{ number_format($summary['returned']) }}</strong></article>
 </div>
 
 <section class="panel report-panel">
     <div class="panel-header panel-header-wrap">
-        <div><p class="eyebrow">Riwayat per buku</p><h2>Buku yang dipinjam setiap siswa</h2></div>
+        <div><p class="eyebrow">Riwayat peminjaman siswa</p><h2>Catatan peminjaman setiap siswa</h2></div>
         <div class="report-actions no-print">
             <a href="{{ route('reports.loan-records.pdf', request()->query()) }}" class="button-primary button-link">Unduh PDF</a>
         </div>
@@ -32,7 +32,7 @@
 
     <div class="table-wrap">
         <table>
-            <thead><tr><th class="table-number-heading">No.</th><th>Transaksi</th><th>Siswa</th><th>Kelas</th><th>Buku</th><th>Tanggal pinjam</th><th>Jatuh tempo</th><th>Tanggal kembali</th><th>Status</th></tr></thead>
+            <thead><tr><th class="table-number-heading">No.</th><th>Kode transaksi</th><th>Siswa</th><th>Kelas</th><th>Buku</th><th>Tanggal pinjam</th><th>Jatuh tempo</th><th>Tanggal kembali</th><th>Status</th></tr></thead>
             <tbody>
                 @forelse ($records as $record)
                     @php
@@ -56,11 +56,11 @@
                         <td><span class="badge {{ $record->return_status === 'borrowed' ? 'badge-warning' : 'badge-success' }}">{{ $statusLabel }}</span></td>
                     </tr>
                 @empty
-                    <tr><td colspan="9" class="empty-state">Tidak ada record peminjaman yang sesuai dengan filter.</td></tr>
+                    <tr><td colspan="9" class="empty-state">Tidak ada catatan peminjaman siswa yang sesuai dengan filter.</td></tr>
                 @endforelse
             </tbody>
         </table>
     </div>
-    @include('reports._pagination', ['paginator' => $records, 'label' => 'record buku'])
+    @include('reports._pagination', ['paginator' => $records, 'label' => 'catatan peminjaman'])
 </section>
 @endsection
