@@ -3,13 +3,15 @@
 @section('title', 'Login Siswa')
 
 @section('content')
+@php($loginLogo = asset('images/branding/sdn-mekarsari-smart-96.png'))
+
 <section class="student-login-section">
     <div class="portal-container student-login-grid">
         <div class="student-login-intro">
             <span class="portal-kicker">Akses khusus siswa</span>
             <h1>Masuk dengan email siswa.</h1>
             <p>
-                Akun siswa dibuat dan diaktifkan oleh admin perpustakaan. Gunakan email serta password yang diberikan untuk masuk ke dashboard siswa.
+                Dashboard siswa berdiri sendiri dari dashboard admin. Gunakan email aktif yang terdaftar agar akun siap digunakan sebagai tujuan notifikasi email pada pengembangan berikutnya.
             </p>
 
             <div class="student-login-points">
@@ -21,7 +23,9 @@
 
         <div class="student-login-card">
             <div>
-                <span class="student-login-icon">S</span>
+                <div class="student-login-icon student-login-icon-logo" aria-hidden="true">
+                    <img src="{{ $loginLogo }}" alt="Logo SDN Mekarsari 08">
+                </div>
                 <p class="portal-kicker">Login siswa</p>
                 <h2>Selamat datang kembali</h2>
                 <p>Masukkan email dan password akun siswa.</p>
@@ -69,7 +73,8 @@
             <div class="student-login-links">
                 <a href="{{ route('student.password.request') }}">Lupa password?</a>
                 <p class="student-register-prompt">
-                    <span>Belum memiliki akun? Hubungi admin perpustakaan.</span>
+                    <span>Belum punya akun?</span>
+                    <a href="{{ \Illuminate\Support\Facades\Route::has('register') ? route('register') : url('/siswa/daftar') }}">Daftar siswa</a>
                 </p>
             </div>
         </div>
