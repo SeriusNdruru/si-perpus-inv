@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=67">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=69">
 </head>
 <body class="member-page">
     @php
@@ -86,6 +86,6 @@
             </div>
         </main>
     </div>
-    <script src="{{ asset('js/image-retry.js') }}?v=67" defer></script>
+    <script src="{{ asset('js/image-retry.js') }}?v=69" defer></script>
 </body>
 </html>

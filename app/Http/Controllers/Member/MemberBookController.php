@@ -81,7 +81,7 @@ class MemberBookController extends Controller
                     ->whereColumn('book_authors.item_id', 'items.id');
             }, 'author_names')
             ->orderBy('items.item_name')
-            ->paginate(12)
+            ->paginate(15)
             ->withQueryString();
 
         $categories = DB::table('categories')
