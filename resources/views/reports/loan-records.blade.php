@@ -57,15 +57,17 @@
             <thead>
                 <tr>
                     <th class="table-number-heading">No.</th>
+                    <th>NIS/NISN</th>
                     <th>Nama siswa</th>
                     <th>Jumlah peminjaman</th>
-                    <th class="table-actions-heading">Aksi</th>
+                    <th class="table-actions-heading">Detail</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($records as $record)
                     <tr>
                         <td class="table-number">{{ ($records->firstItem() ?? 1) + $loop->index }}</td>
+                        <td>{{ $record->identity_number ?: '-' }}</td>
                         <td><div class="table-primary">{{ $record->member_name }}</div></td>
                         <td><strong>{{ number_format($record->loan_count) }} kali</strong></td>
                         <td>
@@ -73,7 +75,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="4" class="empty-state">Tidak ada riwayat peminjaman siswa yang sesuai dengan filter.</td></tr>
+                    <tr><td colspan="5" class="empty-state">Tidak ada riwayat peminjaman siswa yang sesuai dengan filter.</td></tr>
                 @endforelse
             </tbody>
         </table>

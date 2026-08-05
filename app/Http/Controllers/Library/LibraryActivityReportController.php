@@ -203,6 +203,7 @@ class LibraryActivityReportController extends Controller
             ->values()
             ->map(fn ($row, int $index): array => [
                 $index + 1,
+                $row->identity_number ?: '-',
                 $row->member_name,
                 $row->loan_count.' kali',
             ]);
@@ -213,9 +214,10 @@ class LibraryActivityReportController extends Controller
             'Riwayat Peminjaman Siswa',
             $this->pdfMeta($filters),
             [
-                ['label' => 'No.', 'width' => 60],
-                ['label' => 'Nama Siswa', 'width' => 460],
-                ['label' => 'Jumlah Peminjaman', 'width' => 240],
+                ['label' => 'No.', 'width' => 55],
+                ['label' => 'NIS/NISN', 'width' => 170],
+                ['label' => 'Nama Siswa', 'width' => 345],
+                ['label' => 'Jumlah Peminjaman', 'width' => 190],
             ],
             $rows,
         );
