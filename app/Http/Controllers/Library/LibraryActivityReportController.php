@@ -128,9 +128,9 @@ class LibraryActivityReportController extends Controller
             ->get();
 
         return $this->excel->download(
-            'laporan-kunjungan-'.now()->format('Ymd-His').'.xlsx',
+            'riwayat-kunjungan-siswa-'.now()->format('Ymd-His').'.xlsx',
             $this->institutionName(),
-            'Laporan Kunjungan Siswa ke Perpustakaan',
+            'Riwayat Kunjungan Siswa',
             $this->excelMeta($filters),
             ['No.', 'Tanggal', 'Waktu', 'Kode anggota', 'Nama siswa', 'NIS/NISN', 'Kelas', 'Kegiatan', 'Petugas', 'Catatan'],
             $rows,
@@ -146,7 +146,7 @@ class LibraryActivityReportController extends Controller
                 $row->recorder_name ?: '-',
                 $row->notes ?: '-',
             ],
-            'Kunjungan Siswa',
+            'Riwayat Kunjungan',
         );
     }
 
@@ -156,9 +156,9 @@ class LibraryActivityReportController extends Controller
         $rows = $this->rankingQuery($filters)->get();
 
         return $this->excel->download(
-            'laporan-siswa-sering-berkunjung-'.now()->format('Ymd-His').'.xlsx',
+            'peringkat-kunjungan-siswa-'.now()->format('Ymd-His').'.xlsx',
             $this->institutionName(),
-            'Peringkat Siswa yang Sering ke Perpustakaan',
+            'Peringkat Kunjungan Siswa',
             $this->excelMeta($filters),
             ['Peringkat', 'Kode anggota', 'Nama siswa', 'NIS/NISN', 'Kelas', 'Jumlah kunjungan', 'Kunjungan terakhir'],
             $rows,
@@ -171,7 +171,7 @@ class LibraryActivityReportController extends Controller
                 (int) $row->visit_count,
                 $row->last_visit ?: '-',
             ],
-            'Siswa Sering Berkunjung',
+            'Peringkat Kunjungan',
         );
     }
 

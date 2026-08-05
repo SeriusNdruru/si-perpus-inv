@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Kunjungan Siswa')
-@section('page-title', 'Laporan Kunjungan Siswa')
+@section('title', 'Riwayat Kunjungan Siswa')
+@section('page-title', 'Riwayat Kunjungan Siswa')
 
 @section('content')
 @include('reports._tabs')
@@ -13,7 +13,7 @@
 
 <section class="panel report-panel">
     <div class="panel-header panel-header-wrap">
-        <div><p class="eyebrow">Aktivitas membaca</p><h2>Record kunjungan siswa</h2></div>
+        <div><p class="eyebrow">Riwayat kunjungan</p><h2>Daftar setiap kunjungan siswa</h2></div>
         <div class="report-actions no-print">
             <a href="{{ route('reports.library-visits.excel', request()->query()) }}" class="button-primary button-link">Unduh Excel</a>
         </div>

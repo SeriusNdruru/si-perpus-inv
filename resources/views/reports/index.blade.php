@@ -56,19 +56,19 @@
             </a>
 
             <a href="{{ route('reports.library-visits') }}" class="report-link-card">
-                <span class="report-card-code">KJG</span>
+                <span class="report-card-code">RWK</span>
                 <div>
-                    <strong>Laporan Kunjungan Siswa</strong>
-                    <p>Catatan siswa yang datang membaca di perpustakaan.</p>
+                    <strong>Riwayat Kunjungan Siswa</strong>
+                    <p>Daftar setiap kedatangan siswa yang dicatat oleh Admin Perpustakaan.</p>
                     <small>Dapat difilter dan diunduh sebagai Excel</small>
                 </div>
             </a>
 
             <a href="{{ route('reports.frequent-visitors') }}" class="report-link-card">
-                <span class="report-card-code">TOP</span>
+                <span class="report-card-code">PRK</span>
                 <div>
-                    <strong>Siswa Sering Berkunjung</strong>
-                    <p>Peringkat siswa berdasarkan jumlah kunjungan pada periode tertentu.</p>
+                    <strong>Peringkat Kunjungan Siswa</strong>
+                    <p>Rangkuman jumlah kunjungan setiap siswa yang diurutkan dari terbanyak.</p>
                     <small>Dapat difilter dan diunduh sebagai Excel</small>
                 </div>
             </a>
