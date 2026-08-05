@@ -1456,3 +1456,116 @@ body.portal-modal-open {
         width: 100%;
     }
 }
+
+/* Tahap 67: standarisasi formulir publik dan siswa */
+.portal-form-shell {
+    width: 100%;
+    max-width: 1120px;
+}
+
+.portal-form {
+    width: 100%;
+    box-sizing: border-box;
+    padding: clamp(22px, 3vw, 32px);
+}
+
+.portal-form-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(16px, 2vw, 22px);
+    row-gap: 20px;
+    align-items: start;
+}
+
+.portal-form-grid > label {
+    grid-column: span 6;
+    min-width: 0;
+    align-content: start;
+}
+
+.portal-form-grid > .portal-field-full {
+    grid-column: 1 / -1;
+}
+
+.portal-form label > span,
+.student-login-form label > span,
+.member-request-form label > span {
+    display: flex;
+    align-items: flex-end;
+    min-height: 20px;
+    line-height: 1.35;
+}
+
+.portal-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.portal-form select,
+.portal-form textarea,
+.student-login-form input:not([type="hidden"]),
+.member-request-form textarea {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+}
+
+.portal-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+.portal-form select,
+.student-login-form input:not([type="hidden"]) {
+    height: 48px;
+    min-height: 48px;
+}
+
+.portal-form textarea,
+.member-request-form textarea {
+    min-height: 120px;
+    line-height: 1.55;
+}
+
+.portal-form input[type="file"] {
+    min-height: 48px;
+    padding: 6px 8px;
+    line-height: 32px;
+}
+
+.portal-form input[type="file"]::file-selector-button {
+    min-height: 34px;
+    margin-right: 10px;
+    padding: 0 13px;
+    border: 0;
+    border-radius: 8px;
+    color: #0f6670;
+    background: #e4f4f2;
+    font-weight: 850;
+    cursor: pointer;
+}
+
+.portal-form .portal-button {
+    min-height: 46px;
+    margin-top: 18px;
+}
+
+.portal-contact-grid {
+    align-items: start;
+}
+
+.student-login-form {
+    display: grid;
+    gap: 18px;
+}
+
+.student-login-form label {
+    gap: 8px;
+}
+
+@media (max-width: 760px) {
+    .portal-form-grid > label,
+    .portal-form-grid > .portal-field-full {
+        grid-column: 1 / -1;
+    }
+
+    .portal-form {
+        padding: 18px;
+        border-radius: 16px;
+    }
+
+    .portal-form .portal-button {
+        width: 100%;
+    }
+}

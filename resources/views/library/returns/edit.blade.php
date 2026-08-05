@@ -73,7 +73,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('library.returns.update', $loanItem) }}" class="form-body">
+        <form method="POST" action="{{ route('library.returns.update', $loanItem) }}" class="data-form return-edit-form">
             @csrf
             @method('PUT')
 

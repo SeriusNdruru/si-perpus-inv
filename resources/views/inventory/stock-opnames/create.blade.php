@@ -24,7 +24,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('inventory.stock-opnames.store') }}" class="panel stock-opname-create-card">
+    <form method="POST" action="{{ route('inventory.stock-opnames.store') }}" class="panel stock-opname-create-card workflow-form">
         @csrf
         <div class="panel-header">
             <div>

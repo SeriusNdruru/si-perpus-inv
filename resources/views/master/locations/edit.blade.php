@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('locations.update', $location) }}">
+        <form method="POST" action="{{ route('locations.update', $location) }}" class="data-form">
             @csrf
             @method('PUT')
             @include('master.locations._form', [

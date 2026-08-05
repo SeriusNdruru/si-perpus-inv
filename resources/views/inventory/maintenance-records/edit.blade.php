@@ -24,7 +24,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('inventory.maintenance-records.update', $record) }}" class="panel">
+    <form method="POST" action="{{ route('inventory.maintenance-records.update', $record) }}" class="panel workflow-form">
         @csrf
         @method('PUT')
         <div class="panel-header">

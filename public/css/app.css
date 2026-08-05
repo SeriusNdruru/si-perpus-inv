@@ -1727,3 +1727,264 @@ body.portal-modal-open {
         padding-right: 0;
     }
 }
+
+/* Tahap 67: standarisasi seluruh formulir pengisian dan pengeditan */
+.form-panel,
+.workflow-form,
+.stock-opname-create-card {
+    width: 100%;
+    max-width: none;
+}
+
+.data-form,
+.return-edit-form,
+.workflow-form .panel-body-form {
+    box-sizing: border-box;
+}
+
+.data-form:not(.member-account-form),
+.return-edit-form {
+    padding: clamp(20px, 2.4vw, 30px);
+}
+
+.workflow-form {
+    overflow: hidden;
+}
+
+.workflow-form .panel-body-form {
+    padding: clamp(20px, 2.4vw, 28px);
+}
+
+.data-form:not(.member-account-form) .form-grid,
+.return-edit-form .form-grid,
+.workflow-form .panel-body-form,
+.settings-form .form-grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(16px, 2vw, 22px);
+    row-gap: 20px;
+    align-items: start;
+}
+
+.data-form:not(.member-account-form) .form-grid > .form-field,
+.return-edit-form .form-grid > .form-field,
+.workflow-form .panel-body-form > .form-field,
+.settings-form .form-grid > .form-field {
+    grid-column: span 6;
+    min-width: 0;
+    align-content: start;
+}
+
+.data-form:not(.member-account-form) .form-grid > .form-field-full,
+.return-edit-form .form-grid > .form-field-full,
+.workflow-form .panel-body-form > .form-field-full,
+.settings-form .form-grid > .form-field-full {
+    grid-column: 1 / -1;
+}
+
+.form-field {
+    min-width: 0;
+    align-content: start;
+}
+
+.form-field > label,
+.filter-field > label {
+    display: flex;
+    align-items: flex-end;
+    min-height: 20px;
+    line-height: 1.35;
+}
+
+.form-field input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.form-field select,
+.form-field textarea,
+.data-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.data-form select,
+.data-form textarea,
+.return-edit-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.return-edit-form select,
+.return-edit-form textarea,
+.workflow-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]),
+.workflow-form select,
+.workflow-form textarea {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+}
+
+.form-field input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+.form-field select,
+.data-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+.data-form select,
+.return-edit-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+.return-edit-form select,
+.workflow-form input:not([type="checkbox"]):not([type="radio"]):not([type="hidden"]):not([type="file"]),
+.workflow-form select {
+    height: 48px;
+    min-height: 48px;
+}
+
+.form-field textarea,
+.data-form textarea,
+.return-edit-form textarea,
+.workflow-form textarea {
+    min-height: 120px;
+    line-height: 1.55;
+    resize: vertical;
+}
+
+.form-field input[type="file"],
+.data-form input[type="file"],
+.workflow-form input[type="file"] {
+    min-height: 48px;
+    padding: 6px 8px;
+    line-height: 32px;
+}
+
+.form-field input[type="file"]::file-selector-button,
+.data-form input[type="file"]::file-selector-button,
+.workflow-form input[type="file"]::file-selector-button {
+    min-height: 34px;
+    margin-right: 10px;
+    padding: 0 13px;
+    border: 0;
+    border-radius: 8px;
+    color: var(--primary-dark);
+    background: var(--accent);
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.form-field input:disabled,
+.form-field select:disabled,
+.form-field textarea:disabled,
+.form-field input[readonly],
+.data-form input:disabled,
+.data-form select:disabled,
+.data-form textarea:disabled,
+.data-form input[readonly] {
+    color: #667582;
+    background: #f3f6f7;
+    cursor: not-allowed;
+}
+
+.form-field small,
+.field-help,
+.field-error {
+    display: block;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.field-error {
+    color: var(--danger);
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.data-form:not(.member-account-form):has(> .form-section) {
+    background: #f7fafb;
+}
+
+.data-form:not(.member-account-form) > .form-section {
+    padding: clamp(20px, 2.2vw, 26px);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(26, 55, 67, .035);
+}
+
+.data-form:not(.member-account-form) > .form-section + .form-section {
+    margin-top: 18px;
+    padding-top: clamp(20px, 2.2vw, 26px);
+    border-top: 1px solid var(--line);
+}
+
+.form-section-heading {
+    margin-bottom: 20px;
+}
+
+.form-actions,
+.workflow-form > .form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.workflow-form > .form-actions {
+    margin: 0;
+    padding: 20px clamp(20px, 2.4vw, 28px) 24px;
+}
+
+.form-actions .button-primary,
+.form-actions .button-secondary,
+.form-actions button,
+.form-actions a {
+    min-height: 46px;
+}
+
+.settings-form {
+    width: 100%;
+}
+
+.settings-form .settings-panel {
+    width: 100%;
+}
+
+.settings-form .data-form {
+    padding: clamp(20px, 2.4vw, 28px);
+}
+
+.settings-rule-grid,
+.settings-format-grid {
+    align-items: stretch;
+}
+
+.settings-rule-card,
+.settings-format-grid > * {
+    min-width: 0;
+}
+
+@media (max-width: 900px) {
+    .data-form:not(.member-account-form) .form-grid > .form-field,
+    .return-edit-form .form-grid > .form-field,
+    .workflow-form .panel-body-form > .form-field,
+    .settings-form .form-grid > .form-field,
+    .data-form:not(.member-account-form) .form-grid > .form-field-full,
+    .return-edit-form .form-grid > .form-field-full,
+    .workflow-form .panel-body-form > .form-field-full,
+    .settings-form .form-grid > .form-field-full {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 700px) {
+    .data-form:not(.member-account-form),
+    .return-edit-form,
+    .workflow-form .panel-body-form,
+    .settings-form .data-form {
+        padding: 16px;
+    }
+
+    .data-form:not(.member-account-form) > .form-section {
+        padding: 18px;
+        border-radius: 14px;
+    }
+
+    .form-actions,
+    .workflow-form > .form-actions,
+    .member-account-form .form-actions {
+        flex-direction: row;
+        align-items: stretch;
+    }
+
+    .form-actions > *,
+    .workflow-form > .form-actions > *,
+    .member-account-form .form-actions > * {
+        flex: 1 1 0;
+        width: auto;
+        min-width: 0;
+    }
+}

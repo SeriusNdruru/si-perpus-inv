@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=65">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=67">
 </head>
 <body class="app-page">
     @php
@@ -145,7 +145,7 @@
         </main>
     </div>
     @include('shared.photo-preview-modal')
-    <script src="{{ asset('js/portal-photo-preview.js') }}?v=48" defer></script>
-    <script src="{{ asset('js/image-retry.js') }}?v=57" defer></script>
+    <script src="{{ asset('js/portal-photo-preview.js') }}?v=67" defer></script>
+    <script src="{{ asset('js/image-retry.js') }}?v=67" defer></script>
 </body>
 </html>

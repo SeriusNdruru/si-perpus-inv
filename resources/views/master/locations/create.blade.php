@@ -13,7 +13,7 @@
             </div>
         </div>
 
-        <form method="POST" action="{{ route('locations.store') }}">
+        <form method="POST" action="{{ route('locations.store') }}" class="data-form">
             @csrf
             @include('master.locations._form', [
                 'location' => null,

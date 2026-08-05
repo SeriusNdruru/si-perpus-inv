@@ -22,7 +22,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('inventory.disposals.complete', $disposal) }}" class="panel">
+    <form method="POST" action="{{ route('inventory.disposals.complete', $disposal) }}" class="panel workflow-form">
         @csrf
         @method('PATCH')
 

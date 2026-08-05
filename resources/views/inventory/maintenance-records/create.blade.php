@@ -24,7 +24,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('inventory.maintenance-records.store') }}" class="panel">
+    <form method="POST" action="{{ route('inventory.maintenance-records.store') }}" class="panel workflow-form">
         @csrf
         <div class="panel-header">
             <div>
