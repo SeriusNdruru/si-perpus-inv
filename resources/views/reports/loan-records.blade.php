@@ -59,6 +59,7 @@
                     <th class="table-number-heading">No.</th>
                     <th>Nama siswa</th>
                     <th>Jumlah peminjaman</th>
+                    <th class="table-actions-heading">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -67,9 +68,12 @@
                         <td class="table-number">{{ ($records->firstItem() ?? 1) + $loop->index }}</td>
                         <td><div class="table-primary">{{ $record->member_name }}</div></td>
                         <td><strong>{{ number_format($record->loan_count) }} kali</strong></td>
+                        <td>
+                            <a href="{{ route('reports.loan-records.detail', ['member' => $record->id, 'date_from' => $filters['date_from'] ?? null, 'date_to' => $filters['date_to'] ?? null]) }}" class="action-link">Detail</a>
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="3" class="empty-state">Tidak ada riwayat peminjaman siswa yang sesuai dengan filter.</td></tr>
+                    <tr><td colspan="4" class="empty-state">Tidak ada riwayat peminjaman siswa yang sesuai dengan filter.</td></tr>
                 @endforelse
             </tbody>
         </table>

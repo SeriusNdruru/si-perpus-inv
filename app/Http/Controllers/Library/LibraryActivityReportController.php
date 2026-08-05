@@ -86,6 +86,39 @@ class LibraryActivityReportController extends Controller
         ]);
     }
 
+    public function loanRecordDetail(Request $request, Member $member): View
+    {
+        abort_unless($member->member_type === 'student', 404);
+
+        $filters = $request->validate([
+            'date_from' => ['nullable', 'date'],
+            'date_to' => ['nullable', 'date', 'after_or_equal:date_from'],
+        ]);
+
+        $detailQuery = $this->studentLoanDetailQuery($member->id, $filters);
+        $summaryQuery = DB::query()->fromSub(clone $detailQuery, 'student_loan_detail');
+
+        $summary = [
+            'loans' => (int) (clone $summaryQuery)->distinct()->count('loan_id'),
+            'books' => (int) (clone $summaryQuery)->count(),
+            'active' => (int) (clone $summaryQuery)->where('return_status', 'borrowed')->count(),
+            'fines' => (float) ((clone $summaryQuery)->sum('fine_amount') ?? 0),
+        ];
+
+        $records = $detailQuery
+            ->orderByDesc('loan_items.borrowed_at')
+            ->orderBy('items.item_name')
+            ->paginate(20)
+            ->withQueryString();
+
+        return view('reports.loan-record-detail', [
+            'member' => $member,
+            'records' => $records,
+            'summary' => $summary,
+            'filters' => $filters,
+        ]);
+    }
+
     public function visitsPdf(Request $request): Response
     {
         $filters = $this->visitFilters($request);
@@ -309,6 +342,40 @@ class LibraryActivityReportController extends Controller
                 'members.department',
             ])
             ->selectRaw('COUNT(DISTINCT loans.id) as loan_count');
+    }
+
+    /** @param array<string, mixed> $filters */
+    private function studentLoanDetailQuery(int $memberId, array $filters): Builder
+    {
+        $finePayments = DB::table('fine_payments')
+            ->select('loan_item_id')
+            ->selectRaw('SUM(amount) as paid_amount')
+            ->groupBy('loan_item_id');
+
+        return DB::table('loans')
+            ->join('loan_items', 'loan_items.loan_id', '=', 'loans.id')
+            ->join('assets', 'assets.id', '=', 'loan_items.asset_id')
+            ->join('items', 'items.id', '=', 'assets.item_id')
+            ->leftJoinSub($finePayments, 'fine_totals', function ($join): void {
+                $join->on('fine_totals.loan_item_id', '=', 'loan_items.id');
+            })
+            ->where('loans.member_id', $memberId)
+            ->when($filters['date_from'] ?? null, fn (Builder $query, string $date) => $query->whereDate('loan_items.borrowed_at', '>=', $date))
+            ->when($filters['date_to'] ?? null, fn (Builder $query, string $date) => $query->whereDate('loan_items.borrowed_at', '<=', $date))
+            ->select([
+                'loans.id as loan_id',
+                'loans.loan_code',
+                'loan_items.id as loan_item_id',
+                'loan_items.borrowed_at',
+                'loan_items.due_date',
+                'loan_items.returned_at',
+                'loan_items.return_status',
+                'loan_items.fine_amount',
+                'assets.asset_code',
+                'items.item_code as book_code',
+                'items.item_name',
+            ])
+            ->selectRaw('COALESCE(fine_totals.paid_amount, 0) as paid_amount');
     }
 
     private function classes()

@@ -542,6 +542,9 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
             Route::get('/siswa-sering-berkunjung/pdf', [LibraryActivityReportController::class, 'frequentVisitorsPdf'])->name('frequent-visitors.pdf');
             Route::get('/riwayat-peminjaman-siswa', [LibraryActivityReportController::class, 'loanRecords'])->name('loan-records');
             Route::get('/riwayat-peminjaman-siswa/pdf', [LibraryActivityReportController::class, 'loanRecordsPdf'])->name('loan-records.pdf');
+            Route::get('/riwayat-peminjaman-siswa/{member}/detail', [LibraryActivityReportController::class, 'loanRecordDetail'])
+                ->whereNumber('member')
+                ->name('loan-records.detail');
             Route::redirect('/catatan-peminjaman-siswa', '/laporan/riwayat-peminjaman-siswa', 301);
             Route::redirect('/catatan-peminjaman-siswa/pdf', '/laporan/riwayat-peminjaman-siswa/pdf', 301);
             Route::redirect('/record-peminjaman', '/laporan/riwayat-peminjaman-siswa', 301);
