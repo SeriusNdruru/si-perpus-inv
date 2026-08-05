@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Disposal;
 use App\Models\Item;
 use App\Models\LibraryShelf;
+use App\Models\LibraryVisit;
 use App\Models\Location;
 use App\Models\LoanRequest;
 use App\Models\MaintenanceRecord;
@@ -106,6 +107,7 @@ class GenericAuditObserver
             $model instanceof Publisher => 'library_publishers',
             $model instanceof Author => 'library_authors',
             $model instanceof LibraryShelf => 'library_shelves',
+            $model instanceof LibraryVisit => 'library_visits',
             $model instanceof Member => 'library_members',
             $model instanceof StockOpname => 'inventory_stock_opname',
             $model instanceof MaintenanceRecord => 'inventory_maintenance',

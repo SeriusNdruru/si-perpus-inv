@@ -10,7 +10,7 @@
         <div>
             <p class="eyebrow">Pusat informasi</p>
             <h2>Data siap diperiksa dan diekspor</h2>
-            <p>Pilih laporan berdasarkan tanggung jawab akun. Filter yang diterapkan pada layar juga digunakan saat mengunduh CSV.</p>
+            <p>Pilih laporan berdasarkan tanggung jawab akun. Filter yang diterapkan pada layar juga digunakan saat mengunduh laporan CSV atau PDF.</p>
         </div>
         <span class="role-pill">READ ONLY</span>
     </section>
@@ -43,6 +43,33 @@
                     <strong>Laporan Peminjaman</strong>
                     <p>Transaksi berdasarkan periode, status, dan jenis anggota.</p>
                     <small>{{ number_format((int) $summary['active_loans']) }} eksemplar belum kembali</small>
+                </div>
+            </a>
+
+            <a href="{{ route('reports.loan-records') }}" class="report-link-card">
+                <span class="report-card-code">RCD</span>
+                <div>
+                    <strong>Record Buku yang Dipinjam</strong>
+                    <p>Riwayat setiap judul dan eksemplar buku yang dipinjam siswa.</p>
+                    <small>Dapat difilter dan diunduh sebagai PDF</small>
+                </div>
+            </a>
+
+            <a href="{{ route('reports.library-visits') }}" class="report-link-card">
+                <span class="report-card-code">KJG</span>
+                <div>
+                    <strong>Laporan Kunjungan Siswa</strong>
+                    <p>Catatan siswa yang datang membaca di perpustakaan.</p>
+                    <small>Dapat difilter dan diunduh sebagai PDF</small>
+                </div>
+            </a>
+
+            <a href="{{ route('reports.frequent-visitors') }}" class="report-link-card">
+                <span class="report-card-code">TOP</span>
+                <div>
+                    <strong>Siswa Sering Berkunjung</strong>
+                    <p>Peringkat siswa berdasarkan jumlah kunjungan pada periode tertentu.</p>
+                    <small>Dapat difilter dan diunduh sebagai PDF</small>
                 </div>
             </a>
 

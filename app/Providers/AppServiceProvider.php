@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Disposal;
 use App\Models\Item;
 use App\Models\LibraryShelf;
+use App\Models\LibraryVisit;
 use App\Models\Location;
 use App\Models\LoanRequest;
 use App\Models\MaintenanceRecord;
@@ -46,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
             Publisher::class,
             Author::class,
             LibraryShelf::class,
+            LibraryVisit::class,
             Member::class,
             StockOpname::class,
             MaintenanceRecord::class,

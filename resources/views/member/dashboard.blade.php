@@ -10,6 +10,7 @@
         <h2>Kelola kegiatan perpustakaan dari satu dashboard.</h2>
         <p>Cari buku, kirim pengajuan, pantau tanggal kembali, dan periksa notifikasi tanpa harus datang ke meja petugas terlebih dahulu.</p>
         <a href="{{ route('member.books.index') }}" class="member-button member-button-primary">Cari buku</a>
+        <a href="{{ route('member.activity.index') }}" class="member-button">Lihat aktivitas saya</a>
     </div>
     <div class="member-card-visual">
         <span>{{ $member->member_code }}</span>
@@ -19,6 +20,8 @@
 </section>
 
 <div class="member-stat-grid">
+    <article><span>Kunjungan membaca</span><strong>{{ $statistics['total_visits'] }}</strong></article>
+    <article><span>Transaksi peminjaman</span><strong>{{ $statistics['total_loans'] }}</strong></article>
     <article><span>Buku sedang dipinjam</span><strong>{{ $statistics['active_books'] }}</strong></article>
     <article><span>Jatuh tempo besok</span><strong>{{ $statistics['due_tomorrow'] }}</strong></article>
     <article><span>Pengajuan aktif</span><strong>{{ $statistics['active_requests'] }}</strong></article>

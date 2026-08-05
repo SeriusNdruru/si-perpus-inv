@@ -1988,3 +1988,12 @@ body.portal-modal-open {
         min-width: 0;
     }
 }
+
+/* Tahap 74: kunjungan siswa dan laporan aktivitas perpustakaan */
+.report-stat-grid-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.table-actions-inline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.table-actions-inline form { margin: 0; }
+
+@media (max-width: 700px) {
+    .report-stat-grid-two { grid-template-columns: 1fr; }
+}

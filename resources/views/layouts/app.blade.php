@@ -18,7 +18,7 @@
     @endphp
     <title>@yield('title', 'Dashboard') | {{ $browserSystemName }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=67">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=74">
 </head>
 <body class="app-page">
     @php
@@ -94,6 +94,7 @@
                     <a href="{{ route('library.shelves.index') }}" class="{{ request()->routeIs('library.shelves.*') ? 'active' : '' }}">Rak Perpustakaan</a>
                     <a href="{{ route('library.shelf-assignments.index') }}" class="{{ request()->routeIs('library.shelf-assignments.*') ? 'active' : '' }}">Penempatan Buku</a>
                     <a href="{{ route('library.members.index') }}" class="{{ request()->routeIs('library.members.*') ? 'active' : '' }}">Anggota</a>
+                    <a href="{{ route('library.visits.index') }}" class="{{ request()->routeIs('library.visits.*') ? 'active' : '' }}">Kunjungan Siswa</a>
                     <a href="{{ route('library.loans.index') }}" class="{{ request()->routeIs('library.loans.*') ? 'active' : '' }}">Peminjaman</a>
                     <a href="{{ route('library.returns.index') }}" class="{{ request()->routeIs('library.returns.*') ? 'active' : '' }}">Pengembalian</a>
                     <a href="{{ route('library.fines.index') }}" class="{{ request()->routeIs('library.fines.*') ? 'active' : '' }}">Denda</a>

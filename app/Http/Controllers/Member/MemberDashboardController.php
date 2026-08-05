@@ -27,6 +27,12 @@ class MemberDashboardController extends Controller
         $this->reminders->generateForMember($member);
 
         $statistics = [
+            'total_visits' => DB::table('library_visits')
+                ->where('member_id', $member->id)
+                ->count(),
+            'total_loans' => DB::table('loans')
+                ->where('member_id', $member->id)
+                ->count(),
             'active_books' => DB::table('loan_items')
                 ->join('loans', 'loans.id', '=', 'loan_items.loan_id')
                 ->where('loans.member_id', $member->id)

@@ -57,6 +57,11 @@ class Member extends Model
         return $this->hasMany(LoanRequest::class);
     }
 
+    public function libraryVisits(): HasMany
+    {
+        return $this->hasMany(LibraryVisit::class);
+    }
+
     public function notifications(): HasMany
     {
         return $this->hasMany(MemberNotification::class);

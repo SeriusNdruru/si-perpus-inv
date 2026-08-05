@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=70">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=74">
 </head>
 <body class="member-page">
     @php
@@ -35,6 +35,7 @@
                     @if ($cartCount > 0)<span>{{ $cartCount }}</span>@endif
                 </a>
                 <a href="{{ route('member.loan-requests.index') }}" class="{{ request()->routeIs('member.loan-requests.*') ? 'active' : '' }}">Pengajuan peminjaman</a>
+                <a href="{{ route('member.activity.index') }}" class="{{ request()->routeIs('member.activity.*') ? 'active' : '' }}">Aktivitas saya</a>
                 <a href="{{ route('member.history.loans') }}" class="{{ request()->routeIs('member.history.loans', 'member.history.loan-detail') ? 'active' : '' }}">Riwayat peminjaman</a>
                 <a href="{{ route('member.history.fines') }}" class="{{ request()->routeIs('member.history.fines') ? 'active' : '' }}">Denda</a>
                 <a href="{{ route('member.notifications.index') }}" class="{{ request()->routeIs('member.notifications.*') ? 'active' : '' }}">
@@ -86,6 +87,6 @@
             </div>
         </main>
     </div>
-    <script src="{{ asset('js/image-retry.js') }}?v=70" defer></script>
+    <script src="{{ asset('js/image-retry.js') }}?v=74" defer></script>
 </body>
 </html>

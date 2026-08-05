@@ -28,6 +28,8 @@ use App\Http\Controllers\Library\ShelfAssignmentController;
 use App\Http\Controllers\Library\MemberController;
 use App\Http\Controllers\Library\LoanController;
 use App\Http\Controllers\Library\LoanRequestAdminController;
+use App\Http\Controllers\Library\LibraryActivityReportController;
+use App\Http\Controllers\Library\LibraryVisitController;
 use App\Http\Controllers\Library\ContactMessageAdminController;
 use App\Http\Controllers\Library\ReturnController;
 use App\Http\Controllers\Library\FineController;
@@ -40,6 +42,7 @@ use App\Http\Controllers\Member\MemberBookController;
 use App\Http\Controllers\Member\MemberDashboardController;
 use App\Http\Controllers\Member\MemberHistoryController;
 use App\Http\Controllers\Member\MemberLoanRequestController;
+use App\Http\Controllers\Member\MemberLibraryActivityController;
 use App\Http\Controllers\Member\MemberNotificationController;
 use App\Http\Controllers\Member\MemberProfileController;
 use App\Http\Controllers\ReportController;
@@ -161,6 +164,9 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
 
             Route::get('/profil', [MemberProfileController::class, 'show'])
                 ->name('member.profile.show');
+
+            Route::get('/aktivitas-perpustakaan', [MemberLibraryActivityController::class, 'index'])
+                ->name('member.activity.index');
 
             Route::get('/katalog', [MemberBookController::class, 'index'])
                 ->name('member.books.index');
@@ -438,6 +444,11 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
         Route::patch('/perpustakaan/anggota/{member}/status', [MemberController::class, 'updateStatus'])
             ->name('library.members.status');
 
+        Route::resource('/perpustakaan/kunjungan', LibraryVisitController::class)
+            ->parameters(['kunjungan' => 'visit'])
+            ->except(['show'])
+            ->names('library.visits');
+
 
         Route::resource('/perpustakaan/peminjaman', LoanController::class)
             ->parameters(['peminjaman' => 'loan'])
@@ -525,6 +536,12 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
             Route::get('/anggota/csv', [ReportController::class, 'membersCsv'])->name('members.csv');
             Route::get('/reservasi', [ReportController::class, 'reservations'])->name('reservations');
             Route::get('/reservasi/csv', [ReportController::class, 'reservationsCsv'])->name('reservations.csv');
+            Route::get('/kunjungan-siswa', [LibraryActivityReportController::class, 'visits'])->name('library-visits');
+            Route::get('/kunjungan-siswa/pdf', [LibraryActivityReportController::class, 'visitsPdf'])->name('library-visits.pdf');
+            Route::get('/siswa-sering-berkunjung', [LibraryActivityReportController::class, 'frequentVisitors'])->name('frequent-visitors');
+            Route::get('/siswa-sering-berkunjung/pdf', [LibraryActivityReportController::class, 'frequentVisitorsPdf'])->name('frequent-visitors.pdf');
+            Route::get('/record-peminjaman', [LibraryActivityReportController::class, 'loanRecords'])->name('loan-records');
+            Route::get('/record-peminjaman/pdf', [LibraryActivityReportController::class, 'loanRecordsPdf'])->name('loan-records.pdf');
         });
 
     Route::post('/admin/logout', [LoginController::class, 'destroy'])
