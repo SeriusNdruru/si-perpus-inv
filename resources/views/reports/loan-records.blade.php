@@ -20,7 +20,7 @@
             <h2>Jumlah peminjaman setiap siswa</h2>
         </div>
         <div class="report-actions no-print">
-            <a href="{{ route('reports.loan-records.pdf', request()->query()) }}" class="button-primary button-link">Unduh PDF</a>
+            <a href="{{ route('reports.loan-records.excel', request()->query()) }}" class="button-primary button-link">Unduh Excel</a>
         </div>
     </div>
 

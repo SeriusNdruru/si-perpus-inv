@@ -519,7 +519,8 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
         ->middleware('role:SUPER_ADMIN,INVENTORY_ADMIN,MANAGER')
         ->group(function (): void {
             Route::get('/inventaris', [ReportController::class, 'inventory'])->name('inventory');
-            Route::get('/inventaris/csv', [ReportController::class, 'inventoryCsv'])->name('inventory.csv');
+            Route::get('/inventaris/excel', [ReportController::class, 'inventoryExcel'])->name('inventory.excel');
+            Route::get('/inventaris/csv', [ReportController::class, 'inventoryExcel'])->name('inventory.csv');
         });
 
     Route::prefix('/laporan')
@@ -527,28 +528,39 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
         ->middleware('role:SUPER_ADMIN,LIBRARY_ADMIN,LIBRARY_OFFICER,MANAGER')
         ->group(function (): void {
             Route::get('/koleksi-buku', [ReportController::class, 'collection'])->name('collection');
-            Route::get('/koleksi-buku/csv', [ReportController::class, 'collectionCsv'])->name('collection.csv');
+            Route::get('/koleksi-buku/excel', [ReportController::class, 'collectionExcel'])->name('collection.excel');
+            Route::get('/koleksi-buku/csv', [ReportController::class, 'collectionExcel'])->name('collection.csv');
             Route::get('/peminjaman', [ReportController::class, 'loans'])->name('loans');
-            Route::get('/peminjaman/csv', [ReportController::class, 'loansCsv'])->name('loans.csv');
+            Route::get('/peminjaman/excel', [ReportController::class, 'loansExcel'])->name('loans.excel');
+            Route::get('/peminjaman/csv', [ReportController::class, 'loansExcel'])->name('loans.csv');
             Route::get('/denda', [ReportController::class, 'fines'])->name('fines');
-            Route::get('/denda/csv', [ReportController::class, 'finesCsv'])->name('fines.csv');
+            Route::get('/denda/excel', [ReportController::class, 'finesExcel'])->name('fines.excel');
+            Route::get('/denda/csv', [ReportController::class, 'finesExcel'])->name('fines.csv');
             Route::get('/anggota', [ReportController::class, 'members'])->name('members');
-            Route::get('/anggota/csv', [ReportController::class, 'membersCsv'])->name('members.csv');
+            Route::get('/anggota/excel', [ReportController::class, 'membersExcel'])->name('members.excel');
+            Route::get('/anggota/csv', [ReportController::class, 'membersExcel'])->name('members.csv');
             Route::get('/reservasi', [ReportController::class, 'reservations'])->name('reservations');
-            Route::get('/reservasi/csv', [ReportController::class, 'reservationsCsv'])->name('reservations.csv');
+            Route::get('/reservasi/excel', [ReportController::class, 'reservationsExcel'])->name('reservations.excel');
+            Route::get('/reservasi/csv', [ReportController::class, 'reservationsExcel'])->name('reservations.csv');
             Route::get('/kunjungan-siswa', [LibraryActivityReportController::class, 'visits'])->name('library-visits');
-            Route::get('/kunjungan-siswa/pdf', [LibraryActivityReportController::class, 'visitsPdf'])->name('library-visits.pdf');
+            Route::get('/kunjungan-siswa/excel', [LibraryActivityReportController::class, 'visitsExcel'])->name('library-visits.excel');
+            Route::get('/kunjungan-siswa/pdf', [LibraryActivityReportController::class, 'visitsExcel'])->name('library-visits.pdf');
             Route::get('/siswa-sering-berkunjung', [LibraryActivityReportController::class, 'frequentVisitors'])->name('frequent-visitors');
-            Route::get('/siswa-sering-berkunjung/pdf', [LibraryActivityReportController::class, 'frequentVisitorsPdf'])->name('frequent-visitors.pdf');
+            Route::get('/siswa-sering-berkunjung/excel', [LibraryActivityReportController::class, 'frequentVisitorsExcel'])->name('frequent-visitors.excel');
+            Route::get('/siswa-sering-berkunjung/pdf', [LibraryActivityReportController::class, 'frequentVisitorsExcel'])->name('frequent-visitors.pdf');
             Route::get('/riwayat-peminjaman-siswa', [LibraryActivityReportController::class, 'loanRecords'])->name('loan-records');
-            Route::get('/riwayat-peminjaman-siswa/pdf', [LibraryActivityReportController::class, 'loanRecordsPdf'])->name('loan-records.pdf');
+            Route::get('/riwayat-peminjaman-siswa/excel', [LibraryActivityReportController::class, 'loanRecordsExcel'])->name('loan-records.excel');
+            Route::get('/riwayat-peminjaman-siswa/pdf', [LibraryActivityReportController::class, 'loanRecordsExcel'])->name('loan-records.pdf');
             Route::get('/riwayat-peminjaman-siswa/{member}/detail', [LibraryActivityReportController::class, 'loanRecordDetail'])
                 ->whereNumber('member')
                 ->name('loan-records.detail');
+            Route::get('/riwayat-peminjaman-siswa/{member}/detail/excel', [LibraryActivityReportController::class, 'loanRecordDetailExcel'])
+                ->whereNumber('member')
+                ->name('loan-records.detail.excel');
             Route::redirect('/catatan-peminjaman-siswa', '/laporan/riwayat-peminjaman-siswa', 301);
-            Route::redirect('/catatan-peminjaman-siswa/pdf', '/laporan/riwayat-peminjaman-siswa/pdf', 301);
+            Route::redirect('/catatan-peminjaman-siswa/pdf', '/laporan/riwayat-peminjaman-siswa/excel', 301);
             Route::redirect('/record-peminjaman', '/laporan/riwayat-peminjaman-siswa', 301);
-            Route::redirect('/record-peminjaman/pdf', '/laporan/riwayat-peminjaman-siswa/pdf', 301);
+            Route::redirect('/record-peminjaman/pdf', '/laporan/riwayat-peminjaman-siswa/excel', 301);
         });
 
     Route::post('/admin/logout', [LoginController::class, 'destroy'])

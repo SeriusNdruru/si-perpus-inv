@@ -1016,7 +1016,7 @@ class SystemReadinessService
                     'Buat satu akun admin percobaan, ubah status, dan reset password.',
                     'Ubah pengaturan nama aplikasi dan aturan perpustakaan lalu pastikan perubahan diterapkan.',
                     'Periksa Riwayat Aktivitas setelah melakukan tambah, ubah, login, dan logout.',
-                    'Buka seluruh Laporan Terpadu, uji filter, cetak, dan ekspor CSV.',
+                    'Buka seluruh Laporan Terpadu, uji filter, cetak, dan ekspor Excel.',
                     'Buat backup database dan unduh salinannya ke komputer.',
                 ],
             ],

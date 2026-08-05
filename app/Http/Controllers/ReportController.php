@@ -12,13 +12,18 @@ use App\Models\LoanItem;
 use App\Models\Member;
 use App\Models\Reservation;
 use App\Models\StockBalance;
+use App\Models\SystemSetting;
+use App\Services\Reports\SimpleExcelReportService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ReportController extends Controller
 {
+    public function __construct(private readonly SimpleExcelReportService $excel)
+    {
+    }
     public function index(): View
     {
         $user = auth()->user();
@@ -79,7 +84,7 @@ class ReportController extends Controller
         return view('reports.inventory', compact('items', 'summary', 'categories', 'filters'));
     }
 
-    public function inventoryCsv(Request $request): StreamedResponse
+    public function inventoryExcel(Request $request): BinaryFileResponse
     {
         $filters = $this->inventoryFilters($request);
         $query = $this->inventoryBaseQuery($filters)
@@ -95,8 +100,9 @@ class ReportController extends Controller
             ->withSum('assets as acquisition_value', 'acquisition_price')
             ->orderBy('items.item_name');
 
-        return $this->csvDownload(
-            'laporan-inventaris-'.now()->format('Ymd-His').'.csv',
+        return $this->excelDownload(
+            'laporan-inventaris-'.now()->format('Ymd-His').'.xlsx',
+            'Laporan Inventaris',
             ['Kode', 'Nama barang', 'Jenis', 'Pencatatan', 'Kategori', 'Satuan', 'Status', 'Total aset', 'Tersedia', 'Dipinjam', 'Rusak', 'Hilang', 'Stok jumlah', 'Nilai perolehan'],
             $query->lazy(500),
             fn (Item $item): array => [
@@ -162,7 +168,7 @@ class ReportController extends Controller
         return view('reports.collection', compact('books', 'summary', 'categories', 'shelves', 'filters'));
     }
 
-    public function collectionCsv(Request $request): StreamedResponse
+    public function collectionExcel(Request $request): BinaryFileResponse
     {
         $filters = $this->collectionFilters($request);
         $query = $this->collectionBaseQuery($filters)
@@ -182,8 +188,9 @@ class ReportController extends Controller
             ])
             ->orderBy('items.item_name');
 
-        return $this->csvDownload(
-            'laporan-koleksi-buku-'.now()->format('Ymd-His').'.csv',
+        return $this->excelDownload(
+            'laporan-koleksi-buku-'.now()->format('Ymd-His').'.xlsx',
+            'Laporan Koleksi Buku',
             ['Kode', 'Judul', 'ISBN', 'Penulis', 'Penerbit', 'Tahun', 'Kategori kelas', 'Kategori', 'Klasifikasi', 'Nomor panggil', 'Status katalog', 'Total eksemplar', 'Tersedia', 'Dipinjam', 'Belum diproses', 'Tanpa rak', 'Reservasi aktif'],
             $query->lazy(500),
             fn (Item $book): array => [
@@ -237,7 +244,7 @@ class ReportController extends Controller
         return view('reports.loans', compact('loans', 'summary', 'filters'));
     }
 
-    public function loansCsv(Request $request): StreamedResponse
+    public function loansExcel(Request $request): BinaryFileResponse
     {
         $filters = $this->transactionFilters($request, ['active', 'completed', 'overdue', 'cancelled']);
         $query = $this->loanBaseQuery($filters)
@@ -250,8 +257,9 @@ class ReportController extends Controller
             ->withSum('items as fine_total', 'fine_amount')
             ->orderByDesc('loan_date');
 
-        return $this->csvDownload(
-            'laporan-peminjaman-'.now()->format('Ymd-His').'.csv',
+        return $this->excelDownload(
+            'laporan-peminjaman-'.now()->format('Ymd-His').'.xlsx',
+            'Laporan Peminjaman',
             ['Kode peminjaman', 'Tanggal pinjam', 'Jatuh tempo', 'Kode anggota', 'Nama anggota', 'Jenis anggota', 'Status', 'Jumlah eksemplar', 'Belum kembali', 'Sudah diproses', 'Total denda', 'Petugas'],
             $query->lazy(500),
             fn (Loan $loan): array => [
@@ -303,7 +311,7 @@ class ReportController extends Controller
         return view('reports.fines', compact('fines', 'summary', 'filters'));
     }
 
-    public function finesCsv(Request $request): StreamedResponse
+    public function finesExcel(Request $request): BinaryFileResponse
     {
         $filters = $this->fineFilters($request);
         $query = $this->fineBaseQuery($filters)
@@ -316,8 +324,9 @@ class ReportController extends Controller
             ->withSum('finePayments as paid_amount', 'amount')
             ->orderByDesc('returned_at');
 
-        return $this->csvDownload(
-            'laporan-denda-'.now()->format('Ymd-His').'.csv',
+        return $this->excelDownload(
+            'laporan-denda-'.now()->format('Ymd-His').'.xlsx',
+            'Laporan Denda',
             ['Kode peminjaman', 'Kode anggota', 'Nama anggota', 'Judul buku', 'Kode aset', 'Tanggal kembali', 'Denda final', 'Sudah dibayar', 'Sisa tagihan', 'Status pembayaran'],
             $query->lazy(500),
             function (LoanItem $loanItem): array {
@@ -386,7 +395,7 @@ class ReportController extends Controller
         return view('reports.members', compact('members', 'summary', 'filters'));
     }
 
-    public function membersCsv(Request $request): StreamedResponse
+    public function membersExcel(Request $request): BinaryFileResponse
     {
         $filters = $this->memberFilters($request);
         $query = $this->memberBaseQuery($filters)
@@ -410,8 +419,9 @@ class ReportController extends Controller
             }, 'paid_fines')
             ->orderBy('members.member_name');
 
-        return $this->csvDownload(
-            'laporan-anggota-'.now()->format('Ymd-His').'.csv',
+        return $this->excelDownload(
+            'laporan-anggota-'.now()->format('Ymd-His').'.xlsx',
+            'Laporan Anggota',
             ['Kode anggota', 'Nama', 'Jenis', 'Nomor identitas', 'Kelas', 'Tanggal bergabung', 'Masa berlaku', 'Status', 'Total transaksi', 'Pinjaman aktif', 'Reservasi aktif', 'Total denda', 'Sudah dibayar', 'Sisa denda'],
             $query->lazy(500),
             fn (Member $member): array => [
@@ -460,7 +470,7 @@ class ReportController extends Controller
         return view('reports.reservations', compact('reservations', 'summary', 'filters'));
     }
 
-    public function reservationsCsv(Request $request): StreamedResponse
+    public function reservationsExcel(Request $request): BinaryFileResponse
     {
         $filters = $this->transactionFilters($request, ['waiting', 'ready', 'completed', 'cancelled', 'expired']);
         $query = $this->reservationBaseQuery($filters)
@@ -472,8 +482,9 @@ class ReportController extends Controller
             ])
             ->orderByDesc('reservation_date');
 
-        return $this->csvDownload(
-            'laporan-reservasi-'.now()->format('Ymd-His').'.csv',
+        return $this->excelDownload(
+            'laporan-reservasi-'.now()->format('Ymd-His').'.xlsx',
+            'Laporan Reservasi',
             ['Kode reservasi', 'Tanggal reservasi', 'Kode anggota', 'Nama anggota', 'Judul buku', 'ISBN', 'Nomor antrean', 'Batas pengambilan', 'Status', 'Petugas'],
             $query->lazy(500),
             fn (Reservation $reservation): array => [
@@ -726,39 +737,63 @@ class ReportController extends Controller
         return max($fine - $paid, 0);
     }
 
-    private function csvDownload(string $filename, array $headers, iterable $rows, callable $mapper): StreamedResponse
-    {
-        return response()->streamDownload(function () use ($headers, $rows, $mapper): void {
-            $handle = fopen('php://output', 'wb');
-
-            if ($handle === false) {
-                return;
-            }
-
-            fwrite($handle, "\xEF\xBB\xBF");
-            fputcsv($handle, $headers, ';', '"', '');
-
-            foreach ($rows as $row) {
-                $values = array_map(fn ($value) => $this->safeCsvCell($value), $mapper($row));
-                fputcsv($handle, $values, ';', '"', '');
-            }
-
-            fclose($handle);
-        }, $filename, [
-            'Content-Type' => 'text/csv; charset=UTF-8',
-            'Cache-Control' => 'no-store, no-cache, must-revalidate',
-        ]);
+    private function excelDownload(
+        string $filename,
+        string $title,
+        array $headers,
+        iterable $rows,
+        callable $mapper,
+    ): BinaryFileResponse {
+        return $this->excel->download(
+            $filename,
+            $this->institutionName(),
+            $title,
+            $this->excelMeta(),
+            $headers,
+            $rows,
+            $mapper,
+            $title,
+        );
     }
 
-    private function safeCsvCell(mixed $value): string|int|float|null
+    /** @return array<int, string> */
+    private function excelMeta(): array
     {
-        if (! is_string($value)) {
-            return $value;
+        $query = request()->query();
+        $meta = [
+            'Diekspor pada '.now()->translatedFormat('d F Y H:i').' oleh '.(auth()->user()?->full_name ?? 'Sistem'),
+        ];
+
+        if (! empty($query['date_from']) || ! empty($query['date_to'])) {
+            $meta[] = 'Periode: '.($query['date_from'] ?? 'awal').' sampai '.($query['date_to'] ?? 'sekarang');
         }
 
-        $value = trim($value);
+        $labels = [
+            'search' => 'Pencarian',
+            'status' => 'Status',
+            'item_type' => 'Jenis barang',
+            'tracking_type' => 'Pencatatan',
+            'completion_status' => 'Status katalog',
+            'grade_level' => 'Kategori kelas',
+            'availability' => 'Ketersediaan',
+            'member_type' => 'Jenis anggota',
+            'class' => 'Kelas',
+        ];
 
-        return preg_match('/^[=+\-@]/', $value) === 1 ? "'{$value}" : $value;
+        foreach ($labels as $key => $label) {
+            if (isset($query[$key]) && trim((string) $query[$key]) !== '') {
+                $meta[] = $label.': '.trim((string) $query[$key]);
+            }
+        }
+
+        return $meta;
+    }
+
+    private function institutionName(): string
+    {
+        return (string) (SystemSetting::query()
+            ->where('setting_key', 'institution.name')
+            ->value('setting_value') ?: 'SDN Mekarsari 08');
     }
 
     private function itemTypeLabel(?string $type): string

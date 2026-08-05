@@ -6,16 +6,16 @@ use App\Http\Controllers\Controller;
 use App\Models\LibraryVisit;
 use App\Models\Member;
 use App\Models\SystemSetting;
-use App\Services\Reports\SimplePdfReportService;
+use App\Services\Reports\SimpleExcelReportService;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class LibraryActivityReportController extends Controller
 {
-    public function __construct(private readonly SimplePdfReportService $pdf)
+    public function __construct(private readonly SimpleExcelReportService $excel)
     {
     }
 
@@ -119,17 +119,25 @@ class LibraryActivityReportController extends Controller
         ]);
     }
 
-    public function visitsPdf(Request $request): Response
+    public function visitsExcel(Request $request): BinaryFileResponse
     {
         $filters = $this->visitFilters($request);
         $rows = $this->visitQuery($filters)
             ->orderByDesc('library_visits.visit_date')
             ->orderByDesc('library_visits.visit_time')
-            ->get()
-            ->values()
-            ->map(fn ($row, int $index): array => [
-                $index + 1,
-                $row->visit_date.' '.substr((string) $row->visit_time, 0, 5),
+            ->get();
+
+        return $this->excel->download(
+            'laporan-kunjungan-'.now()->format('Ymd-His').'.xlsx',
+            $this->institutionName(),
+            'Laporan Kunjungan Siswa ke Perpustakaan',
+            $this->excelMeta($filters),
+            ['No.', 'Tanggal', 'Waktu', 'Kode anggota', 'Nama siswa', 'NIS/NISN', 'Kelas', 'Kegiatan', 'Petugas', 'Catatan'],
+            $rows,
+            fn ($row, int $number): array => [
+                $number,
+                $row->visit_date,
+                substr((string) $row->visit_time, 0, 5),
                 $row->member_code,
                 $row->member_name,
                 $row->identity_number ?: '-',
@@ -137,89 +145,116 @@ class LibraryActivityReportController extends Controller
                 $row->activity,
                 $row->recorder_name ?: '-',
                 $row->notes ?: '-',
-            ]);
-
-        return $this->pdf->download(
-            'laporan-kunjungan-'.now()->format('Ymd-His').'.pdf',
-            $this->institutionName(),
-            'Laporan Kunjungan Siswa ke Perpustakaan',
-            $this->pdfMeta($filters),
-            [
-                ['label' => 'No.', 'width' => 30],
-                ['label' => 'Tanggal / Waktu', 'width' => 88],
-                ['label' => 'Kode', 'width' => 70],
-                ['label' => 'Nama Siswa', 'width' => 120],
-                ['label' => 'NIS/NISN', 'width' => 75],
-                ['label' => 'Kelas', 'width' => 70],
-                ['label' => 'Kegiatan', 'width' => 90],
-                ['label' => 'Petugas', 'width' => 90],
-                ['label' => 'Catatan', 'width' => 120],
             ],
-            $rows,
+            'Kunjungan Siswa',
         );
     }
 
-    public function frequentVisitorsPdf(Request $request): Response
+    public function frequentVisitorsExcel(Request $request): BinaryFileResponse
     {
         $filters = $this->visitFilters($request);
-        $rows = $this->rankingQuery($filters)
-            ->get()
-            ->values()
-            ->map(fn ($row, int $index): array => [
-                $index + 1,
+        $rows = $this->rankingQuery($filters)->get();
+
+        return $this->excel->download(
+            'laporan-siswa-sering-berkunjung-'.now()->format('Ymd-His').'.xlsx',
+            $this->institutionName(),
+            'Peringkat Siswa yang Sering ke Perpustakaan',
+            $this->excelMeta($filters),
+            ['Peringkat', 'Kode anggota', 'Nama siswa', 'NIS/NISN', 'Kelas', 'Jumlah kunjungan', 'Kunjungan terakhir'],
+            $rows,
+            fn ($row, int $number): array => [
+                $number,
                 $row->member_code,
                 $row->member_name,
                 $row->identity_number ?: '-',
                 $row->department ?: '-',
-                $row->visit_count.' kali',
+                (int) $row->visit_count,
                 $row->last_visit ?: '-',
-            ]);
-
-        return $this->pdf->download(
-            'laporan-siswa-sering-berkunjung-'.now()->format('Ymd-His').'.pdf',
-            $this->institutionName(),
-            'Peringkat Siswa yang Sering ke Perpustakaan',
-            $this->pdfMeta($filters),
-            [
-                ['label' => 'Peringkat', 'width' => 55],
-                ['label' => 'Kode', 'width' => 85],
-                ['label' => 'Nama Siswa', 'width' => 170],
-                ['label' => 'NIS/NISN', 'width' => 100],
-                ['label' => 'Kelas', 'width' => 95],
-                ['label' => 'Jumlah Kunjungan', 'width' => 110],
-                ['label' => 'Kunjungan Terakhir', 'width' => 115],
             ],
-            $rows,
+            'Siswa Sering Berkunjung',
         );
     }
 
-    public function loanRecordsPdf(Request $request): Response
+    public function loanRecordsExcel(Request $request): BinaryFileResponse
     {
         $filters = $this->loanFilters($request);
         $rows = $this->studentLoanHistoryQuery($filters)
             ->orderByDesc('loan_count')
             ->orderBy('members.member_name')
-            ->get()
-            ->values()
-            ->map(fn ($row, int $index): array => [
-                $index + 1,
-                $row->identity_number ?: '-',
-                $row->member_name,
-                $row->loan_count.' kali',
-            ]);
+            ->get();
 
-        return $this->pdf->download(
-            'riwayat-peminjaman-siswa-'.now()->format('Ymd-His').'.pdf',
+        return $this->excel->download(
+            'riwayat-peminjaman-siswa-'.now()->format('Ymd-His').'.xlsx',
             $this->institutionName(),
             'Riwayat Peminjaman Siswa',
-            $this->pdfMeta($filters),
-            [
-                ['label' => 'No.', 'width' => 55],
-                ['label' => 'NIS/NISN', 'width' => 170],
-                ['label' => 'Nama Siswa', 'width' => 345],
-                ['label' => 'Jumlah Peminjaman', 'width' => 190],
-            ],
+            $this->excelMeta($filters),
+            ['No.', 'NIS/NISN', 'Nama siswa', 'Kelas', 'Jumlah peminjaman'],
             $rows,
+            fn ($row, int $number): array => [
+                $number,
+                $row->identity_number ?: '-',
+                $row->member_name,
+                $row->department ?: '-',
+                (int) $row->loan_count,
+            ],
+            'Riwayat Peminjaman',
+        );
+    }
+
+    public function loanRecordDetailExcel(Request $request, Member $member): BinaryFileResponse
+    {
+        abort_unless($member->member_type === 'student', 404);
+
+        $filters = $request->validate([
+            'date_from' => ['nullable', 'date'],
+            'date_to' => ['nullable', 'date', 'after_or_equal:date_from'],
+        ]);
+
+        $rows = $this->studentLoanDetailQuery($member->id, $filters)
+            ->orderByDesc('loan_items.borrowed_at')
+            ->orderBy('items.item_name')
+            ->get();
+
+        $meta = $this->excelMeta($filters);
+        array_splice($meta, 0, 0, [
+            'Nama siswa: '.$member->member_name,
+            'NIS/NISN: '.($member->identity_number ?: '-').' | Kelas: '.($member->department ?: '-'),
+        ]);
+
+        return $this->excel->download(
+            'detail-riwayat-peminjaman-'.preg_replace('/[^A-Za-z0-9_-]+/', '-', $member->member_code).'-'.now()->format('Ymd-His').'.xlsx',
+            $this->institutionName(),
+            'Detail Riwayat Peminjaman Siswa',
+            $meta,
+            ['No.', 'Kode transaksi', 'Judul buku', 'Kode buku', 'Kode eksemplar', 'Hari peminjaman', 'Tanggal peminjaman', 'Jatuh tempo', 'Tanggal pengembalian', 'Denda', 'Sudah dibayar', 'Sisa denda', 'Status'],
+            $rows,
+            function ($row, int $number): array {
+                $fine = (float) $row->fine_amount;
+                $paid = (float) $row->paid_amount;
+
+                return [
+                    $number,
+                    $row->loan_code,
+                    $row->item_name,
+                    $row->book_code,
+                    $row->asset_code,
+                    \Illuminate\Support\Carbon::parse($row->borrowed_at)->translatedFormat('l'),
+                    \Illuminate\Support\Carbon::parse($row->borrowed_at)->format('Y-m-d H:i:s'),
+                    \Illuminate\Support\Carbon::parse($row->due_date)->format('Y-m-d'),
+                    $row->returned_at ? \Illuminate\Support\Carbon::parse($row->returned_at)->format('Y-m-d H:i:s') : '-',
+                    $fine,
+                    $paid,
+                    max($fine - $paid, 0),
+                    match ($row->return_status) {
+                        'borrowed' => 'Masih dipinjam',
+                        'returned' => 'Dikembalikan',
+                        'damaged' => 'Rusak',
+                        'lost' => 'Hilang',
+                        default => ucfirst((string) $row->return_status),
+                    },
+                ];
+            },
+            'Detail Peminjaman',
         );
     }
 
@@ -392,7 +427,7 @@ class LibraryActivityReportController extends Controller
     }
 
     /** @param array<string, mixed> $filters @return array<int, string> */
-    private function pdfMeta(array $filters): array
+    private function excelMeta(array $filters): array
     {
         $period = 'Semua tanggal';
         if (! empty($filters['date_from']) || ! empty($filters['date_to'])) {
@@ -402,7 +437,7 @@ class LibraryActivityReportController extends Controller
         return [
             'Periode: '.$period,
             'Kelas: '.($filters['class'] ?? 'Semua kelas'),
-            'Dicetak: '.now()->format('d-m-Y H:i').' oleh '.(auth()->user()?->full_name ?? 'Sistem'),
+            'Diekspor: '.now()->format('d-m-Y H:i').' oleh '.(auth()->user()?->full_name ?? 'Sistem'),
         ];
     }
 

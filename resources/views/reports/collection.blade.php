@@ -20,7 +20,7 @@
             <div><p class="eyebrow">Katalog dan sirkulasi</p><h2>Kondisi koleksi per judul</h2></div>
             <div class="report-actions no-print">
                 <button type="button" class="button-secondary" onclick="window.print()">Cetak</button>
-                <a href="{{ route('reports.collection.csv', request()->query()) }}" class="button-primary button-link">Unduh CSV</a>
+                <a href="{{ route('reports.collection.excel', request()->query()) }}" class="button-primary button-link">Unduh Excel</a>
             </div>
         </div>
 

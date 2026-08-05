@@ -17,6 +17,7 @@
         </div>
     </div>
     <div class="detail-actions no-print">
+        <a href="{{ route('reports.loan-records.detail.excel', ['member' => $member->id, 'date_from' => $filters['date_from'] ?? null, 'date_to' => $filters['date_to'] ?? null]) }}" class="button-primary button-link">Unduh Excel</a>
         <a href="{{ route('reports.loan-records', ['date_from' => $filters['date_from'] ?? null, 'date_to' => $filters['date_to'] ?? null]) }}" class="button-secondary button-link">Kembali</a>
     </div>
 </div>

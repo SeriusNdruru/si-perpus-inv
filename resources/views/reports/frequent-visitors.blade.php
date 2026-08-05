@@ -10,7 +10,7 @@
     <div class="panel-header panel-header-wrap">
         <div><p class="eyebrow">Peringkat kunjungan</p><h2>Siswa yang sering ke perpustakaan</h2></div>
         <div class="report-actions no-print">
-            <a href="{{ route('reports.frequent-visitors.pdf', request()->query()) }}" class="button-primary button-link">Unduh PDF</a>
+            <a href="{{ route('reports.frequent-visitors.excel', request()->query()) }}" class="button-primary button-link">Unduh Excel</a>
         </div>
     </div>
 

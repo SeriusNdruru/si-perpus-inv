@@ -17,7 +17,7 @@
     <section class="panel report-panel">
         <div class="panel-header panel-header-wrap">
             <div><p class="eyebrow">Keanggotaan</p><h2>Aktivitas dan status anggota</h2></div>
-            <div class="report-actions no-print"><button type="button" class="button-secondary" onclick="window.print()">Cetak</button><a href="{{ route('reports.members.csv', request()->query()) }}" class="button-primary button-link">Unduh CSV</a></div>
+            <div class="report-actions no-print"><button type="button" class="button-secondary" onclick="window.print()">Cetak</button><a href="{{ route('reports.members.excel', request()->query()) }}" class="button-primary button-link">Unduh Excel</a></div>
         </div>
 
         <form method="GET" action="{{ route('reports.members') }}" class="filter-bar filter-bar-report transaction-report-filter no-print">

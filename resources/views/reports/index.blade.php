@@ -10,7 +10,7 @@
         <div>
             <p class="eyebrow">Pusat informasi</p>
             <h2>Data siap diperiksa dan diekspor</h2>
-            <p>Pilih laporan berdasarkan tanggung jawab akun. Filter yang diterapkan pada layar juga digunakan saat mengunduh laporan CSV atau PDF.</p>
+            <p>Pilih laporan berdasarkan tanggung jawab akun. Filter yang diterapkan pada layar juga digunakan saat mengunduh laporan Excel.</p>
         </div>
         <span class="role-pill">READ ONLY</span>
     </section>
@@ -51,7 +51,7 @@
                 <div>
                     <strong>Riwayat Peminjaman Siswa</strong>
                     <p>Setiap siswa ditampilkan satu kali beserta jumlah transaksi peminjamannya.</p>
-                    <small>Dapat difilter dan diunduh sebagai PDF</small>
+                    <small>Dapat difilter dan diunduh sebagai Excel</small>
                 </div>
             </a>
 
@@ -60,7 +60,7 @@
                 <div>
                     <strong>Laporan Kunjungan Siswa</strong>
                     <p>Catatan siswa yang datang membaca di perpustakaan.</p>
-                    <small>Dapat difilter dan diunduh sebagai PDF</small>
+                    <small>Dapat difilter dan diunduh sebagai Excel</small>
                 </div>
             </a>
 
@@ -69,7 +69,7 @@
                 <div>
                     <strong>Siswa Sering Berkunjung</strong>
                     <p>Peringkat siswa berdasarkan jumlah kunjungan pada periode tertentu.</p>
-                    <small>Dapat difilter dan diunduh sebagai PDF</small>
+                    <small>Dapat difilter dan diunduh sebagai Excel</small>
                 </div>
             </a>
 

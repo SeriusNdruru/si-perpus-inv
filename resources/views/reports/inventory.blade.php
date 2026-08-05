@@ -23,7 +23,7 @@
             </div>
             <div class="report-actions no-print">
                 <button type="button" class="button-secondary" onclick="window.print()">Cetak</button>
-                <a href="{{ route('reports.inventory.csv', request()->query()) }}" class="button-primary button-link">Unduh CSV</a>
+                <a href="{{ route('reports.inventory.excel', request()->query()) }}" class="button-primary button-link">Unduh Excel</a>
             </div>
         </div>
 

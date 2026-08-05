@@ -15,7 +15,7 @@
     <div class="panel-header panel-header-wrap">
         <div><p class="eyebrow">Aktivitas membaca</p><h2>Record kunjungan siswa</h2></div>
         <div class="report-actions no-print">
-            <a href="{{ route('reports.library-visits.pdf', request()->query()) }}" class="button-primary button-link">Unduh PDF</a>
+            <a href="{{ route('reports.library-visits.excel', request()->query()) }}" class="button-primary button-link">Unduh Excel</a>
         </div>
     </div>
 
