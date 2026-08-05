@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Audit Inventaris') | {{ $systemBrand['institution.name'] ?? config('app.name') }}</title>
+    <title>@yield('title', 'Audit Inventaris') | Sistem Inventaris</title>
     @include('shared.favicon-links')
     <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=67">
 </head>

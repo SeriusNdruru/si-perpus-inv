@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Kuitansi {{ $finePayment->payment_code }}</title>
+    <title>Kuitansi {{ $finePayment->payment_code }} | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
     <style>
         * { box-sizing: border-box; }

@@ -4,7 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard') | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
+    @php
+        $browserSystemName = 'Sistem Inventaris dan Perpustakaan';
+        $browserTitleUser = auth()->user();
+
+        if ($browserTitleUser && ! $browserTitleUser->hasRole('SUPER_ADMIN')) {
+            if ($browserTitleUser->hasRole('INVENTORY_ADMIN')) {
+                $browserSystemName = 'Sistem Inventaris';
+            } elseif ($browserTitleUser->hasAnyRole(['LIBRARY_ADMIN', 'LIBRARY_OFFICER'])) {
+                $browserSystemName = 'Sistem Perpustakaan';
+            }
+        }
+    @endphp
+    <title>@yield('title', 'Dashboard') | {{ $browserSystemName }}</title>
     @include('shared.favicon-links')
     <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=67">
 </head>
