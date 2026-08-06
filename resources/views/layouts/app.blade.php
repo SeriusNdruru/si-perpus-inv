@@ -18,7 +18,7 @@
     @endphp
     <title>@yield('title', 'Dashboard') | {{ $browserSystemName }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=108">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=109">
 </head>
 <body class="app-page">
     @php
@@ -202,11 +202,18 @@
                 </nav>
 
                 <div class="sidebar-user">
-                    <span class="avatar">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'width' => 38, 'height' => 38, 'alt' => 'profil admin'])</span>
-                    <div>
-                        <strong>{{ $currentUser->full_name }}</strong>
-                        <small>{{ $currentUser->primaryRoleLabel() }}</small>
+                    <div class="sidebar-user-profile">
+                        <span class="avatar">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'width' => 38, 'height' => 38, 'alt' => 'profil admin'])</span>
+                        <div>
+                            <strong>{{ $currentUser->full_name }}</strong>
+                            <small>{{ $currentUser->primaryRoleLabel() }}</small>
+                        </div>
                     </div>
+
+                    <form method="POST" action="{{ route('logout') }}" class="sidebar-mobile-logout">
+                        @csrf
+                        <button type="submit">Keluar</button>
+                    </form>
                 </div>
             </div>
         </aside>
@@ -237,7 +244,7 @@
         </main>
     </div>
     @include('shared.photo-preview-modal')
-    <script src="{{ asset('js/admin-mobile-menu.js') }}?v=108" defer></script>
+    <script src="{{ asset('js/admin-mobile-menu.js') }}?v=109" defer></script>
     <script src="{{ asset('js/portal-photo-preview.js') }}?v=93" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=67" defer></script>
 </body>
