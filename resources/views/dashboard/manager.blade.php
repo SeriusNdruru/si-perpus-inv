@@ -13,7 +13,7 @@
         <span class="role-pill">PIMPINAN</span>
     </div>
 
-    <div class="stat-grid">
+    <div class="stat-grid dashboard-stat-grid dashboard-stat-count-6">
         <article class="stat-card"><span>Barang aktif</span><strong>{{ number_format($statistics['items']) }}</strong></article>
         <article class="stat-card"><span>Total aset</span><strong>{{ number_format($statistics['assets']) }}</strong></article>
         <article class="stat-card"><span>Judul buku</span><strong>{{ number_format($statistics['book_titles']) }}</strong></article>

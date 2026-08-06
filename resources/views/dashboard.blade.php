@@ -4,7 +4,7 @@
 @section('page-title', 'Ringkasan Sistem')
 
 @section('content')
-    <div class="stat-grid">
+    <div class="stat-grid dashboard-stat-grid dashboard-stat-count-6">
         <article class="stat-card"><span>Total barang</span><strong>{{ number_format($statistics['total_items']) }}</strong></article>
         <article class="stat-card"><span>Judul buku</span><strong>{{ number_format($statistics['book_titles']) }}</strong></article>
         <article class="stat-card"><span>Buku tersedia</span><strong>{{ number_format($statistics['available_books']) }}</strong></article>

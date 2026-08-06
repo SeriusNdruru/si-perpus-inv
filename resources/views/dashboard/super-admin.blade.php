@@ -13,7 +13,7 @@
         <span class="role-pill">SUPER ADMIN</span>
     </div>
 
-    <div class="stat-grid">
+    <div class="stat-grid dashboard-stat-grid dashboard-stat-count-6">
         <article class="stat-card"><span>Pengguna aktif</span><strong>{{ number_format($statistics['users']) }}</strong></article>
         <article class="stat-card"><span>Total barang</span><strong>{{ number_format($statistics['items']) }}</strong></article>
         <article class="stat-card"><span>Total aset</span><strong>{{ number_format($statistics['assets']) }}</strong></article>

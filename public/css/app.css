@@ -2533,3 +2533,99 @@ th, td { padding: 12px 18px; }
     }
 }
 
+
+
+/* Tahap 110: box statistik dashboard admin mengikuti pola ringkas dashboard siswa pada mobile. */
+@media screen and (max-width: 700px) {
+    .app-page .dashboard-stat-grid,
+    .app-page .dashboard-stat-grid.stat-grid-four {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        width: 100%;
+        margin: 0;
+        overflow: visible;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card {
+        min-width: 0;
+        min-height: 112px;
+        padding: 11px 9px;
+        border-radius: 14px;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card span {
+        display: block;
+        min-height: 36px;
+        font-size: 10px;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card strong {
+        display: block;
+        margin-top: 5px;
+        font-size: 30px;
+        line-height: 1;
+        overflow-wrap: anywhere;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card,
+    .app-page .dashboard-stat-count-12 .stat-card {
+        min-height: 102px;
+        padding: 10px 8px;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card span,
+    .app-page .dashboard-stat-count-12 .stat-card span {
+        min-height: 32px;
+        font-size: 9.5px;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card strong,
+    .app-page .dashboard-stat-count-12 .stat-card strong {
+        font-size: 27px;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card:last-child {
+        grid-column: 2 / 3;
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .app-page .dashboard-stat-grid,
+    .app-page .dashboard-stat-grid.stat-grid-four {
+        gap: 7px !important;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card {
+        min-height: 106px;
+        padding: 10px 7px;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card span {
+        min-height: 34px;
+        font-size: 9.5px;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card strong {
+        font-size: 28px;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card,
+    .app-page .dashboard-stat-count-12 .stat-card {
+        min-height: 96px;
+        padding: 9px 6px;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card span,
+    .app-page .dashboard-stat-count-12 .stat-card span {
+        min-height: 30px;
+        font-size: 9px;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card strong,
+    .app-page .dashboard-stat-count-12 .stat-card strong {
+        font-size: 25px;
+    }
+}

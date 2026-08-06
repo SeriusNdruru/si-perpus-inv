@@ -18,7 +18,7 @@
     @endphp
     <title>@yield('title', 'Dashboard') | {{ $browserSystemName }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=109">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=110">
 </head>
 <body class="app-page">
     @php
@@ -244,7 +244,7 @@
         </main>
     </div>
     @include('shared.photo-preview-modal')
-    <script src="{{ asset('js/admin-mobile-menu.js') }}?v=109" defer></script>
+    <script src="{{ asset('js/admin-mobile-menu.js') }}?v=110" defer></script>
     <script src="{{ asset('js/portal-photo-preview.js') }}?v=93" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=67" defer></script>
 </body>

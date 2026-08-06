@@ -19,7 +19,7 @@
         <span class="role-pill">{{ auth()->user()->hasRole('SUPER_ADMIN') ? 'SUPER ADMIN' : 'ADMIN PERPUSTAKAAN' }}</span>
     </div>
 
-    <div class="stat-grid stat-grid-four">
+    <div class="stat-grid stat-grid-four dashboard-stat-grid dashboard-stat-count-12">
         <article class="stat-card"><span>Judul buku</span><strong>{{ number_format($statistics['book_titles']) }}</strong></article>
         <article class="stat-card"><span>Total eksemplar</span><strong>{{ number_format($statistics['book_copies']) }}</strong></article>
         <article class="stat-card"><span>Buku tersedia</span><strong>{{ number_format($statistics['available_books']) }}</strong></article>

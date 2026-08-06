@@ -19,7 +19,7 @@
         <span class="role-pill">{{ auth()->user()->hasRole('SUPER_ADMIN') ? 'SUPER ADMIN' : 'ADMIN INVENTARIS' }}</span>
     </div>
 
-    <div class="stat-grid">
+    <div class="stat-grid dashboard-stat-grid dashboard-stat-count-10">
         <article class="stat-card"><span>Barang aktif</span><strong>{{ number_format($statistics['items']) }}</strong></article>
         <article class="stat-card"><span>Unit aset</span><strong>{{ number_format($statistics['assets']) }}</strong></article>
         <article class="stat-card"><span>Stok kuantitas</span><strong>{{ number_format($statistics['quantity_stock'], 2, ',', '.') }}</strong></article>
