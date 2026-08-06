@@ -2898,3 +2898,82 @@ body.member-photo-preview-open {
         overflow-wrap: anywhere;
     }
 }
+
+/* Tahap 116: perbesar judul buku dan teks utama data pada portal serta dashboard siswa. */
+.portal-page .portal-book-body h3 {
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+.portal-page .portal-book-body p {
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.portal-page .portal-book-meta {
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.portal-page .portal-table td {
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.portal-page .portal-table td strong {
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.member-page .member-book-grid h3 {
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.member-page .member-book-grid-catalog h3 {
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+.member-page .member-loan-list strong,
+.member-page .member-cart-list strong,
+.member-page .member-notification-list strong,
+.member-page .member-table td strong {
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+.member-page .member-table td {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@media screen and (max-width: 680px) {
+    .portal-page .portal-book-body h3 {
+        font-size: 17px;
+    }
+
+    .portal-page .portal-table td {
+        font-size: 13px;
+    }
+
+    .portal-page .portal-table td strong {
+        font-size: 14px;
+    }
+
+    .member-page .member-book-grid h3,
+    .member-page .member-book-grid-catalog h3 {
+        font-size: 15px;
+    }
+
+    .member-page .member-loan-list strong,
+    .member-page .member-cart-list strong,
+    .member-page .member-notification-list strong,
+    .member-page .member-table td strong {
+        font-size: 14px;
+    }
+
+    .member-page .member-table td {
+        font-size: 12px;
+    }
+}

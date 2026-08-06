@@ -2862,3 +2862,37 @@ th, td { padding: 12px 18px; }
         font-size: 25px;
     }
 }
+
+/* Tahap 116: perbesar teks utama data seperti judul buku, nama barang, anggota, dan data sejenis. */
+.app-page tbody td {
+    font-size: 15px;
+    line-height: 1.45;
+}
+
+.app-page .table-primary,
+.app-page td.table-primary {
+    font-size: 16px;
+    line-height: 1.4;
+    font-weight: 800;
+}
+
+.app-page .table-secondary {
+    margin-top: 5px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@media screen and (max-width: 700px) {
+    .app-page tbody td {
+        font-size: 14px;
+    }
+
+    .app-page .table-primary,
+    .app-page td.table-primary {
+        font-size: 15px;
+    }
+
+    .app-page .table-secondary {
+        font-size: 12px;
+    }
+}

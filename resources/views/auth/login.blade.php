@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Login Pengguna | {{ $systemBrand['application.name'] ?? config('app.name') }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=107">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=116">
     <script src="{{ asset('js/login.js') }}" defer></script>
 </head>
 <body class="login-page">
