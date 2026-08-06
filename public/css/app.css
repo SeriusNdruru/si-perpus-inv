@@ -2535,7 +2535,7 @@ th, td { padding: 12px 18px; }
 
 
 
-/* Tahap 111: padatkan tinggi box statistik dashboard admin pada mobile. */
+/* Tahap 112: rapatkan angka ke keterangan box statistik dashboard admin pada mobile. */
 @media screen and (max-width: 700px) {
     .app-page .dashboard-stat-grid,
     .app-page .dashboard-stat-grid.stat-grid-four {
@@ -2550,13 +2550,14 @@ th, td { padding: 12px 18px; }
     .app-page .dashboard-stat-grid .stat-card {
         min-width: 0;
         min-height: 82px;
+        justify-content: flex-start;
         padding: 8px 8px;
         border-radius: 12px;
     }
 
     .app-page .dashboard-stat-grid .stat-card span {
         display: block;
-        min-height: 27px;
+        min-height: 0;
         font-size: 9.5px;
         line-height: 1.18;
         overflow-wrap: anywhere;
@@ -2564,8 +2565,8 @@ th, td { padding: 12px 18px; }
 
     .app-page .dashboard-stat-grid .stat-card strong {
         display: block;
-        margin-top: 2px;
-        font-size: 25px;
+        margin-top: 0;
+        font-size: 22px;
         line-height: 1;
         overflow-wrap: anywhere;
     }
@@ -2578,14 +2579,15 @@ th, td { padding: 12px 18px; }
 
     .app-page .dashboard-stat-count-10 .stat-card span,
     .app-page .dashboard-stat-count-12 .stat-card span {
-        min-height: 24px;
+        min-height: 0;
         font-size: 9px;
         line-height: 1.15;
     }
 
     .app-page .dashboard-stat-count-10 .stat-card strong,
     .app-page .dashboard-stat-count-12 .stat-card strong {
-        font-size: 23px;
+        margin-top: 0;
+        font-size: 20px;
     }
 
     .app-page .dashboard-stat-count-10 .stat-card:last-child {
@@ -2605,13 +2607,14 @@ th, td { padding: 12px 18px; }
     }
 
     .app-page .dashboard-stat-grid .stat-card span {
-        min-height: 25px;
+        min-height: 0;
         font-size: 9px;
         line-height: 1.15;
     }
 
     .app-page .dashboard-stat-grid .stat-card strong {
-        font-size: 23px;
+        margin-top: 0;
+        font-size: 20px;
     }
 
     .app-page .dashboard-stat-count-10 .stat-card,
@@ -2622,13 +2625,14 @@ th, td { padding: 12px 18px; }
 
     .app-page .dashboard-stat-count-10 .stat-card span,
     .app-page .dashboard-stat-count-12 .stat-card span {
-        min-height: 22px;
+        min-height: 0;
         font-size: 8.5px;
         line-height: 1.12;
     }
 
     .app-page .dashboard-stat-count-10 .stat-card strong,
     .app-page .dashboard-stat-count-12 .stat-card strong {
-        font-size: 21px;
+        margin-top: 0;
+        font-size: 18px;
     }
 }
