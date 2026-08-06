@@ -264,6 +264,7 @@ img { max-width: 100%; display: block; }
 .member-sidebar-head { display:block; }
 .member-menu-toggle { display:none; }
 .member-sidebar-menu { display:block; }
+.member-mobile-profile-link { display:none !important; }
 .member-nav { display:grid; gap:5px; margin-top:36px; overflow:auto; }
 .member-nav a { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 13px; border-radius:12px; color:#c4d7da; font-size:12px; font-weight:780; }
 .member-nav a:hover,.member-nav a.active { color:#fff; background:#215966; }
@@ -2441,6 +2442,10 @@ body.member-photo-preview-open {
         text-align: center;
         border: 1px solid rgba(255,255,255,.15);
         box-sizing: border-box;
+    }
+
+    .member-page .member-mobile-profile-link {
+        display: flex !important;
     }
 
     .member-page .member-sidebar-footer a.active {
