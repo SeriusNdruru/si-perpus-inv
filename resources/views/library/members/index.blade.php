@@ -94,12 +94,23 @@
                         <tr><td class="table-number">{{ (is_object($members) && method_exists($members, 'firstItem') && $members->firstItem() !== null ? $members->firstItem() : 1) + $loop->index }}</td>
                             <td><strong>{{ $member->member_code }}</strong></td>
                             <td>
-                                <div class="table-primary">{{ $member->member_name }}</div>
-                                <div class="table-secondary">
-                                    {{ $member->identity_number ?: 'Tanpa nomor identitas' }}
-                                    @if ($member->department)
-                                        · {{ $member->department }}
-                                    @endif
+                                <div class="admin-member-cell">
+                                    @include('shared.member-avatar', [
+                                        'member' => $member,
+                                        'class' => 'admin-member-avatar admin-member-avatar-list',
+                                        'size' => 180,
+                                        'preview' => true,
+                                        'previewSize' => 1200,
+                                    ])
+                                    <div>
+                                        <div class="table-primary">{{ $member->member_name }}</div>
+                                        <div class="table-secondary">
+                                            {{ $member->identity_number ?: 'Tanpa nomor identitas' }}
+                                            @if ($member->department)
+                                                · {{ $member->department }}
+                                            @endif
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                             <td>{{ $member->typeLabel() }}</td>

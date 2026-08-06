@@ -45,6 +45,7 @@
         const trigger = event.target.closest('[data-photo-preview]');
 
         if (trigger) {
+            event.preventDefault();
             openModal(trigger);
         }
     });
@@ -52,6 +53,14 @@
     closeButtons.forEach((button) => button.addEventListener('click', closeModal));
 
     document.addEventListener('keydown', (event) => {
+        const trigger = event.target.closest?.('[data-photo-preview]');
+
+        if (trigger && (event.key === 'Enter' || event.key === ' ')) {
+            event.preventDefault();
+            openModal(trigger);
+            return;
+        }
+
         if (event.key === 'Escape' && !modal.hidden) {
             closeModal();
         }

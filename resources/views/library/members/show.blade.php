@@ -13,12 +13,26 @@
     @endphp
 
     <div class="detail-heading">
-        <div>
-            <p class="eyebrow">{{ $member->member_code }}</p>
-            <h2>{{ $member->member_name }}</h2>
-            <div class="detail-badges">
-                <span class="badge badge-neutral">{{ $member->typeLabel() }}</span>
-                <span class="badge {{ $statusClass }}">{{ $member->statusLabel() }}</span>
+        <div class="admin-member-detail-identity">
+            @include('shared.member-avatar', [
+                'member' => $member,
+                'class' => 'admin-member-avatar admin-member-avatar-detail',
+                'size' => 320,
+                'preview' => true,
+                'previewSize' => 1200,
+            ])
+            <div>
+                <p class="eyebrow">{{ $member->member_code }}</p>
+                <h2>{{ $member->member_name }}</h2>
+                <div class="detail-badges">
+                    <span class="badge badge-neutral">{{ $member->typeLabel() }}</span>
+                    <span class="badge {{ $statusClass }}">{{ $member->statusLabel() }}</span>
+                </div>
+                @if ($member->profile_photo_path)
+                    <p class="admin-member-photo-help">Klik foto untuk melihat ukuran lebih besar.</p>
+                @else
+                    <p class="admin-member-photo-help">Anggota belum menambahkan foto profil.</p>
+                @endif
             </div>
         </div>
         <div class="detail-actions">

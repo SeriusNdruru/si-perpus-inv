@@ -17,6 +17,9 @@
         aria-label="Lihat foto profil {{ $avatarName }}"
         data-member-photo-preview
         data-preview-src="{{ route('media.thumbnail', ['path' => $avatarPath, 'size' => $avatarPreviewSize]) }}"
+        data-photo-preview
+        data-photo-src="{{ route('media.thumbnail', ['path' => $avatarPath, 'size' => $avatarPreviewSize]) }}"
+        data-photo-title="Foto profil {{ $avatarName }}"
     @endif
 >
     @if ($avatarPath)
@@ -26,7 +29,7 @@
             loading="lazy"
             decoding="async"
             data-image-retry
-            onerror="this.hidden=true;this.parentElement.classList.remove('has-photo', 'is-previewable');this.parentElement.classList.add('is-placeholder');this.parentElement.removeAttribute('data-member-photo-preview');this.parentElement.removeAttribute('data-preview-src');this.parentElement.removeAttribute('role');this.parentElement.removeAttribute('tabindex');"
+            onerror="this.hidden=true;this.parentElement.classList.remove('has-photo', 'is-previewable');this.parentElement.classList.add('is-placeholder');this.parentElement.removeAttribute('data-member-photo-preview');this.parentElement.removeAttribute('data-preview-src');this.parentElement.removeAttribute('data-photo-preview');this.parentElement.removeAttribute('data-photo-src');this.parentElement.removeAttribute('data-photo-title');this.parentElement.removeAttribute('role');this.parentElement.removeAttribute('tabindex');"
         >
     @else
         <span class="member-avatar-person" aria-label="Foto profil belum ditambahkan" role="img"></span>

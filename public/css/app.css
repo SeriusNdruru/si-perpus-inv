@@ -2107,3 +2107,126 @@ th, td { padding: 12px 18px; }
     .settings-form .data-form { padding: 14px; }
     .data-form:not(.member-account-form) > .form-section { padding: 15px; }
 }
+
+/* Tahap 93: preview foto anggota untuk Admin Perpustakaan dan Super Admin. */
+.admin-member-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 220px;
+}
+
+.admin-member-avatar {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: 0 0 auto;
+    overflow: hidden;
+    border: 2px solid #d8e5e7;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #edf4f5, #dce9eb);
+    color: #55757a;
+    box-shadow: 0 7px 18px rgba(16, 55, 62, .10);
+}
+
+.admin-member-avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.admin-member-avatar.is-previewable {
+    cursor: zoom-in;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.admin-member-avatar.is-previewable:hover,
+.admin-member-avatar.is-previewable:focus-visible {
+    transform: translateY(-1px) scale(1.03);
+    border-color: #5f8e94;
+    box-shadow: 0 10px 24px rgba(16, 55, 62, .18);
+    outline: none;
+}
+
+.admin-member-avatar-list {
+    width: 48px;
+    height: 48px;
+}
+
+.admin-member-avatar-report {
+    width: 44px;
+    height: 44px;
+}
+
+.admin-member-avatar-detail {
+    width: 104px;
+    height: 104px;
+}
+
+.admin-member-avatar .member-avatar-person {
+    position: relative;
+    display: block;
+    width: 62%;
+    height: 62%;
+}
+
+.admin-member-avatar .member-avatar-person::before {
+    content: '';
+    position: absolute;
+    top: 3%;
+    left: 50%;
+    width: 36%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: currentColor;
+    transform: translateX(-50%);
+}
+
+.admin-member-avatar .member-avatar-person::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 76%;
+    height: 45%;
+    border-radius: 50% 50% 28% 28%;
+    background: currentColor;
+    transform: translateX(-50%);
+}
+
+.admin-member-detail-identity {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    min-width: 0;
+}
+
+.admin-member-photo-help {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+@media (max-width: 640px) {
+    .admin-member-cell {
+        min-width: 190px;
+        gap: 10px;
+    }
+
+    .admin-member-avatar-list {
+        width: 44px;
+        height: 44px;
+    }
+
+    .admin-member-detail-identity {
+        align-items: flex-start;
+        gap: 13px;
+    }
+
+    .admin-member-avatar-detail {
+        width: 82px;
+        height: 82px;
+    }
+}
