@@ -18,7 +18,7 @@
     @endphp
     <title>@yield('title', 'Dashboard') | {{ $browserSystemName }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=118">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=119">
 </head>
 <body class="app-page">
     @php
@@ -118,39 +118,40 @@
 
             <div id="admin-sidebar-menu" class="sidebar-menu" data-admin-sidebar-menu>
                 <nav class="sidebar-nav" aria-label="Menu utama">
-                <a href="{{ route($dashboardRoute) }}" class="{{ request()->routeIs($dashboardRoute) ? 'active' : '' }}">Dashboard</a>
+                <a href="{{ route($dashboardRoute) }}" data-sidebar-icon="dashboard" class="{{ request()->routeIs($dashboardRoute) ? 'active' : '' }}">Dashboard</a>
 
                 @if ($isSuperAdmin && ! $isSystemArea)
                     <p class="sidebar-section">Mode Super Admin</p>
-                    <a href="{{ route('dashboard.super-admin') }}">Kembali ke Super Admin</a>
+                    <a href="{{ route('dashboard.super-admin') }}" data-sidebar-icon="back">Kembali ke Super Admin</a>
                 @endif
 
                 @if ($isSystemArea)
                     <p class="sidebar-section">Administrasi</p>
-                    <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">Pengguna Sistem</a>
-                    <a href="{{ route('admin.settings.edit') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">Pengaturan Sistem</a>
-                    <a href="{{ route('admin.email-notifications.index') }}" class="{{ request()->routeIs('admin.email-notifications.*') ? 'active' : '' }}">Email & Notifikasi</a>
-                    <a href="{{ route('admin.audit-logs.index') }}" class="{{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">Riwayat Aktivitas</a>
-                    <a href="{{ route('admin.database-backups.index') }}" class="{{ request()->routeIs('admin.database-backups.*') ? 'active' : '' }}">Backup Database</a>
-                    <a href="{{ route('admin.system-readiness.index') }}" class="{{ request()->routeIs('admin.system-readiness.*') ? 'active' : '' }}">Pengujian Sistem</a>
-                    <a href="{{ route('admin.acceptance-tests.index') }}" class="{{ request()->routeIs('admin.acceptance-tests.*') ? 'active' : '' }}">Uji Akses & Alur</a>
+                    <a href="{{ route('admin.users.index') }}" data-sidebar-icon="users" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">Pengguna Sistem</a>
+                    <a href="{{ route('admin.settings.edit') }}" data-sidebar-icon="settings" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">Pengaturan Sistem</a>
+                    <a href="{{ route('admin.email-notifications.index') }}" data-sidebar-icon="email" class="{{ request()->routeIs('admin.email-notifications.*') ? 'active' : '' }}">Email & Notifikasi</a>
+                    <a href="{{ route('admin.audit-logs.index') }}" data-sidebar-icon="activity" class="{{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">Riwayat Aktivitas</a>
+                    <a href="{{ route('admin.database-backups.index') }}" data-sidebar-icon="backup" class="{{ request()->routeIs('admin.database-backups.*') ? 'active' : '' }}">Backup Database</a>
+                    <a href="{{ route('admin.system-readiness.index') }}" data-sidebar-icon="testing" class="{{ request()->routeIs('admin.system-readiness.*') ? 'active' : '' }}">Pengujian Sistem</a>
+                    <a href="{{ route('admin.acceptance-tests.index') }}" data-sidebar-icon="access" class="{{ request()->routeIs('admin.acceptance-tests.*') ? 'active' : '' }}">Uji Akses & Alur</a>
                 @endif
 
                 @if ($isInventoryArea)
                     <p class="sidebar-section">Master Inventaris</p>
-                    <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">Kategori</a>
-                    <a href="{{ route('units.index') }}" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">Satuan</a>
-                    <a href="{{ route('suppliers.index') }}" class="{{ request()->routeIs('suppliers.*') ? 'active' : '' }}">Supplier</a>
-                    <a href="{{ route('locations.index') }}" class="{{ request()->routeIs('locations.*') ? 'active' : '' }}">Lokasi</a>
+                    <a href="{{ route('categories.index') }}" data-sidebar-icon="category" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">Kategori</a>
+                    <a href="{{ route('units.index') }}" data-sidebar-icon="unit" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">Satuan</a>
+                    <a href="{{ route('suppliers.index') }}" data-sidebar-icon="supplier" class="{{ request()->routeIs('suppliers.*') ? 'active' : '' }}">Supplier</a>
+                    <a href="{{ route('locations.index') }}" data-sidebar-icon="location" class="{{ request()->routeIs('locations.*') ? 'active' : '' }}">Lokasi</a>
 
                     <p class="sidebar-section">Inventaris</p>
-                    <a href="{{ route('inventory.items.index') }}" class="{{ request()->routeIs('inventory.items.*') ? 'active' : '' }}">Data Barang</a>
-                    <a href="{{ route('inventory.deleted-items.index') }}" class="{{ request()->routeIs('inventory.deleted-items.*') ? 'active' : '' }}">Daftar Hapus</a>
-                    <a href="{{ route('inventory.stock-opnames.index') }}" class="{{ request()->routeIs('inventory.stock-opnames.*') ? 'active' : '' }}">Stock Opname</a>
-                    <a href="{{ route('inventory.maintenance-records.index') }}" class="{{ request()->routeIs('inventory.maintenance-records.*') ? 'active' : '' }}">Pemeliharaan Aset</a>
-                    <a href="{{ route('inventory.disposals.index') }}" class="{{ request()->routeIs('inventory.disposals.*') ? 'active' : '' }}">Penghapusan Aset</a>
+                    <a href="{{ route('inventory.items.index') }}" data-sidebar-icon="items" class="{{ request()->routeIs('inventory.items.*') ? 'active' : '' }}">Data Barang</a>
+                    <a href="{{ route('inventory.deleted-items.index') }}" data-sidebar-icon="deleted" class="{{ request()->routeIs('inventory.deleted-items.*') ? 'active' : '' }}">Daftar Hapus</a>
+                    <a href="{{ route('inventory.stock-opnames.index') }}" data-sidebar-icon="opname" class="{{ request()->routeIs('inventory.stock-opnames.*') ? 'active' : '' }}">Stock Opname</a>
+                    <a href="{{ route('inventory.maintenance-records.index') }}" data-sidebar-icon="maintenance" class="{{ request()->routeIs('inventory.maintenance-records.*') ? 'active' : '' }}">Pemeliharaan Aset</a>
+                    <a href="{{ route('inventory.disposals.index') }}" data-sidebar-icon="disposal" class="{{ request()->routeIs('inventory.disposals.*') ? 'active' : '' }}">Penghapusan Aset</a>
                     <a
                         href="{{ route('inventory.public-damage-reports.index') }}"
+                        data-sidebar-icon="damage"
                         class="sidebar-link-with-badge {{ request()->routeIs('inventory.public-damage-reports.*') ? 'active' : '' }}"
                     >
                         <span>Laporan Kerusakan Publik</span>
@@ -168,17 +169,18 @@
 
                 @if ($isLibraryArea)
                     <p class="sidebar-section">Perpustakaan</p>
-                    <a href="{{ route('library.books.index') }}" class="{{ request()->routeIs('library.books.*') ? 'active' : '' }}">Buku Baru & Katalog</a>
-                    <a href="{{ route('library.shelves.index') }}" class="{{ request()->routeIs('library.shelves.*') ? 'active' : '' }}">Rak Perpustakaan</a>
-                    <a href="{{ route('library.shelf-assignments.index') }}" class="{{ request()->routeIs('library.shelf-assignments.*') ? 'active' : '' }}">Penempatan Buku</a>
-                    <a href="{{ route('library.members.index') }}" class="{{ request()->routeIs('library.members.*') ? 'active' : '' }}">Anggota</a>
-                    <a href="{{ route('library.visits.index') }}" class="{{ request()->routeIs('library.visits.*') ? 'active' : '' }}">Kunjungan Siswa</a>
-                    <a href="{{ route('library.loans.index') }}" class="{{ request()->routeIs('library.loans.*') ? 'active' : '' }}">Peminjaman</a>
-                    <a href="{{ route('library.returns.index') }}" class="{{ request()->routeIs('library.returns.*') ? 'active' : '' }}">Pengembalian</a>
-                    <a href="{{ route('library.fines.index') }}" class="{{ request()->routeIs('library.fines.*') ? 'active' : '' }}">Denda</a>
-                    <a href="{{ route('library.reservations.index') }}" class="{{ request()->routeIs('library.reservations.*') ? 'active' : '' }}">Reservasi</a>
+                    <a href="{{ route('library.books.index') }}" data-sidebar-icon="books" class="{{ request()->routeIs('library.books.*') ? 'active' : '' }}">Buku Baru & Katalog</a>
+                    <a href="{{ route('library.shelves.index') }}" data-sidebar-icon="shelf" class="{{ request()->routeIs('library.shelves.*') ? 'active' : '' }}">Rak Perpustakaan</a>
+                    <a href="{{ route('library.shelf-assignments.index') }}" data-sidebar-icon="placement" class="{{ request()->routeIs('library.shelf-assignments.*') ? 'active' : '' }}">Penempatan Buku</a>
+                    <a href="{{ route('library.members.index') }}" data-sidebar-icon="members" class="{{ request()->routeIs('library.members.*') ? 'active' : '' }}">Anggota</a>
+                    <a href="{{ route('library.visits.index') }}" data-sidebar-icon="visits" class="{{ request()->routeIs('library.visits.*') ? 'active' : '' }}">Kunjungan Siswa</a>
+                    <a href="{{ route('library.loans.index') }}" data-sidebar-icon="loans" class="{{ request()->routeIs('library.loans.*') ? 'active' : '' }}">Peminjaman</a>
+                    <a href="{{ route('library.returns.index') }}" data-sidebar-icon="returns" class="{{ request()->routeIs('library.returns.*') ? 'active' : '' }}">Pengembalian</a>
+                    <a href="{{ route('library.fines.index') }}" data-sidebar-icon="fines" class="{{ request()->routeIs('library.fines.*') ? 'active' : '' }}">Denda</a>
+                    <a href="{{ route('library.reservations.index') }}" data-sidebar-icon="reservation" class="{{ request()->routeIs('library.reservations.*') ? 'active' : '' }}">Reservasi</a>
                     <a
                         href="{{ route('library.loan-requests.index') }}"
+                        data-sidebar-icon="online"
                         class="sidebar-link-with-badge {{ request()->routeIs('library.loan-requests.*') ? 'active' : '' }}"
                     >
                         <span>Pengajuan Online</span>
@@ -192,12 +194,12 @@
                             </span>
                         @endif
                     </a>
-                    <a href="{{ route('library.contact-messages.index') }}" class="{{ request()->routeIs('library.contact-messages.*') ? 'active' : '' }}">Pesan Kontak</a>
+                    <a href="{{ route('library.contact-messages.index') }}" data-sidebar-icon="message" class="{{ request()->routeIs('library.contact-messages.*') ? 'active' : '' }}">Pesan Kontak</a>
                 @endif
 
                 @if ($isInventoryArea || $isLibraryArea || $isManager)
                     <p class="sidebar-section">Informasi</p>
-                    <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">Laporan Terpadu</a>
+                    <a href="{{ route('reports.index') }}" data-sidebar-icon="reports" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">Laporan Terpadu</a>
                 @endif
                 </nav>
 

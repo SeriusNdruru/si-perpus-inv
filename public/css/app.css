@@ -2972,3 +2972,83 @@ th, td { padding: 12px 18px; }
         overflow-wrap: anywhere;
     }
 }
+
+
+/* Tahap 119: ikon menu sidebar desktop dan mobile, menu mobile rata kiri. */
+.sidebar-nav a[data-sidebar-icon] {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+}
+
+.sidebar-nav a[data-sidebar-icon]::before {
+    flex: 0 0 24px;
+    width: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    line-height: 1;
+    filter: saturate(.82);
+}
+
+.sidebar-nav a[data-sidebar-icon="dashboard"]::before { content: "🏠"; }
+.sidebar-nav a[data-sidebar-icon="back"]::before { content: "↩"; }
+.sidebar-nav a[data-sidebar-icon="users"]::before,
+.sidebar-nav a[data-sidebar-icon="members"]::before { content: "👥"; }
+.sidebar-nav a[data-sidebar-icon="settings"]::before { content: "⚙"; }
+.sidebar-nav a[data-sidebar-icon="email"]::before { content: "✉"; }
+.sidebar-nav a[data-sidebar-icon="activity"]::before { content: "📜"; }
+.sidebar-nav a[data-sidebar-icon="backup"]::before { content: "💾"; }
+.sidebar-nav a[data-sidebar-icon="testing"]::before { content: "🧪"; }
+.sidebar-nav a[data-sidebar-icon="access"]::before { content: "🔐"; }
+.sidebar-nav a[data-sidebar-icon="category"]::before { content: "🗂"; }
+.sidebar-nav a[data-sidebar-icon="unit"]::before { content: "📏"; }
+.sidebar-nav a[data-sidebar-icon="supplier"]::before { content: "🚚"; }
+.sidebar-nav a[data-sidebar-icon="location"]::before { content: "📍"; }
+.sidebar-nav a[data-sidebar-icon="items"]::before { content: "📦"; }
+.sidebar-nav a[data-sidebar-icon="deleted"]::before,
+.sidebar-nav a[data-sidebar-icon="disposal"]::before { content: "🗑"; }
+.sidebar-nav a[data-sidebar-icon="opname"]::before { content: "📋"; }
+.sidebar-nav a[data-sidebar-icon="maintenance"]::before { content: "🛠"; }
+.sidebar-nav a[data-sidebar-icon="damage"]::before { content: "⚠"; }
+.sidebar-nav a[data-sidebar-icon="books"]::before { content: "📚"; }
+.sidebar-nav a[data-sidebar-icon="shelf"]::before { content: "🗄"; }
+.sidebar-nav a[data-sidebar-icon="placement"]::before { content: "🗃"; }
+.sidebar-nav a[data-sidebar-icon="visits"]::before { content: "👣"; }
+.sidebar-nav a[data-sidebar-icon="loans"]::before { content: "🔄"; }
+.sidebar-nav a[data-sidebar-icon="returns"]::before { content: "↩"; }
+.sidebar-nav a[data-sidebar-icon="fines"]::before { content: "💰"; }
+.sidebar-nav a[data-sidebar-icon="reservation"]::before { content: "🔖"; }
+.sidebar-nav a[data-sidebar-icon="online"]::before { content: "🌐"; }
+.sidebar-nav a[data-sidebar-icon="message"]::before { content: "💬"; }
+.sidebar-nav a[data-sidebar-icon="reports"]::before { content: "📊"; }
+
+.sidebar-nav .sidebar-link-with-badge[data-sidebar-icon] > span:first-child {
+    flex: 1 1 auto;
+}
+
+@media screen and (max-width: 900px) {
+    .app-page .sidebar-nav a[data-sidebar-icon] {
+        justify-content: flex-start !important;
+        gap: 8px;
+        padding-left: 10px;
+        padding-right: 8px;
+        text-align: left !important;
+    }
+
+    .app-page .sidebar-nav a[data-sidebar-icon]::before {
+        flex-basis: 21px;
+        width: 21px;
+        font-size: 16px;
+    }
+
+    .app-page .sidebar-nav .sidebar-link-with-badge[data-sidebar-icon] {
+        justify-content: flex-start !important;
+    }
+
+    .app-page .sidebar-nav .sidebar-link-with-badge[data-sidebar-icon] .sidebar-notification-badge {
+        margin-left: auto;
+    }
+}
