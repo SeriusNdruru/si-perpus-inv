@@ -28,7 +28,7 @@
             </a>
 
             <nav class="member-nav">
-                <a href="{{ route('dashboard.member') }}" class="{{ request()->routeIs('dashboard.member') ? 'active' : '' }}">Ringkasan</a>
+                <a href="{{ route('dashboard.member') }}" class="{{ request()->routeIs('dashboard.member') ? 'active' : '' }}">Dashboard</a>
                 <a href="{{ route('member.books.index') }}" class="{{ request()->routeIs('member.books.index') ? 'active' : '' }}">Katalog buku</a>
                 <a href="{{ route('member.books.cart') }}" class="{{ request()->routeIs('member.books.cart') ? 'active' : '' }}">
                     Keranjang pengajuan
