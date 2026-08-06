@@ -23,10 +23,10 @@
         @endif
     </div>
     <div class="member-table-wrap">
-        <table class="member-table">
+        <table class="member-table member-activity-preview member-activity-preview-visits">
             <thead><tr><th class="table-number-heading">No.</th><th>Tanggal</th><th>Waktu</th><th>Kegiatan</th><th>Catatan</th></tr></thead>
             <tbody>
-                @forelse ($visits as $visit)
+                @foreach ($visits as $visit)
                     <tr>
                         <td class="table-number">{{ $loop->iteration }}</td>
                         <td>{{ \Illuminate\Support\Carbon::parse($visit->visit_date)->format('d/m/Y') }}</td>
@@ -34,9 +34,13 @@
                         <td>{{ $visit->activity }}</td>
                         <td>{{ $visit->notes ?: '-' }}</td>
                     </tr>
-                @empty
-                    <tr><td colspan="5">Belum ada kunjungan yang dicatat.</td></tr>
-                @endforelse
+                @endforeach
+                @if ($visits->isEmpty())
+                    <tr class="member-activity-empty-row"><td colspan="5">Belum ada kunjungan yang dicatat.</td></tr>
+                @endif
+                @for ($row = max(1, $visits->count()); $row < 5; $row++)
+                    <tr class="member-activity-placeholder-row" aria-hidden="true"><td colspan="5">&nbsp;</td></tr>
+                @endfor
             </tbody>
         </table>
     </div>
@@ -50,10 +54,10 @@
         @endif
     </div>
     <div class="member-table-wrap">
-        <table class="member-table">
+        <table class="member-table member-activity-preview member-activity-preview-books">
             <thead><tr><th class="table-number-heading">No.</th><th>Buku</th><th>Kode buku</th><th>Tanggal pinjam</th><th>Jatuh tempo</th><th>Tanggal kembali</th><th>Status</th></tr></thead>
             <tbody>
-                @forelse ($borrowedBooks as $book)
+                @foreach ($borrowedBooks as $book)
                     @php
                         $statusLabel = match ($book->return_status) {
                             'borrowed' => 'Masih dipinjam',
@@ -72,9 +76,13 @@
                         <td>{{ $book->returned_at ? \Illuminate\Support\Carbon::parse($book->returned_at)->format('d/m/Y H:i') : '-' }}</td>
                         <td><span class="member-status member-status-{{ $book->return_status }}">{{ $statusLabel }}</span></td>
                     </tr>
-                @empty
-                    <tr><td colspan="7">Belum ada buku yang pernah dipinjam.</td></tr>
-                @endforelse
+                @endforeach
+                @if ($borrowedBooks->isEmpty())
+                    <tr class="member-activity-empty-row"><td colspan="7">Belum ada buku yang pernah dipinjam.</td></tr>
+                @endif
+                @for ($row = max(1, $borrowedBooks->count()); $row < 5; $row++)
+                    <tr class="member-activity-placeholder-row" aria-hidden="true"><td colspan="7">&nbsp;</td></tr>
+                @endfor
             </tbody>
         </table>
     </div>

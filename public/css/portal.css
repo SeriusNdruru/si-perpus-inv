@@ -1597,3 +1597,8 @@ body.portal-modal-open {
 @media (max-width:700px) {
     .member-welcome .member-button + .member-button { margin-left:0; margin-top:8px; }
 }
+
+/* Tahap 87: jaga tinggi pratinjau aktivitas siswa tetap setara lima baris. */
+.member-activity-preview-visits tbody tr { height:47px; }
+.member-activity-preview-books tbody tr { height:55px; }
+.member-activity-placeholder-row td { color:transparent; user-select:none; }
