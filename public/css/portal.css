@@ -261,6 +261,9 @@ img { max-width: 100%; display: block; }
 .member-brand strong,.member-brand small { display:block; }
 .member-brand strong { color:#fff; font-size:13px; }
 .member-brand small { margin-top:3px; color:#8eb0b5; font-size:10px; }
+.member-sidebar-head { display:block; }
+.member-menu-toggle { display:none; }
+.member-sidebar-menu[hidden] { display:none !important; }
 .member-nav { display:grid; gap:5px; margin-top:36px; overflow:auto; }
 .member-nav a { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 13px; border-radius:12px; color:#c4d7da; font-size:12px; font-weight:780; }
 .member-nav a:hover,.member-nav a.active { color:#fff; background:#215966; }
@@ -2268,8 +2271,7 @@ body.member-photo-preview-open {
     }
 }
 
-/* Tahap 99: rapikan dashboard siswa pada tablet dan ponsel.
-   Navigasi siswa dipindahkan ke bagian atas tepat di bawah identitas sekolah. */
+/* Tahap 102: menu siswa mobile menggunakan tombol hamburger agar tidak memakan banyak ruang. */
 @media screen and (max-width: 1000px) {
     body.member-page {
         min-width: 0;
@@ -2292,9 +2294,17 @@ body.member-photo-preview-open {
         padding: 15px 16px 13px;
     }
 
+    .member-page .member-sidebar-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
     .member-page .member-brand {
-        width: 100%;
+        width: auto;
         min-width: 0;
+        flex: 1 1 auto;
         padding: 0;
     }
 
@@ -2307,12 +2317,62 @@ body.member-photo-preview-open {
         overflow-wrap: anywhere;
     }
 
+    .member-page .member-menu-toggle {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border: 1px solid rgba(255,255,255,.18);
+        border-radius: 14px;
+        background: rgba(255,255,255,.08);
+        color: #fff;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .member-page .member-menu-toggle span {
+        display: block;
+        width: 20px;
+        height: 2.5px;
+        border-radius: 999px;
+        background: currentColor;
+        transition: transform .18s ease, opacity .18s ease;
+    }
+
+    .member-page .member-menu-toggle span + span {
+        margin-top: 4px;
+    }
+
+    .member-page .member-sidebar.is-open .member-menu-toggle span:nth-child(1) {
+        transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .member-page .member-sidebar.is-open .member-menu-toggle span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .member-page .member-sidebar.is-open .member-menu-toggle span:nth-child(3) {
+        transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    .member-page .member-sidebar-menu {
+        width: 100%;
+        margin-top: 12px;
+        padding: 12px;
+        border-radius: 18px;
+        background: rgba(255,255,255,.06);
+        border: 1px solid rgba(255,255,255,.08);
+        box-sizing: border-box;
+    }
+
     .member-page .member-nav {
         display: grid !important;
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 8px;
         width: 100%;
-        margin-top: 14px;
+        margin-top: 0;
         overflow: visible;
     }
 
@@ -2320,7 +2380,7 @@ body.member-photo-preview-open {
         min-width: 0;
         min-height: 44px;
         justify-content: center;
-        padding: 9px 10px;
+        padding: 10px 10px;
         text-align: center;
         line-height: 1.28;
         white-space: normal;
@@ -2337,6 +2397,7 @@ body.member-photo-preview-open {
         justify-content: flex-end;
         margin-top: 11px;
         padding-top: 10px;
+        border-top: 1px solid rgba(255,255,255,.08);
     }
 
     .member-page .member-sidebar-footer form {
@@ -2424,10 +2485,21 @@ body.member-photo-preview-open {
         font-size: 11px;
     }
 
+    .member-page .member-menu-toggle {
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+    }
+
+    .member-page .member-sidebar-menu {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 16px;
+    }
+
     .member-page .member-nav {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
         gap: 7px;
-        margin-top: 12px;
     }
 
     .member-page .member-nav a {
@@ -2555,3 +2627,4 @@ body.member-photo-preview-open {
         font-size: 28px;
     }
 }
+

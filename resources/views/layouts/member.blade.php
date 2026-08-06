@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=101">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=102">
 </head>
 <body class="member-page @yield('body-class')">
     @php
@@ -18,37 +18,54 @@
     @endphp
 
     <div class="member-shell">
-        <aside class="member-sidebar">
-            <a href="{{ route('dashboard.member') }}" class="member-brand">
-                <span class="member-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'dashboard siswa'])</span>
-                <div>
-                    <strong>{{ $systemBrand['institution.name'] ?? 'Perpustakaan' }}</strong>
-                    <small>Dashboard siswa</small>
+        <aside class="member-sidebar" data-member-sidebar>
+            <div class="member-sidebar-head">
+                <a href="{{ route('dashboard.member') }}" class="member-brand">
+                    <span class="member-brand-mark">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'dashboard siswa'])</span>
+                    <div>
+                        <strong>{{ $systemBrand['institution.name'] ?? 'Perpustakaan' }}</strong>
+                        <small>Dashboard siswa</small>
+                    </div>
+                </a>
+
+                <button
+                    type="button"
+                    class="member-menu-toggle"
+                    aria-label="Buka menu siswa"
+                    aria-controls="member-sidebar-menu"
+                    aria-expanded="false"
+                    data-member-menu-toggle
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+            <div id="member-sidebar-menu" class="member-sidebar-menu" data-member-sidebar-menu>
+                <nav class="member-nav">
+                    <a href="{{ route('dashboard.member') }}" class="{{ request()->routeIs('dashboard.member') ? 'active' : '' }}">Dashboard</a>
+                    <a href="{{ route('member.books.index') }}" class="{{ request()->routeIs('member.books.index') ? 'active' : '' }}">Katalog buku</a>
+                    <a href="{{ route('member.books.cart') }}" class="{{ request()->routeIs('member.books.cart') ? 'active' : '' }}">
+                        Keranjang pengajuan
+                        @if ($cartCount > 0)<span>{{ $cartCount }}</span>@endif
+                    </a>
+                    <a href="{{ route('member.loan-requests.index') }}" class="{{ request()->routeIs('member.loan-requests.*') ? 'active' : '' }}">Pengajuan peminjaman</a>
+                    <a href="{{ route('member.activity.index') }}" class="{{ request()->routeIs('member.activity.*', 'member.history.visits', 'member.history.books') ? 'active' : '' }}">Aktivitas saya</a>
+                    <a href="{{ route('member.history.loans') }}" class="{{ request()->routeIs('member.history.loans', 'member.history.loan-detail') ? 'active' : '' }}">Riwayat peminjaman</a>
+                    <a href="{{ route('member.history.fines') }}" class="{{ request()->routeIs('member.history.fines') ? 'active' : '' }}">Denda</a>
+                    <a href="{{ route('member.notifications.index') }}" class="{{ request()->routeIs('member.notifications.*') ? 'active' : '' }}">
+                        Notifikasi
+                        @if ($unreadCount > 0)<span>{{ $unreadCount }}</span>@endif
+                    </a>
+                </nav>
+
+                <div class="member-sidebar-footer">
+                    <form method="POST" action="{{ route('student.logout') }}">
+                        @csrf
+                        <button type="submit">Keluar</button>
+                    </form>
                 </div>
-            </a>
-
-            <nav class="member-nav">
-                <a href="{{ route('dashboard.member') }}" class="{{ request()->routeIs('dashboard.member') ? 'active' : '' }}">Dashboard</a>
-                <a href="{{ route('member.books.index') }}" class="{{ request()->routeIs('member.books.index') ? 'active' : '' }}">Katalog buku</a>
-                <a href="{{ route('member.books.cart') }}" class="{{ request()->routeIs('member.books.cart') ? 'active' : '' }}">
-                    Keranjang pengajuan
-                    @if ($cartCount > 0)<span>{{ $cartCount }}</span>@endif
-                </a>
-                <a href="{{ route('member.loan-requests.index') }}" class="{{ request()->routeIs('member.loan-requests.*') ? 'active' : '' }}">Pengajuan peminjaman</a>
-                <a href="{{ route('member.activity.index') }}" class="{{ request()->routeIs('member.activity.*', 'member.history.visits', 'member.history.books') ? 'active' : '' }}">Aktivitas saya</a>
-                <a href="{{ route('member.history.loans') }}" class="{{ request()->routeIs('member.history.loans', 'member.history.loan-detail') ? 'active' : '' }}">Riwayat peminjaman</a>
-                <a href="{{ route('member.history.fines') }}" class="{{ request()->routeIs('member.history.fines') ? 'active' : '' }}">Denda</a>
-                <a href="{{ route('member.notifications.index') }}" class="{{ request()->routeIs('member.notifications.*') ? 'active' : '' }}">
-                    Notifikasi
-                    @if ($unreadCount > 0)<span>{{ $unreadCount }}</span>@endif
-                </a>
-            </nav>
-
-            <div class="member-sidebar-footer">
-                <form method="POST" action="{{ route('student.logout') }}">
-                    @csrf
-                    <button type="submit">Keluar</button>
-                </form>
             </div>
         </aside>
 
@@ -112,6 +129,46 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const sidebar = document.querySelector('[data-member-sidebar]');
+            const toggle = document.querySelector('[data-member-menu-toggle]');
+            const menu = document.querySelector('[data-member-sidebar-menu]');
+            if (!sidebar || !toggle || !menu) return;
+            const mobileQuery = window.matchMedia('(max-width: 1000px)');
+            const syncMenuState = function () {
+                if (mobileQuery.matches) {
+                    const isOpen = sidebar.classList.contains('is-open');
+                    menu.hidden = !isOpen;
+                    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                } else {
+                    sidebar.classList.remove('is-open');
+                    menu.hidden = false;
+                    toggle.setAttribute('aria-expanded', 'false');
+                }
+            };
+            toggle.addEventListener('click', function () {
+                if (!mobileQuery.matches) return;
+                const isOpen = sidebar.classList.toggle('is-open');
+                menu.hidden = !isOpen;
+                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            });
+            menu.querySelectorAll('a').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    if (!mobileQuery.matches) return;
+                    sidebar.classList.remove('is-open');
+                    menu.hidden = true;
+                    toggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+            syncMenuState();
+            if (typeof mobileQuery.addEventListener === 'function') {
+                mobileQuery.addEventListener('change', syncMenuState);
+            } else if (typeof mobileQuery.addListener === 'function') {
+                mobileQuery.addListener(syncMenuState);
+            }
+        });
+    </script>
     <script src="{{ asset('js/image-retry.js') }}?v=74" defer></script>
     <script src="{{ asset('js/member-photo-preview.js') }}?v=92" defer></script>
 </body>
