@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Riwayat Peminjaman Siswa')
-@section('page-title', 'Riwayat Peminjaman Siswa')
+@section('title', 'Peringkat Peminjaman Siswa')
+@section('page-title', 'Peringkat Peminjaman Siswa')
 
 @section('content')
 @include('reports._tabs')
@@ -16,8 +16,8 @@
 <section class="panel report-panel">
     <div class="panel-header panel-header-wrap">
         <div>
-            <p class="eyebrow">Ringkasan per siswa</p>
-            <h2>Jumlah peminjaman setiap siswa</h2>
+            <p class="eyebrow">Peringkat per siswa</p>
+            <h2>Siswa berdasarkan jumlah peminjaman</h2>
         </div>
         <div class="report-actions no-print">
             <a href="{{ route('reports.loan-records.excel', request()->query()) }}" class="button-primary button-link">Unduh Excel</a>
@@ -75,7 +75,7 @@
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="empty-state">Tidak ada riwayat peminjaman siswa yang sesuai dengan filter.</td></tr>
+                    <tr><td colspan="5" class="empty-state">Tidak ada peringkat peminjaman siswa yang sesuai dengan filter.</td></tr>
                 @endforelse
             </tbody>
         </table>

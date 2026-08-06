@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Laporan Peminjaman')
-@section('page-title', 'Laporan Peminjaman')
+@section('title', 'Riwayat Peminjaman')
+@section('page-title', 'Riwayat Peminjaman')
 
 @section('content')
     @include('reports._tabs')

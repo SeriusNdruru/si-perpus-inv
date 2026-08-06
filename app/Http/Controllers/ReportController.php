@@ -258,8 +258,8 @@ class ReportController extends Controller
             ->orderByDesc('loan_date');
 
         return $this->excelDownload(
-            'laporan-peminjaman-'.now()->format('Ymd-His').'.xlsx',
-            'Laporan Peminjaman',
+            'riwayat-peminjaman-'.now()->format('Ymd-His').'.xlsx',
+            'Riwayat Peminjaman',
             ['Kode peminjaman', 'Tanggal pinjam', 'Jatuh tempo', 'Kode anggota', 'Nama anggota', 'Jenis anggota', 'Status', 'Jumlah eksemplar', 'Belum kembali', 'Sudah diproses', 'Total denda', 'Petugas'],
             $query->lazy(500),
             fn (Loan $loan): array => [

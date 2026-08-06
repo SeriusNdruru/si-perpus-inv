@@ -38,19 +38,19 @@
             </a>
 
             <a href="{{ route('reports.loans') }}" class="report-link-card">
-                <span class="report-card-code">PJM</span>
+                <span class="report-card-code">RWP</span>
                 <div>
-                    <strong>Laporan Peminjaman</strong>
-                    <p>Transaksi berdasarkan periode, status, dan jenis anggota.</p>
+                    <strong>Riwayat Peminjaman</strong>
+                    <p>Daftar setiap transaksi peminjaman berdasarkan periode, status, dan jenis anggota.</p>
                     <small>{{ number_format((int) $summary['active_loans']) }} eksemplar belum kembali</small>
                 </div>
             </a>
 
             <a href="{{ route('reports.loan-records') }}" class="report-link-card">
-                <span class="report-card-code">RPS</span>
+                <span class="report-card-code">PRP</span>
                 <div>
-                    <strong>Riwayat Peminjaman Siswa</strong>
-                    <p>Setiap siswa ditampilkan satu kali beserta jumlah transaksi peminjamannya.</p>
+                    <strong>Peringkat Peminjaman Siswa</strong>
+                    <p>Rangkuman jumlah peminjaman setiap siswa yang diurutkan dari terbanyak.</p>
                     <small>Dapat difilter dan diunduh sebagai Excel</small>
                 </div>
             </a>

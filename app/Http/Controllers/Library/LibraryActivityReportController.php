@@ -184,9 +184,9 @@ class LibraryActivityReportController extends Controller
             ->get();
 
         return $this->excel->download(
-            'riwayat-peminjaman-siswa-'.now()->format('Ymd-His').'.xlsx',
+            'peringkat-peminjaman-siswa-'.now()->format('Ymd-His').'.xlsx',
             $this->institutionName(),
-            'Riwayat Peminjaman Siswa',
+            'Peringkat Peminjaman Siswa',
             $this->excelMeta($filters),
             ['No.', 'NIS/NISN', 'Nama siswa', 'Kelas', 'Jumlah peminjaman'],
             $rows,
@@ -197,7 +197,7 @@ class LibraryActivityReportController extends Controller
                 $row->department ?: '-',
                 (int) $row->loan_count,
             ],
-            'Riwayat Peminjaman',
+            'Peringkat Peminjaman',
         );
     }
 
