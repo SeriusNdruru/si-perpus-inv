@@ -18,16 +18,77 @@
     @endphp
     <title>@yield('title', 'Dashboard') | {{ $browserSystemName }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=93">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=96">
 </head>
 <body class="app-page">
     @php
         $currentUser = auth()->user();
-        $dashboardRoute = $currentUser->dashboardRouteName();
+        $defaultDashboardRoute = $currentUser->dashboardRouteName();
         $isSuperAdmin = $currentUser->hasRole('SUPER_ADMIN');
         $isInventoryAdmin = $currentUser->hasRole('INVENTORY_ADMIN');
         $isLibraryAdmin = $currentUser->hasAnyRole(['LIBRARY_ADMIN', 'LIBRARY_OFFICER']);
         $isManager = $currentUser->hasRole('MANAGER');
+
+        $superAdminArea = 'system';
+
+        if ($isSuperAdmin) {
+            $storedSuperAdminArea = session('super_admin_area', 'system');
+            $superAdminArea = in_array($storedSuperAdminArea, ['system', 'inventory', 'library'], true)
+                ? $storedSuperAdminArea
+                : 'system';
+
+            if (request()->routeIs('dashboard.super-admin', 'admin.*')) {
+                $superAdminArea = 'system';
+            } elseif (request()->routeIs(
+                'dashboard.inventory',
+                'categories.*',
+                'units.*',
+                'suppliers.*',
+                'locations.*',
+                'inventory.*',
+                'reports.inventory',
+                'reports.inventory.*'
+            )) {
+                $superAdminArea = 'inventory';
+            } elseif (request()->routeIs(
+                'dashboard.library',
+                'library.*',
+                'reports.collection',
+                'reports.collection.*',
+                'reports.loans',
+                'reports.loans.*',
+                'reports.fines',
+                'reports.fines.*',
+                'reports.members',
+                'reports.members.*',
+                'reports.reservations',
+                'reports.reservations.*',
+                'reports.library-visits',
+                'reports.library-visits.*',
+                'reports.frequent-visitors',
+                'reports.frequent-visitors.*',
+                'reports.loan-records',
+                'reports.loan-records.*'
+            )) {
+                $superAdminArea = 'library';
+            }
+        }
+
+        $isSystemArea = $isSuperAdmin && $superAdminArea === 'system';
+        $isInventoryArea = $isInventoryAdmin || ($isSuperAdmin && $superAdminArea === 'inventory');
+        $isLibraryArea = $isLibraryAdmin || ($isSuperAdmin && $superAdminArea === 'library');
+
+        $dashboardRoute = match (true) {
+            $isSuperAdmin && $superAdminArea === 'inventory' => 'dashboard.inventory',
+            $isSuperAdmin && $superAdminArea === 'library' => 'dashboard.library',
+            default => $defaultDashboardRoute,
+        };
+
+        $sidebarContextLabel = match (true) {
+            $isSuperAdmin && $superAdminArea === 'inventory' => 'Super Admin · Area Inventaris',
+            $isSuperAdmin && $superAdminArea === 'library' => 'Super Admin · Area Perpustakaan',
+            default => $currentUser->primaryRoleLabel(),
+        };
     @endphp
 
     <div class="app-shell">
@@ -36,14 +97,19 @@
                 <span class="sidebar-logo">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'sidebar'])</span>
                 <span>
                     <strong>{{ $systemBrand['institution.name'] ?? 'Rius Library' }}</strong>
-                    <small>{{ $currentUser->primaryRoleLabel() }}</small>
+                    <small>{{ $sidebarContextLabel }}</small>
                 </span>
             </a>
 
             <nav class="sidebar-nav" aria-label="Menu utama">
                 <a href="{{ route($dashboardRoute) }}" class="{{ request()->routeIs($dashboardRoute) ? 'active' : '' }}">Dashboard</a>
 
-                @if ($isSuperAdmin)
+                @if ($isSuperAdmin && ! $isSystemArea)
+                    <p class="sidebar-section">Mode Super Admin</p>
+                    <a href="{{ route('dashboard.super-admin') }}">Kembali ke Super Admin</a>
+                @endif
+
+                @if ($isSystemArea)
                     <p class="sidebar-section">Administrasi</p>
                     <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">Pengguna Sistem</a>
                     <a href="{{ route('admin.settings.edit') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">Pengaturan Sistem</a>
@@ -54,7 +120,7 @@
                     <a href="{{ route('admin.acceptance-tests.index') }}" class="{{ request()->routeIs('admin.acceptance-tests.*') ? 'active' : '' }}">Uji Akses & Alur</a>
                 @endif
 
-                @if ($isInventoryAdmin && ! $isSuperAdmin)
+                @if ($isInventoryArea)
                     <p class="sidebar-section">Master Inventaris</p>
                     <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">Kategori</a>
                     <a href="{{ route('units.index') }}" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">Satuan</a>
@@ -84,7 +150,7 @@
                     </a>
                 @endif
 
-                @if ($isLibraryAdmin && ! $isSuperAdmin)
+                @if ($isLibraryArea)
                     <p class="sidebar-section">Perpustakaan</p>
                     <a href="{{ route('library.books.index') }}" class="{{ request()->routeIs('library.books.*') ? 'active' : '' }}">Buku Baru & Katalog</a>
                     <a href="{{ route('library.shelves.index') }}" class="{{ request()->routeIs('library.shelves.*') ? 'active' : '' }}">Rak Perpustakaan</a>
@@ -113,7 +179,7 @@
                     <a href="{{ route('library.contact-messages.index') }}" class="{{ request()->routeIs('library.contact-messages.*') ? 'active' : '' }}">Pesan Kontak</a>
                 @endif
 
-                @if (! $isSuperAdmin && ($isInventoryAdmin || $isLibraryAdmin || $isManager))
+                @if ($isInventoryArea || $isLibraryArea || $isManager)
                     <p class="sidebar-section">Informasi</p>
                     <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">Laporan Terpadu</a>
                 @endif

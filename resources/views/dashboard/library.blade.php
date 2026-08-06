@@ -1,16 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Perpustakaan')
-@section('page-title', 'Dashboard Admin Perpustakaan')
+@section('title', auth()->user()->hasRole('SUPER_ADMIN') ? 'Area Admin Perpustakaan' : 'Dashboard Perpustakaan')
+@section('page-title', auth()->user()->hasRole('SUPER_ADMIN') ? 'Area Admin Perpustakaan' : 'Dashboard Admin Perpustakaan')
 
 @section('content')
     <div class="role-banner">
         <div>
-            <p class="eyebrow">Area kerja khusus</p>
-            <h2>Pengelolaan perpustakaan</h2>
-            <p>Akun ini mengelola katalog, rak, anggota, dan sirkulasi buku. Data barang umum tetap dikelola oleh Admin Inventaris.</p>
+            @if (auth()->user()->hasRole('SUPER_ADMIN'))
+                <p class="eyebrow">Mode area Super Admin</p>
+                <h2>Pengelolaan perpustakaan</h2>
+                <p>Super Admin sedang membuka area kerja Admin Perpustakaan. Akun, peran, dan hak akses tetap sebagai Super Admin.</p>
+            @else
+                <p class="eyebrow">Area kerja khusus</p>
+                <h2>Pengelolaan perpustakaan</h2>
+                <p>Akun ini mengelola katalog, rak, anggota, dan sirkulasi buku. Data barang umum tetap dikelola oleh Admin Inventaris.</p>
+            @endif
         </div>
-        <span class="role-pill">ADMIN PERPUSTAKAAN</span>
+        <span class="role-pill">{{ auth()->user()->hasRole('SUPER_ADMIN') ? 'SUPER ADMIN' : 'ADMIN PERPUSTAKAAN' }}</span>
     </div>
 
     <div class="stat-grid stat-grid-four">

@@ -23,8 +23,12 @@ class DashboardController extends Controller
         return redirect()->route($user->dashboardRouteName());
     }
 
-    public function superAdmin(): View
+    public function superAdmin(Request $request): View
     {
+        if ($request->user()?->hasRole(User::ROLE_SUPER_ADMIN)) {
+            $request->session()->put('super_admin_area', 'system');
+        }
+
         $statistics = [
             'users' => DB::table('users')->where('status', 'active')->count(),
             'items' => DB::table('items')->where('status', 'active')->count(),
@@ -55,8 +59,12 @@ class DashboardController extends Controller
         return view('dashboard.super-admin', compact('statistics', 'administrators'));
     }
 
-    public function inventory(): View
+    public function inventory(Request $request): View
     {
+        if ($request->user()?->hasRole(User::ROLE_SUPER_ADMIN)) {
+            $request->session()->put('super_admin_area', 'inventory');
+        }
+
         $statistics = [
             'items' => DB::table('items')->where('status', 'active')->count(),
             'assets' => DB::table('assets')->where('asset_status', '<>', 'disposed')->count(),
@@ -92,8 +100,12 @@ class DashboardController extends Controller
         return view('dashboard.inventory', compact('statistics', 'latestItems'));
     }
 
-    public function library(): View
+    public function library(Request $request): View
     {
+        if ($request->user()?->hasRole(User::ROLE_SUPER_ADMIN)) {
+            $request->session()->put('super_admin_area', 'library');
+        }
+
         $this->reservationService->synchronizeAll();
 
         $statistics = [

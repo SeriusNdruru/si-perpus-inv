@@ -1,16 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard Inventaris')
-@section('page-title', 'Dashboard Admin Inventaris')
+@section('title', auth()->user()->hasRole('SUPER_ADMIN') ? 'Area Admin Inventaris' : 'Dashboard Inventaris')
+@section('page-title', auth()->user()->hasRole('SUPER_ADMIN') ? 'Area Admin Inventaris' : 'Dashboard Admin Inventaris')
 
 @section('content')
     <div class="role-banner">
         <div>
-            <p class="eyebrow">Area kerja khusus</p>
-            <h2>Pengelolaan inventaris</h2>
-            <p>Akun ini mengelola barang, aset, stok, kategori, satuan, supplier, dan lokasi. Modul perpustakaan tidak dapat diubah oleh Admin Inventaris.</p>
+            @if (auth()->user()->hasRole('SUPER_ADMIN'))
+                <p class="eyebrow">Mode area Super Admin</p>
+                <h2>Pengelolaan inventaris</h2>
+                <p>Super Admin sedang membuka area kerja Admin Inventaris. Akun, peran, dan hak akses tetap sebagai Super Admin.</p>
+            @else
+                <p class="eyebrow">Area kerja khusus</p>
+                <h2>Pengelolaan inventaris</h2>
+                <p>Akun ini mengelola barang, aset, stok, kategori, satuan, supplier, dan lokasi. Modul perpustakaan tidak dapat diubah oleh Admin Inventaris.</p>
+            @endif
         </div>
-        <span class="role-pill">ADMIN INVENTARIS</span>
+        <span class="role-pill">{{ auth()->user()->hasRole('SUPER_ADMIN') ? 'SUPER ADMIN' : 'ADMIN INVENTARIS' }}</span>
     </div>
 
     <div class="stat-grid">
