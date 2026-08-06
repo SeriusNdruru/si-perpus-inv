@@ -21,6 +21,8 @@
             'member' => $member,
             'class' => 'member-profile-avatar',
             'size' => 320,
+            'preview' => true,
+            'previewSize' => 1400,
         ])
 
         <div>

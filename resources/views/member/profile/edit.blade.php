@@ -23,7 +23,18 @@
 
         <div class="member-profile-edit-body">
             <div class="member-profile-photo-editor">
-                <div id="member-profile-photo-preview" class="member-profile-edit-avatar {{ $member->profile_photo_path ? 'has-photo' : 'is-placeholder' }}">
+                <div
+                    id="member-profile-photo-preview"
+                    class="member-profile-edit-avatar {{ $member->profile_photo_path ? 'has-photo is-previewable' : 'is-placeholder' }}"
+                    @if ($member->profile_photo_path)
+                        role="button"
+                        tabindex="0"
+                        title="Klik untuk melihat foto lebih besar"
+                        aria-label="Lihat foto profil {{ $member->member_name }}"
+                        data-member-photo-preview
+                        data-preview-src="{{ route('media.thumbnail', ['path' => $member->profile_photo_path, 'size' => 1400]) }}"
+                    @endif
+                >
                     @if ($member->profile_photo_path)
                         <img
                             id="member-profile-photo-image"
@@ -40,7 +51,7 @@
 
                 <div class="member-profile-photo-copy">
                     <strong>Foto profil</strong>
-                    <p>Gunakan foto JPG, PNG, atau WebP. Ukuran maksimal 2 MB.</p>
+                    <p>Gunakan foto JPG, PNG, atau WebP. Ukuran maksimal 2 MB. Klik foto untuk melihat pratinjau lebih besar.</p>
 
                     <label class="member-profile-file-button" for="profile_photo">Pilih foto</label>
                     <input
@@ -140,6 +151,7 @@
     const image = document.getElementById('member-profile-photo-image');
     const removeCheckbox = document.getElementById('remove_profile_photo');
     const originalImageSource = image ? (image.getAttribute('src') || '') : '';
+    const originalPreviewSource = preview ? (preview.getAttribute('data-preview-src') || originalImageSource) : originalImageSource;
 
     if (!input || !preview || !image) {
         return;
@@ -155,8 +167,14 @@
         reader.addEventListener('load', () => {
             image.src = String(reader.result || '');
             image.hidden = false;
-            preview.classList.add('has-photo');
+            preview.classList.add('has-photo', 'is-previewable');
             preview.classList.remove('is-placeholder');
+            preview.setAttribute('role', 'button');
+            preview.setAttribute('tabindex', '0');
+            preview.setAttribute('title', 'Klik untuk melihat foto lebih besar');
+            preview.setAttribute('aria-label', 'Lihat pratinjau foto profil');
+            preview.setAttribute('data-member-photo-preview', '');
+            preview.setAttribute('data-preview-src', String(reader.result || ''));
             if (removeCheckbox) {
                 removeCheckbox.checked = false;
             }
@@ -170,16 +188,28 @@
                 input.value = '';
                 image.hidden = true;
                 image.removeAttribute('src');
-                preview.classList.remove('has-photo');
+                preview.classList.remove('has-photo', 'is-previewable');
                 preview.classList.add('is-placeholder');
+                preview.removeAttribute('role');
+                preview.removeAttribute('tabindex');
+                preview.removeAttribute('title');
+                preview.removeAttribute('aria-label');
+                preview.removeAttribute('data-member-photo-preview');
+                preview.removeAttribute('data-preview-src');
                 return;
             }
 
             if (originalImageSource !== '') {
                 image.src = originalImageSource;
                 image.hidden = false;
-                preview.classList.add('has-photo');
+                preview.classList.add('has-photo', 'is-previewable');
                 preview.classList.remove('is-placeholder');
+                preview.setAttribute('role', 'button');
+                preview.setAttribute('tabindex', '0');
+                preview.setAttribute('title', 'Klik untuk melihat foto lebih besar');
+                preview.setAttribute('aria-label', 'Lihat foto profil');
+                preview.setAttribute('data-member-photo-preview', '');
+                preview.setAttribute('data-preview-src', originalPreviewSource);
             }
         });
     }

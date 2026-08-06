@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=91">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=92">
 </head>
 <body class="member-page @yield('body-class')">
     @php
@@ -91,6 +91,28 @@
             </div>
         </main>
     </div>
+    <div
+        id="member-photo-preview-modal"
+        class="member-photo-preview-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+        aria-labelledby="member-photo-preview-caption"
+        hidden
+    >
+        <div class="member-photo-preview-dialog">
+            <button
+                type="button"
+                class="member-photo-preview-close"
+                aria-label="Tutup pratinjau foto"
+                data-member-photo-preview-close
+            >&times;</button>
+            <img id="member-photo-preview-image" alt="Pratinjau foto profil">
+            <p id="member-photo-preview-caption">Foto profil siswa</p>
+        </div>
+    </div>
+
     <script src="{{ asset('js/image-retry.js') }}?v=74" defer></script>
+    <script src="{{ asset('js/member-photo-preview.js') }}?v=92" defer></script>
 </body>
 </html>

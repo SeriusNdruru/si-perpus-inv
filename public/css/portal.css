@@ -2165,3 +2165,105 @@ body.portal-modal-open {
         width: 100%;
     }
 }
+
+/* Tahap 92: pratinjau foto profil siswa dalam ukuran besar. */
+.member-profile-avatar.is-previewable,
+.member-profile-edit-avatar.is-previewable {
+    cursor: zoom-in;
+}
+.member-profile-avatar.is-previewable {
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.member-profile-avatar.is-previewable:hover,
+.member-profile-avatar.is-previewable:focus-visible,
+.member-profile-edit-avatar.is-previewable:hover,
+.member-profile-edit-avatar.is-previewable:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px rgba(0, 0, 0, .18);
+    outline: 3px solid rgba(223, 245, 237, .42);
+    outline-offset: 3px;
+}
+body.member-photo-preview-open {
+    overflow: hidden;
+}
+.member-photo-preview-modal[hidden] {
+    display: none;
+}
+.member-photo-preview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: grid;
+    place-items: center;
+    padding: 22px;
+    background: rgba(7, 23, 29, .78);
+    backdrop-filter: blur(5px);
+}
+.member-photo-preview-dialog {
+    position: relative;
+    width: min(760px, 94vw);
+    max-height: 90vh;
+    display: grid;
+    place-items: center;
+    gap: 10px;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, .22);
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, .35);
+}
+.member-photo-preview-dialog img {
+    width: auto;
+    max-width: 100%;
+    max-height: calc(90vh - 92px);
+    display: block;
+    object-fit: contain;
+    border-radius: 14px;
+    background: #edf2f4;
+}
+.member-photo-preview-dialog p {
+    margin: 0;
+    color: #425b64;
+    font-size: 13px;
+    font-weight: 800;
+    text-align: center;
+}
+.member-photo-preview-close {
+    position: absolute;
+    top: 9px;
+    right: 9px;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    background: rgba(15, 45, 55, .86);
+    font-size: 27px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, .22);
+}
+.member-photo-preview-close:hover,
+.member-photo-preview-close:focus-visible {
+    background: #0f6670;
+    outline: 3px solid rgba(15, 102, 112, .22);
+    outline-offset: 2px;
+}
+@media (max-width: 600px) {
+    .member-photo-preview-modal {
+        padding: 12px;
+    }
+    .member-photo-preview-dialog {
+        width: 100%;
+        padding: 13px;
+        border-radius: 16px;
+    }
+    .member-photo-preview-dialog img {
+        max-height: calc(92vh - 82px);
+        border-radius: 11px;
+    }
+}
