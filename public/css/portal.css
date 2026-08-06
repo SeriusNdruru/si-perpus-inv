@@ -2271,7 +2271,7 @@ body.member-photo-preview-open {
     }
 }
 
-/* Tahap 103: menu siswa mobile menjadi dropdown ringkas yang tidak mendorong konten. */
+/* Tahap 104: perbaikan fungsi tombol hamburger siswa pada Safari dan hosting produksi. */
 @media screen and (max-width: 1000px) {
     body.member-page {
         min-width: 0;
@@ -2296,6 +2296,8 @@ body.member-photo-preview-open {
     }
 
     .member-page .member-sidebar-head {
+        position: relative;
+        z-index: 110;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -2319,6 +2321,8 @@ body.member-photo-preview-open {
     }
 
     .member-page .member-menu-toggle {
+        position: relative;
+        z-index: 120;
         display: inline-flex;
         flex: 0 0 auto;
         flex-direction: column;
@@ -2332,6 +2336,11 @@ body.member-photo-preview-open {
         color: #fff;
         cursor: pointer;
         padding: 0;
+        pointer-events: auto;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        appearance: none;
+        -webkit-appearance: none;
     }
 
     .member-page .member-menu-toggle span {
@@ -2366,7 +2375,7 @@ body.member-photo-preview-open {
         top: calc(100% - 2px);
         right: 12px;
         left: 12px;
-        z-index: 100;
+        z-index: 115;
         width: auto;
         max-height: min(68vh, 540px);
         overflow-y: auto;

@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=103">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=104">
 </head>
 <body class="member-page @yield('body-class')">
     @php
@@ -129,56 +129,7 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const sidebar = document.querySelector('[data-member-sidebar]');
-            const toggle = document.querySelector('[data-member-menu-toggle]');
-            const menu = document.querySelector('[data-member-sidebar-menu]');
-            if (!sidebar || !toggle || !menu) return;
-
-            const mobileQuery = window.matchMedia('(max-width: 1000px)');
-
-            const closeMenu = function () {
-                sidebar.classList.remove('is-open');
-                toggle.setAttribute('aria-expanded', 'false');
-            };
-
-            const syncMenuState = function () {
-                if (!mobileQuery.matches) {
-                    closeMenu();
-                }
-            };
-
-            toggle.addEventListener('click', function (event) {
-                if (!mobileQuery.matches) return;
-                event.stopPropagation();
-                const isOpen = sidebar.classList.toggle('is-open');
-                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-            });
-
-            menu.addEventListener('click', function (event) {
-                event.stopPropagation();
-            });
-
-            menu.querySelectorAll('a').forEach(function (link) {
-                link.addEventListener('click', closeMenu);
-            });
-
-            document.addEventListener('click', function () {
-                if (mobileQuery.matches) closeMenu();
-            });
-
-            document.addEventListener('keydown', function (event) {
-                if (event.key === 'Escape') closeMenu();
-            });
-
-            if (typeof mobileQuery.addEventListener === 'function') {
-                mobileQuery.addEventListener('change', syncMenuState);
-            } else if (typeof mobileQuery.addListener === 'function') {
-                mobileQuery.addListener(syncMenuState);
-            }
-        });
-    </script>
+    <script src="{{ asset('js/member-mobile-menu.js') }}?v=104" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=74" defer></script>
     <script src="{{ asset('js/member-photo-preview.js') }}?v=92" defer></script>
 </body>
