@@ -35,7 +35,7 @@
                     @if ($cartCount > 0)<span>{{ $cartCount }}</span>@endif
                 </a>
                 <a href="{{ route('member.loan-requests.index') }}" class="{{ request()->routeIs('member.loan-requests.*') ? 'active' : '' }}">Pengajuan peminjaman</a>
-                <a href="{{ route('member.activity.index') }}" class="{{ request()->routeIs('member.activity.*') ? 'active' : '' }}">Aktivitas saya</a>
+                <a href="{{ route('member.activity.index') }}" class="{{ request()->routeIs('member.activity.*', 'member.history.visits', 'member.history.books') ? 'active' : '' }}">Aktivitas saya</a>
                 <a href="{{ route('member.history.loans') }}" class="{{ request()->routeIs('member.history.loans', 'member.history.loan-detail') ? 'active' : '' }}">Riwayat peminjaman</a>
                 <a href="{{ route('member.history.fines') }}" class="{{ request()->routeIs('member.history.fines') ? 'active' : '' }}">Denda</a>
                 <a href="{{ route('member.notifications.index') }}" class="{{ request()->routeIs('member.notifications.*') ? 'active' : '' }}">

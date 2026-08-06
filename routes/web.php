@@ -186,6 +186,12 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
             Route::patch('/pengajuan-peminjaman/{loanRequest}/batal', [MemberLoanRequestController::class, 'cancel'])
                 ->name('member.loan-requests.cancel');
 
+            Route::get('/riwayat-kunjungan', [MemberHistoryController::class, 'visits'])
+                ->name('member.history.visits');
+
+            Route::get('/riwayat-buku-dipinjam', [MemberHistoryController::class, 'books'])
+                ->name('member.history.books');
+
             Route::get('/riwayat-peminjaman', [MemberHistoryController::class, 'loans'])
                 ->name('member.history.loans');
             Route::get('/riwayat-peminjaman/{loan}', [MemberHistoryController::class, 'loanDetail'])

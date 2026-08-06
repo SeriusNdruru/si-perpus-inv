@@ -14,6 +14,47 @@ class MemberHistoryController extends Controller
     {
     }
 
+    public function visits(Request $request): View
+    {
+        $member = $this->memberAccounts->memberFor($request->user());
+
+        $visits = DB::table('library_visits')
+            ->where('member_id', $member->id)
+            ->orderByDesc('visit_date')
+            ->orderByDesc('visit_time')
+            ->paginate(12)
+            ->withQueryString();
+
+        return view('member.history.visits', compact('member', 'visits'));
+    }
+
+    public function books(Request $request): View
+    {
+        $member = $this->memberAccounts->memberFor($request->user());
+
+        $borrowedBooks = DB::table('loan_items')
+            ->join('loans', 'loans.id', '=', 'loan_items.loan_id')
+            ->join('assets', 'assets.id', '=', 'loan_items.asset_id')
+            ->join('items', 'items.id', '=', 'assets.item_id')
+            ->leftJoin('book_details', 'book_details.item_id', '=', 'items.id')
+            ->where('loans.member_id', $member->id)
+            ->orderByDesc('loan_items.borrowed_at')
+            ->paginate(12, [
+                'loan_items.id',
+                'loan_items.borrowed_at',
+                'loan_items.due_date',
+                'loan_items.returned_at',
+                'loan_items.return_status',
+                'loans.loan_code',
+                'assets.asset_code',
+                'items.item_name',
+                'book_details.cover_path',
+            ])
+            ->withQueryString();
+
+        return view('member.history.books', compact('member', 'borrowedBooks'));
+    }
+
     public function loans(Request $request): View
     {
         $member = $this->memberAccounts->memberFor($request->user());

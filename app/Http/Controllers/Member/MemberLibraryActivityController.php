@@ -10,6 +10,8 @@ use Illuminate\View\View;
 
 class MemberLibraryActivityController extends Controller
 {
+    private const PREVIEW_LIMIT = 5;
+
     public function __construct(private readonly MemberAccountService $memberAccounts)
     {
     }
@@ -36,8 +38,8 @@ class MemberLibraryActivityController extends Controller
             ->where('member_id', $member->id)
             ->orderByDesc('visit_date')
             ->orderByDesc('visit_time')
-            ->paginate(12, ['*'], 'kunjungan')
-            ->withQueryString();
+            ->limit(self::PREVIEW_LIMIT)
+            ->get();
 
         $borrowedBooks = DB::table('loan_items')
             ->join('loans', 'loans.id', '=', 'loan_items.loan_id')
@@ -46,7 +48,8 @@ class MemberLibraryActivityController extends Controller
             ->leftJoin('book_details', 'book_details.item_id', '=', 'items.id')
             ->where('loans.member_id', $member->id)
             ->orderByDesc('loan_items.borrowed_at')
-            ->paginate(12, [
+            ->limit(self::PREVIEW_LIMIT)
+            ->get([
                 'loan_items.id',
                 'loan_items.borrowed_at',
                 'loan_items.due_date',
@@ -56,9 +59,18 @@ class MemberLibraryActivityController extends Controller
                 'assets.asset_code',
                 'items.item_name',
                 'book_details.cover_path',
-            ], 'buku')
-            ->withQueryString();
+            ]);
 
-        return view('member.activity.index', compact('member', 'statistics', 'visits', 'borrowedBooks'));
+        $hasMoreVisits = $statistics['visits'] > self::PREVIEW_LIMIT;
+        $hasMoreBorrowedBooks = $statistics['borrowed_books'] > self::PREVIEW_LIMIT;
+
+        return view('member.activity.index', compact(
+            'member',
+            'statistics',
+            'visits',
+            'borrowedBooks',
+            'hasMoreVisits',
+            'hasMoreBorrowedBooks',
+        ));
     }
 }
