@@ -2636,3 +2636,100 @@ th, td { padding: 12px 18px; }
         font-size: 18px;
     }
 }
+
+/* Tahap 113: box statistik compact pada seluruh dashboard admin versi mobile. */
+@media screen and (max-width: 700px) {
+    .app-page .dashboard-stat-grid,
+    .app-page .dashboard-stat-grid.stat-grid-four {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 7px !important;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card,
+    .app-page .dashboard-stat-count-10 .stat-card,
+    .app-page .dashboard-stat-count-12 .stat-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 5px;
+        min-width: 0;
+        min-height: 58px;
+        padding: 5px 6px;
+        border: 1px solid #aebcc2;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: none;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card span,
+    .app-page .dashboard-stat-count-10 .stat-card span,
+    .app-page .dashboard-stat-count-12 .stat-card span {
+        min-width: 0;
+        min-height: 0;
+        margin: 0;
+        font-size: 9.5px;
+        line-height: 1.14;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card strong,
+    .app-page .dashboard-stat-count-10 .stat-card strong,
+    .app-page .dashboard-stat-count-12 .stat-card strong {
+        display: grid;
+        place-items: center;
+        min-width: 34px;
+        min-height: 38px;
+        margin: 0;
+        padding: 2px 5px;
+        border: 1px solid #9eabb1;
+        border-radius: 7px;
+        background: #f7fafb;
+        font-size: clamp(17px, 5.2vw, 23px) !important;
+        line-height: 1;
+        letter-spacing: -.035em;
+        font-variant-numeric: tabular-nums;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card.stat-warning strong {
+        border-color: #d8b86d;
+        background: #fff8e8;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card:last-child {
+        grid-column: 2 / 3;
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .app-page .dashboard-stat-grid,
+    .app-page .dashboard-stat-grid.stat-grid-four {
+        gap: 6px !important;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card,
+    .app-page .dashboard-stat-count-10 .stat-card,
+    .app-page .dashboard-stat-count-12 .stat-card {
+        min-height: 55px;
+        padding: 4px 5px;
+        column-gap: 4px;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card span,
+    .app-page .dashboard-stat-count-10 .stat-card span,
+    .app-page .dashboard-stat-count-12 .stat-card span {
+        font-size: 8.8px;
+        line-height: 1.12;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card strong,
+    .app-page .dashboard-stat-count-10 .stat-card strong,
+    .app-page .dashboard-stat-count-12 .stat-card strong {
+        min-width: 31px;
+        min-height: 35px;
+        padding: 2px 4px;
+        font-size: clamp(16px, 5vw, 21px) !important;
+    }
+}

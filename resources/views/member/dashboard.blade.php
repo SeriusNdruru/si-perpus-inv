@@ -14,7 +14,7 @@
     </div>
 </section>
 
-<div class="member-stat-grid">
+<div class="member-stat-grid member-dashboard-stat-grid">
     <article><span>Kunjungan membaca</span><strong>{{ $statistics['total_visits'] }}</strong></article>
     <article><span>Transaksi peminjaman</span><strong>{{ $statistics['total_loans'] }}</strong></article>
     <article><span>Buku sedang dipinjam</span><strong>{{ $statistics['active_books'] }}</strong></article>

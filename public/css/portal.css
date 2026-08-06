@@ -2682,3 +2682,106 @@ body.member-photo-preview-open {
     font-kerning: normal;
     text-rendering: optimizeLegibility;
 }
+
+/* Tahap 113: box statistik compact pada dashboard siswa dan inventaris umum versi mobile. */
+@media screen and (max-width: 700px) {
+    .member-page .member-dashboard-stat-grid,
+    .portal-page .portal-inventory-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+        width: 100%;
+        overflow: visible;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .member-page .member-dashboard-stat-grid article,
+    .portal-page .portal-inventory-stats article {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 5px;
+        min-width: 0;
+        min-height: 58px;
+        padding: 5px 6px;
+        border: 1px solid #aebcc2;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: none;
+        box-sizing: border-box;
+    }
+
+    .member-page .member-dashboard-stat-grid article span,
+    .portal-page .portal-inventory-stats article span {
+        order: 1;
+        min-width: 0;
+        min-height: 0;
+        margin: 0;
+        color: #5f737c;
+        font-size: 9.5px;
+        line-height: 1.14;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+    }
+
+    .member-page .member-dashboard-stat-grid article strong,
+    .portal-page .portal-inventory-stats article strong {
+        order: 2;
+        display: grid;
+        place-items: center;
+        min-width: 34px;
+        min-height: 38px;
+        margin: 0;
+        padding: 2px 5px;
+        border: 1px solid #9eabb1;
+        border-radius: 7px;
+        background: #f7fafb;
+        color: #102033;
+        font-size: clamp(17px, 5.2vw, 23px);
+        line-height: 1;
+        letter-spacing: -.035em;
+        font-variant-numeric: tabular-nums;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+    }
+
+    .portal-page .portal-inventory-stats article {
+        border-right: 1px solid #aebcc2;
+        border-bottom: 1px solid #aebcc2;
+    }
+
+    .portal-page .portal-inventory-stats article:last-child {
+        grid-column: 2 / 3;
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .member-page .member-dashboard-stat-grid,
+    .portal-page .portal-inventory-stats {
+        gap: 6px;
+    }
+
+    .member-page .member-dashboard-stat-grid article,
+    .portal-page .portal-inventory-stats article {
+        min-height: 55px;
+        padding: 4px 5px;
+        column-gap: 4px;
+    }
+
+    .member-page .member-dashboard-stat-grid article span,
+    .portal-page .portal-inventory-stats article span {
+        font-size: 8.8px;
+        line-height: 1.12;
+    }
+
+    .member-page .member-dashboard-stat-grid article strong,
+    .portal-page .portal-inventory-stats article strong {
+        min-width: 31px;
+        min-height: 35px;
+        padding: 2px 4px;
+        font-size: clamp(16px, 5vw, 21px);
+    }
+}
