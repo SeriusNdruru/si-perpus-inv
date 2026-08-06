@@ -36,70 +36,70 @@
 
     <div class="quick-grid">
         <a class="quick-card" href="{{ route('library.books.index', ['status' => 'incomplete']) }}">
-            <span>KB</span>
+            <span class="quick-card-icon icon-catalog" aria-hidden="true"></span>
             <div>
                 <strong>Lengkapi katalog</strong>
                 <small>Proses buku baru yang otomatis masuk dari inventaris.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('library.books.index') }}">
-            <span>BK</span>
+            <span class="quick-card-icon icon-books" aria-hidden="true"></span>
             <div>
                 <strong>Daftar buku</strong>
                 <small>Lihat seluruh judul dan status eksemplar buku.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('library.shelves.index') }}">
-            <span>RK</span>
+            <span class="quick-card-icon icon-shelf" aria-hidden="true"></span>
             <div>
                 <strong>Master rak</strong>
                 <small>Atur lokasi, klasifikasi, dan kapasitas rak perpustakaan.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('library.shelf-assignments.index', ['assignment' => 'without_shelf']) }}">
-            <span>PR</span>
+            <span class="quick-card-icon icon-placement" aria-hidden="true"></span>
             <div>
                 <strong>Penempatan buku</strong>
                 <small>Tempatkan eksemplar baru ke rak dan aktifkan status tersedia.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('library.loans.create') }}">
-            <span>PJ</span>
+            <span class="quick-card-icon icon-loan-add" aria-hidden="true"></span>
             <div>
                 <strong>Buat peminjaman</strong>
                 <small>Pilih anggota dan eksemplar buku yang tersedia.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('library.loans.index') }}">
-            <span>TR</span>
+            <span class="quick-card-icon icon-loans" aria-hidden="true"></span>
             <div>
                 <strong>Transaksi peminjaman</strong>
                 <small>Pantau pinjaman aktif, selesai, dan terlambat.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('library.returns.index') }}">
-            <span>KB</span>
+            <span class="quick-card-icon icon-return" aria-hidden="true"></span>
             <div>
                 <strong>Proses pengembalian</strong>
                 <small>Terima buku, periksa kondisi, dan hitung denda final.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('library.reservations.index') }}">
-            <span>RS</span>
+            <span class="quick-card-icon icon-reserve" aria-hidden="true"></span>
             <div>
                 <strong>Reservasi buku</strong>
                 <small>Kelola antrean dan buku yang sudah siap diambil anggota.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('library.loan-requests.index') }}">
-            <span>ON</span>
+            <span class="quick-card-icon icon-online" aria-hidden="true"></span>
             <div>
                 <strong>Pengajuan online</strong>
                 <small>Setujui permintaan siswa, siapkan buku, dan konfirmasi pengambilan.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('library.contact-messages.index') }}">
-            <span>PS</span>
+            <span class="quick-card-icon icon-message" aria-hidden="true"></span>
             <div>
                 <strong>Pesan portal</strong>
                 <small>Periksa pertanyaan dan masukan yang dikirim dari halaman kontak.</small>

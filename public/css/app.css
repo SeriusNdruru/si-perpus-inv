@@ -311,6 +311,26 @@ tbody tr:last-child td { border-bottom: 0; }
 .quick-card { display: flex; align-items: center; gap: 16px; min-height: 118px; padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; text-decoration: none; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease; }
 .quick-card:hover { transform: translateY(-2px); border-color: #b9d8d5; box-shadow: 0 16px 34px rgba(16, 32, 51, .08); }
 .quick-card > span { flex: 0 0 auto; width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; color: var(--primary-dark); background: var(--accent); font-weight: 900; }
+.quick-card > .quick-card-icon { position: relative; overflow: hidden; font-size: 0; line-height: 0; }
+.quick-card > .quick-card-icon::before { display: block; font-size: 25px; line-height: 1; }
+.quick-card > .quick-card-icon.icon-catalog::before,
+.quick-card > .quick-card-icon.icon-books::before,
+.quick-card > .quick-card-icon.icon-library::before { content: "📚"; }
+.quick-card > .quick-card-icon.icon-shelf::before { content: "🗄"; }
+.quick-card > .quick-card-icon.icon-placement::before { content: "🗃"; }
+.quick-card > .quick-card-icon.icon-loan-add::before { content: "📝"; }
+.quick-card > .quick-card-icon.icon-loans::before { content: "🔄"; }
+.quick-card > .quick-card-icon.icon-return::before { content: "↩"; }
+.quick-card > .quick-card-icon.icon-reserve::before { content: "🔖"; }
+.quick-card > .quick-card-icon.icon-online::before { content: "🌐"; }
+.quick-card > .quick-card-icon.icon-message::before { content: "💬"; }
+.quick-card > .quick-card-icon.icon-add-item::before { content: "➕"; }
+.quick-card > .quick-card-icon.icon-items::before,
+.quick-card > .quick-card-icon.icon-inventory::before { content: "📦"; }
+.quick-card > .quick-card-icon.icon-opname::before { content: "📋"; }
+.quick-card > .quick-card-icon.icon-maintenance::before { content: "🛠"; }
+.quick-card > .quick-card-icon.icon-disposal::before { content: "🗑"; }
+.quick-card > .quick-card-icon.icon-report::before { content: "⚠"; }
 .quick-card strong { display: block; margin-bottom: 6px; }
 .quick-card small { display: block; color: var(--muted); line-height: 1.5; }
 
@@ -2927,6 +2947,10 @@ th, td { padding: 12px 18px; }
         font-size: 23px;
         line-height: 1;
         letter-spacing: -.035em;
+    }
+
+    .app-page .quick-card > .quick-card-icon::before {
+        font-size: 30px;
     }
 
     .app-page .quick-card > div {

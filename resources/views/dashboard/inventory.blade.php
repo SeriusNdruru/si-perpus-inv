@@ -34,42 +34,42 @@
 
     <div class="quick-grid">
         <a class="quick-card" href="{{ route('inventory.items.create') }}">
-            <span>+</span>
+            <span class="quick-card-icon icon-add-item" aria-hidden="true"></span>
             <div>
                 <strong>Tambah barang</strong>
                 <small>Masukkan barang atau buku baru beserta stok awalnya.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('inventory.items.index') }}">
-            <span>DB</span>
+            <span class="quick-card-icon icon-items" aria-hidden="true"></span>
             <div>
                 <strong>Daftar barang</strong>
                 <small>Lihat, cari, edit, dan periksa detail inventaris.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('inventory.stock-opnames.index') }}">
-            <span>SO</span>
+            <span class="quick-card-icon icon-opname" aria-hidden="true"></span>
             <div>
                 <strong>Stock opname</strong>
                 <small>Bandingkan data sistem dengan kondisi fisik pada setiap lokasi.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('inventory.maintenance-records.index') }}">
-            <span>MT</span>
+            <span class="quick-card-icon icon-maintenance" aria-hidden="true"></span>
             <div>
                 <strong>Pemeliharaan aset</strong>
                 <small>Catat kerusakan, proses perbaikan, biaya, dan kondisi akhir aset.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('inventory.disposals.index') }}">
-            <span>HP</span>
+            <span class="quick-card-icon icon-disposal" aria-hidden="true"></span>
             <div>
                 <strong>Penghapusan aset</strong>
                 <small>Ajukan, setujui, dan laksanakan penghapusan aset secara tercatat.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('inventory.public-damage-reports.index') }}">
-            <span>LP</span>
+            <span class="quick-card-icon icon-report" aria-hidden="true"></span>
             <div>
                 <strong>Laporan kerusakan publik</strong>
                 <small>Periksa laporan barang atau buku rusak yang dikirim tanpa login.</small>

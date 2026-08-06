@@ -24,14 +24,14 @@
 
     <div class="quick-grid">
         <a class="quick-card" href="{{ route('dashboard.inventory') }}">
-            <span>IN</span>
+            <span class="quick-card-icon icon-inventory" aria-hidden="true"></span>
             <div>
                 <strong>Area Admin Inventaris</strong>
                 <small>Barang, aset, stok, kategori, satuan, supplier, dan lokasi.</small>
             </div>
         </a>
         <a class="quick-card" href="{{ route('dashboard.library') }}">
-            <span>LB</span>
+            <span class="quick-card-icon icon-library" aria-hidden="true"></span>
             <div>
                 <strong>Area Admin Perpustakaan</strong>
                 <small>Katalog buku, rak, anggota, peminjaman, dan pengembalian.</small>
