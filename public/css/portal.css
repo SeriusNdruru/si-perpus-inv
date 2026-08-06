@@ -2977,3 +2977,69 @@ body.member-photo-preview-open {
         font-size: 12px;
     }
 }
+
+
+/* Tahap 120: ikon sidebar siswa pada desktop dan mobile. */
+.member-page .member-nav a[data-member-icon] {
+    justify-content: flex-start;
+    text-align: left;
+}
+
+.member-page .member-nav a[data-member-icon]::before,
+.member-page .member-sidebar-footer [data-member-icon]::before {
+    flex: 0 0 22px;
+    width: 22px;
+    height: 22px;
+    display: grid;
+    place-items: center;
+    color: currentColor;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.member-page .member-nav a[data-member-icon="dashboard"]::before { content: "🏠"; }
+.member-page .member-nav a[data-member-icon="catalog"]::before { content: "📚"; }
+.member-page .member-nav a[data-member-icon="cart"]::before { content: "🛒"; }
+.member-page .member-nav a[data-member-icon="request"]::before { content: "📝"; }
+.member-page .member-nav a[data-member-icon="activity"]::before { content: "📊"; }
+.member-page .member-nav a[data-member-icon="history"]::before { content: "🔄"; }
+.member-page .member-nav a[data-member-icon="fines"]::before { content: "💰"; }
+.member-page .member-nav a[data-member-icon="notifications"]::before { content: "🔔"; }
+.member-page .member-sidebar-footer [data-member-icon="profile"]::before { content: "👤"; }
+.member-page .member-sidebar-footer [data-member-icon="logout"]::before { content: "🚪"; }
+
+.member-page .member-nav a[data-member-icon] > span {
+    margin-left: auto;
+}
+
+.member-page .member-sidebar-footer [data-member-icon] {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    text-align: left;
+}
+
+@media screen and (max-width: 1000px) {
+    .member-page .member-nav a[data-member-icon] {
+        justify-content: flex-start;
+        gap: 8px;
+        text-align: left;
+    }
+
+    .member-page .member-nav a[data-member-icon]::before {
+        flex-basis: 20px;
+        width: 20px;
+        height: 20px;
+        font-size: 15px;
+    }
+
+    .member-page .member-nav a[data-member-icon] > span {
+        margin-left: auto;
+    }
+
+    .member-page .member-sidebar-footer [data-member-icon] {
+        justify-content: flex-start;
+        text-align: left;
+    }
+}

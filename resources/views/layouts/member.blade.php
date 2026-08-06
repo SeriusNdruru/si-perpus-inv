@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=116">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=120">
 </head>
 <body class="member-page @yield('body-class')">
     @php
@@ -44,27 +44,27 @@
 
             <div id="member-sidebar-menu" class="member-sidebar-menu" data-member-sidebar-menu>
                 <nav class="member-nav">
-                    <a href="{{ route('dashboard.member') }}" class="{{ request()->routeIs('dashboard.member') ? 'active' : '' }}">Dashboard</a>
-                    <a href="{{ route('member.books.index') }}" class="{{ request()->routeIs('member.books.index') ? 'active' : '' }}">Katalog buku</a>
-                    <a href="{{ route('member.books.cart') }}" class="{{ request()->routeIs('member.books.cart') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard.member') }}" data-member-icon="dashboard" class="{{ request()->routeIs('dashboard.member') ? 'active' : '' }}">Dashboard</a>
+                    <a href="{{ route('member.books.index') }}" data-member-icon="catalog" class="{{ request()->routeIs('member.books.index') ? 'active' : '' }}">Katalog buku</a>
+                    <a href="{{ route('member.books.cart') }}" data-member-icon="cart" class="{{ request()->routeIs('member.books.cart') ? 'active' : '' }}">
                         Keranjang pengajuan
                         @if ($cartCount > 0)<span>{{ $cartCount }}</span>@endif
                     </a>
-                    <a href="{{ route('member.loan-requests.index') }}" class="{{ request()->routeIs('member.loan-requests.*') ? 'active' : '' }}">Pengajuan peminjaman</a>
-                    <a href="{{ route('member.activity.index') }}" class="{{ request()->routeIs('member.activity.*', 'member.history.visits', 'member.history.books') ? 'active' : '' }}">Aktivitas saya</a>
-                    <a href="{{ route('member.history.loans') }}" class="{{ request()->routeIs('member.history.loans', 'member.history.loan-detail') ? 'active' : '' }}">Riwayat peminjaman</a>
-                    <a href="{{ route('member.history.fines') }}" class="{{ request()->routeIs('member.history.fines') ? 'active' : '' }}">Denda</a>
-                    <a href="{{ route('member.notifications.index') }}" class="{{ request()->routeIs('member.notifications.*') ? 'active' : '' }}">
+                    <a href="{{ route('member.loan-requests.index') }}" data-member-icon="request" class="{{ request()->routeIs('member.loan-requests.*') ? 'active' : '' }}">Pengajuan peminjaman</a>
+                    <a href="{{ route('member.activity.index') }}" data-member-icon="activity" class="{{ request()->routeIs('member.activity.*', 'member.history.visits', 'member.history.books') ? 'active' : '' }}">Aktivitas saya</a>
+                    <a href="{{ route('member.history.loans') }}" data-member-icon="history" class="{{ request()->routeIs('member.history.loans', 'member.history.loan-detail') ? 'active' : '' }}">Riwayat peminjaman</a>
+                    <a href="{{ route('member.history.fines') }}" data-member-icon="fines" class="{{ request()->routeIs('member.history.fines') ? 'active' : '' }}">Denda</a>
+                    <a href="{{ route('member.notifications.index') }}" data-member-icon="notifications" class="{{ request()->routeIs('member.notifications.*') ? 'active' : '' }}">
                         Notifikasi
                         @if ($unreadCount > 0)<span>{{ $unreadCount }}</span>@endif
                     </a>
                 </nav>
 
                 <div class="member-sidebar-footer">
-                    <a href="{{ route('member.profile.show') }}" class="member-mobile-profile-link {{ request()->routeIs('member.profile.*') ? 'active' : '' }}">Profil</a>
+                    <a href="{{ route('member.profile.show') }}" data-member-icon="profile" class="member-mobile-profile-link {{ request()->routeIs('member.profile.*') ? 'active' : '' }}">Profil</a>
                     <form method="POST" action="{{ route('student.logout') }}">
                         @csrf
-                        <button type="submit">Keluar</button>
+                        <button type="submit" data-member-icon="logout">Keluar</button>
                     </form>
                 </div>
             </div>
