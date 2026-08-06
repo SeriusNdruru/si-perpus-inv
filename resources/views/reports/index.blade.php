@@ -41,37 +41,21 @@
                 <span class="report-card-code">RWP</span>
                 <div>
                     <strong>Riwayat Peminjaman</strong>
-                    <p>Daftar setiap transaksi peminjaman berdasarkan periode, status, dan jenis anggota.</p>
+                    <p>Riwayat transaksi dan peringkat siswa berdasarkan jumlah peminjaman tersedia dalam satu filter.</p>
                     <small>{{ number_format((int) $summary['active_loans']) }} eksemplar belum kembali</small>
                 </div>
             </a>
 
-            <a href="{{ route('reports.loan-records') }}" class="report-link-card">
-                <span class="report-card-code">PRP</span>
-                <div>
-                    <strong>Peringkat Peminjaman Siswa</strong>
-                    <p>Rangkuman jumlah peminjaman setiap siswa yang diurutkan dari terbanyak.</p>
-                    <small>Dapat difilter dan diunduh sebagai Excel</small>
-                </div>
-            </a>
 
             <a href="{{ route('reports.library-visits') }}" class="report-link-card">
                 <span class="report-card-code">RWK</span>
                 <div>
                     <strong>Riwayat Kunjungan Siswa</strong>
-                    <p>Daftar setiap kedatangan siswa yang dicatat oleh Admin Perpustakaan.</p>
+                    <p>Riwayat kedatangan dan peringkat siswa berdasarkan jumlah kunjungan tersedia dalam satu filter.</p>
                     <small>Dapat difilter dan diunduh sebagai Excel</small>
                 </div>
             </a>
 
-            <a href="{{ route('reports.frequent-visitors') }}" class="report-link-card">
-                <span class="report-card-code">PRK</span>
-                <div>
-                    <strong>Peringkat Kunjungan Siswa</strong>
-                    <p>Rangkuman jumlah kunjungan setiap siswa yang diurutkan dari terbanyak.</p>
-                    <small>Dapat difilter dan diunduh sebagai Excel</small>
-                </div>
-            </a>
 
             <a href="{{ route('reports.fines') }}" class="report-link-card">
                 <span class="report-card-code">DND</span>

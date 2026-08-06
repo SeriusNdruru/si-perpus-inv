@@ -9,6 +9,7 @@ use App\Models\SystemSetting;
 use App\Services\Reports\SimpleExcelReportService;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -19,8 +20,18 @@ class LibraryActivityReportController extends Controller
     {
     }
 
-    public function visits(Request $request): View
+    public function visits(Request $request): View|RedirectResponse
     {
+        if ($request->input('report_mode') === 'ranking') {
+            return redirect()->route('reports.frequent-visitors', array_filter([
+                'report_mode' => 'ranking',
+                'search' => $request->input('search'),
+                'class' => $request->input('class'),
+                'date_from' => $request->input('date_from'),
+                'date_to' => $request->input('date_to'),
+            ], fn ($value) => $value !== null && $value !== ''));
+        }
+
         $filters = $this->visitFilters($request);
         $query = $this->visitQuery($filters);
 
@@ -43,8 +54,18 @@ class LibraryActivityReportController extends Controller
         ]);
     }
 
-    public function frequentVisitors(Request $request): View
+    public function frequentVisitors(Request $request): View|RedirectResponse
     {
+        if ($request->input('report_mode') === 'history') {
+            return redirect()->route('reports.library-visits', array_filter([
+                'report_mode' => 'history',
+                'search' => $request->input('search'),
+                'class' => $request->input('class'),
+                'date_from' => $request->input('date_from'),
+                'date_to' => $request->input('date_to'),
+            ], fn ($value) => $value !== null && $value !== ''));
+        }
+
         $filters = $this->visitFilters($request);
         $query = $this->rankingQuery($filters);
         $ranking = $query->paginate(20)->withQueryString();
@@ -56,8 +77,17 @@ class LibraryActivityReportController extends Controller
         ]);
     }
 
-    public function loanRecords(Request $request): View
+    public function loanRecords(Request $request): View|RedirectResponse
     {
+        if ($request->input('report_mode') === 'history') {
+            return redirect()->route('reports.loans', array_filter([
+                'report_mode' => 'history',
+                'search' => $request->input('search'),
+                'date_from' => $request->input('date_from'),
+                'date_to' => $request->input('date_to'),
+            ], fn ($value) => $value !== null && $value !== ''));
+        }
+
         $filters = $this->loanFilters($request);
         $query = $this->studentLoanHistoryQuery($filters);
         $summaryQuery = DB::query()->fromSub(clone $query, 'student_loan_history');

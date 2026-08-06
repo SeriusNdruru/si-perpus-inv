@@ -533,18 +533,20 @@ tbody tr:last-child td { border-bottom: 0; }
 .filter-bar-report { padding-bottom: 20px; }
 .inventory-report-filter, .collection-report-filter { grid-template-columns: minmax(260px, 1.4fr) repeat(4, minmax(145px, .65fr)) auto; }
 .transaction-report-filter { grid-template-columns: minmax(280px, 1.45fr) repeat(4, minmax(145px, .62fr)) auto; }
+.transaction-report-filter-with-mode { grid-template-columns: minmax(170px, .72fr) minmax(260px, 1.35fr) repeat(4, minmax(135px, .58fr)) auto; }
+.visit-report-filter { grid-template-columns: minmax(170px, .72fr) minmax(250px, 1.35fr) repeat(3, minmax(145px, .62fr)) auto; }
 .report-print-meta { display: none; padding: 0 24px 14px; color: var(--muted); font-size: 11px; }
 
 @media (max-width: 1250px) {
     .report-stat-grid-five { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .inventory-report-filter, .collection-report-filter, .transaction-report-filter { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .inventory-report-filter .filter-search, .collection-report-filter .filter-search, .transaction-report-filter .filter-search { grid-column: 1 / -1; }
+    .inventory-report-filter, .collection-report-filter, .transaction-report-filter, .transaction-report-filter-with-mode, .visit-report-filter { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .inventory-report-filter .filter-search, .collection-report-filter .filter-search, .transaction-report-filter .filter-search, .transaction-report-filter-with-mode .filter-search, .visit-report-filter .filter-search { grid-column: 1 / -1; }
 }
 
 @media (max-width: 900px) {
     .report-card-grid { grid-template-columns: 1fr; }
     .report-stat-grid, .report-stat-grid-four, .report-stat-grid-five { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .inventory-report-filter, .collection-report-filter, .transaction-report-filter { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .inventory-report-filter, .collection-report-filter, .transaction-report-filter, .transaction-report-filter-with-mode, .visit-report-filter { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .panel-header-wrap { align-items: stretch; }
     .report-actions { justify-content: flex-start; }
 }
@@ -553,8 +555,8 @@ tbody tr:last-child td { border-bottom: 0; }
     .report-tabs { flex-wrap: nowrap; overflow-x: auto; }
     .report-tabs a { flex: 0 0 auto; }
     .report-stat-grid, .report-stat-grid-four, .report-stat-grid-five { grid-template-columns: 1fr; }
-    .inventory-report-filter, .collection-report-filter, .transaction-report-filter { grid-template-columns: 1fr; }
-    .inventory-report-filter .filter-search, .collection-report-filter .filter-search, .transaction-report-filter .filter-search { grid-column: auto; }
+    .inventory-report-filter, .collection-report-filter, .transaction-report-filter, .transaction-report-filter-with-mode, .visit-report-filter { grid-template-columns: 1fr; }
+    .inventory-report-filter .filter-search, .collection-report-filter .filter-search, .transaction-report-filter .filter-search, .transaction-report-filter-with-mode .filter-search, .visit-report-filter .filter-search { grid-column: auto; }
     .report-actions { flex-direction: column; }
     .report-actions > * { width: 100%; }
 }

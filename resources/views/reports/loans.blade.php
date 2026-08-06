@@ -20,7 +20,8 @@
             <div class="report-actions no-print"><button type="button" class="button-secondary" onclick="window.print()">Cetak</button><a href="{{ route('reports.loans.excel', request()->query()) }}" class="button-primary button-link">Unduh Excel</a></div>
         </div>
 
-        <form method="GET" action="{{ route('reports.loans') }}" class="filter-bar filter-bar-report transaction-report-filter no-print">
+        <form method="GET" action="{{ route('reports.loans') }}" class="filter-bar filter-bar-report transaction-report-filter transaction-report-filter-with-mode no-print">
+            <div class="filter-field"><label for="report_mode">Tampilan laporan</label><select id="report_mode" name="report_mode"><option value="history" selected>Riwayat Peminjaman</option><option value="ranking">Peringkat Peminjaman</option></select></div>
             <div class="filter-field filter-search"><label for="search">Pencarian</label><input id="search" name="search" type="search" value="{{ request('search') }}" placeholder="Kode transaksi, kode anggota, atau nama anggota"></div>
             <div class="filter-field"><label for="status">Status</label><select id="status" name="status"><option value="">Semua status</option><option value="active" @selected(request('status') === 'active')>Aktif</option><option value="overdue" @selected(request('status') === 'overdue')>Terlambat</option><option value="completed" @selected(request('status') === 'completed')>Selesai</option><option value="cancelled" @selected(request('status') === 'cancelled')>Dibatalkan</option></select></div>
             <div class="filter-field"><label for="member_type">Jenis anggota</label><select id="member_type" name="member_type"><option value="">Semua jenis</option>@foreach (\App\Models\Member::typeOptions() as $typeValue => $typeLabel)<option value="{{ $typeValue }}" @selected(request('member_type') === $typeValue)>{{ $typeLabel }}</option>@endforeach</select></div>

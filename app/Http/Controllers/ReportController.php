@@ -17,6 +17,7 @@ use App\Services\Reports\SimpleExcelReportService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ReportController extends Controller
@@ -215,8 +216,17 @@ class ReportController extends Controller
         );
     }
 
-    public function loans(Request $request): View
+    public function loans(Request $request): View|RedirectResponse
     {
+        if ($request->input('report_mode') === 'ranking') {
+            return redirect()->route('reports.loan-records', array_filter([
+                'report_mode' => 'ranking',
+                'search' => $request->input('search'),
+                'date_from' => $request->input('date_from'),
+                'date_to' => $request->input('date_to'),
+            ], fn ($value) => $value !== null && $value !== ''));
+        }
+
         $filters = $this->transactionFilters($request, ['active', 'completed', 'overdue', 'cancelled']);
         $baseQuery = $this->loanBaseQuery($filters);
         $loanIds = (clone $baseQuery)->select('loans.id');

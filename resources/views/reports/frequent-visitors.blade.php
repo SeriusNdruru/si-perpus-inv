@@ -14,12 +14,13 @@
         </div>
     </div>
 
-    <form method="GET" action="{{ route('reports.frequent-visitors') }}" class="filter-bar filter-bar-report no-print">
+    <form method="GET" action="{{ route('reports.frequent-visitors') }}" class="filter-bar filter-bar-report visit-report-filter no-print">
+        <div class="filter-field"><label for="report_mode">Tampilan laporan</label><select id="report_mode" name="report_mode"><option value="history">Riwayat Kunjungan</option><option value="ranking" selected>Peringkat Kunjungan</option></select></div>
         <div class="filter-field filter-search"><label for="search">Pencarian</label><input id="search" name="search" type="search" value="{{ $filters['search'] ?? '' }}" placeholder="Nama, kode anggota, atau NIS/NISN"></div>
         <div class="filter-field"><label for="class">Kelas</label><select id="class" name="class"><option value="">Semua kelas</option>@foreach ($classes as $class)<option value="{{ $class }}" @selected(($filters['class'] ?? '') === $class)>{{ $class }}</option>@endforeach</select></div>
         <div class="filter-field"><label for="date_from">Dari tanggal</label><input id="date_from" name="date_from" type="date" value="{{ $filters['date_from'] ?? '' }}"></div>
         <div class="filter-field"><label for="date_to">Sampai tanggal</label><input id="date_to" name="date_to" type="date" value="{{ $filters['date_to'] ?? '' }}"></div>
-        <div class="filter-actions"><button type="submit" class="button-primary">Terapkan</button><a href="{{ route('reports.frequent-visitors') }}" class="button-secondary">Reset</a></div>
+        <div class="filter-actions"><button type="submit" class="button-primary">Terapkan</button><a href="{{ route('reports.frequent-visitors', ['report_mode' => 'ranking']) }}" class="button-secondary">Reset</a></div>
     </form>
 
     <div class="table-wrap">

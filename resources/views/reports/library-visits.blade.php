@@ -19,7 +19,8 @@
         </div>
     </div>
 
-    <form method="GET" action="{{ route('reports.library-visits') }}" class="filter-bar filter-bar-report no-print">
+    <form method="GET" action="{{ route('reports.library-visits') }}" class="filter-bar filter-bar-report visit-report-filter no-print">
+        <div class="filter-field"><label for="report_mode">Tampilan laporan</label><select id="report_mode" name="report_mode"><option value="history" selected>Riwayat Kunjungan</option><option value="ranking">Peringkat Kunjungan</option></select></div>
         <div class="filter-field filter-search"><label for="search">Pencarian</label><input id="search" name="search" type="search" value="{{ $filters['search'] ?? '' }}" placeholder="Nama, kode anggota, atau NIS/NISN"></div>
         <div class="filter-field"><label for="class">Kelas</label><select id="class" name="class"><option value="">Semua kelas</option>@foreach ($classes as $class)<option value="{{ $class }}" @selected(($filters['class'] ?? '') === $class)>{{ $class }}</option>@endforeach</select></div>
         <div class="filter-field"><label for="date_from">Dari tanggal</label><input id="date_from" name="date_from" type="date" value="{{ $filters['date_from'] ?? '' }}"></div>

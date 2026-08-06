@@ -24,7 +24,14 @@
         </div>
     </div>
 
-    <form method="GET" action="{{ route('reports.loan-records') }}" class="filter-bar filter-bar-report no-print">
+    <form method="GET" action="{{ route('reports.loan-records') }}" class="filter-bar filter-bar-report visit-report-filter no-print">
+        <div class="filter-field">
+            <label for="report_mode">Tampilan laporan</label>
+            <select id="report_mode" name="report_mode">
+                <option value="history">Riwayat Peminjaman</option>
+                <option value="ranking" selected>Peringkat Peminjaman</option>
+            </select>
+        </div>
         <div class="filter-field filter-search">
             <label for="search">Pencarian siswa</label>
             <input id="search" name="search" type="search" value="{{ $filters['search'] ?? '' }}" placeholder="Nama, kode anggota, atau NIS/NISN">
@@ -48,7 +55,7 @@
         </div>
         <div class="filter-actions">
             <button type="submit" class="button-primary">Terapkan</button>
-            <a href="{{ route('reports.loan-records') }}" class="button-secondary">Reset</a>
+            <a href="{{ route('reports.loan-records', ['report_mode' => 'ranking']) }}" class="button-secondary">Reset</a>
         </div>
     </form>
 
