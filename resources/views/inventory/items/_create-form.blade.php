@@ -273,6 +273,27 @@
             </select>
         </div>
 
+        <div
+            class="form-field"
+            id="acquisition-year-field"
+            @if (old('acquisition_source', 'purchase') !== 'bos') hidden @endif
+        >
+            <label for="acquisition_year">Tahun BOS <span>*</span></label>
+            <input
+                id="acquisition_year"
+                name="acquisition_year"
+                type="number"
+                inputmode="numeric"
+                min="2000"
+                max="{{ now()->year + 1 }}"
+                step="1"
+                value="{{ old('acquisition_year', now()->year) }}"
+                placeholder="Contoh: 2024"
+                @if (old('acquisition_source') === 'bos') required @endif
+            >
+            <small>Hasil sumber perolehan akan ditampilkan, misalnya BOS 2024.</small>
+        </div>
+
         <div class="form-field">
             <label for="supplier_id">Supplier</label>
             <select id="supplier_id" name="supplier_id">

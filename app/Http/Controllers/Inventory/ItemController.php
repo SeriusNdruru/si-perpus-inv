@@ -59,6 +59,7 @@ class ItemController extends Controller
         'donation' => 'Donasi',
         'grant' => 'Hibah',
         'transfer' => 'Transfer',
+        'bos' => 'BOS',
         'other' => 'Lainnya',
     ];
 
@@ -178,6 +179,7 @@ class ItemController extends Controller
                             'asset_status' => 'available',
                             'acquisition_date' => $data['acquisition_date'] ?? null,
                             'acquisition_source' => $data['acquisition_source'],
+                            'acquisition_year' => $data['acquisition_source'] === 'bos' ? $data['acquisition_year'] : null,
                             'acquisition_price' => $data['acquisition_price'],
                             'supplier_id' => $data['supplier_id'],
                             'current_location_id' => $data['location_id'],
@@ -663,6 +665,7 @@ class ItemController extends Controller
                 'asset_status' => 'available',
                 'acquisition_date' => $template?->acquisition_date,
                 'acquisition_source' => $template?->acquisition_source ?: 'other',
+                'acquisition_year' => $template?->acquisition_year,
                 'acquisition_price' => $template?->acquisition_price,
                 'supplier_id' => $template?->supplier_id,
                 'current_location_id' => $template?->current_location_id,

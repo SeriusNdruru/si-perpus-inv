@@ -40,6 +40,7 @@ class StoreItemRequest extends FormRequest
             'tracking_type' => self::TRACKING_TYPE_BY_ITEM_TYPE[$itemType] ?? null,
             'category_id' => $this->filled('category_id') ? $this->input('category_id') : null,
             'supplier_id' => $this->filled('supplier_id') ? $this->input('supplier_id') : null,
+            'acquisition_year' => $this->filled('acquisition_year') ? $this->input('acquisition_year') : null,
             'acquisition_price' => $this->filled('acquisition_price') ? $this->input('acquisition_price') : null,
             'minimum_stock' => $this->filled('minimum_stock') ? $this->input('minimum_stock') : 0,
         ]);
@@ -75,7 +76,8 @@ class StoreItemRequest extends FormRequest
             'minimum_stock' => ['required', 'numeric', 'min:0', 'max:9999999999999.99'],
             'quantity' => ['required', 'numeric', 'gt:0', 'max:9999999999999.99'],
             'acquisition_date' => ['nullable', 'date'],
-            'acquisition_source' => ['required', Rule::in(['purchase', 'donation', 'grant', 'transfer', 'other'])],
+            'acquisition_source' => ['required', Rule::in(['purchase', 'donation', 'grant', 'transfer', 'bos', 'other'])],
+            'acquisition_year' => ['nullable', 'required_if:acquisition_source,bos', 'integer', 'digits:4', 'min:2000', 'max:'.(now()->year + 1)],
             'acquisition_price' => ['nullable', 'numeric', 'min:0', 'max:9999999999999.99'],
             'supplier_id' => [
                 'nullable',
@@ -101,6 +103,11 @@ class StoreItemRequest extends FormRequest
             'item_image.image' => 'File foto harus berupa gambar.',
             'item_image.mimes' => 'Foto hanya mendukung JPG, JPEG, PNG, atau WEBP.',
             'item_image.max' => 'Ukuran foto maksimal 3 MB.',
+            'acquisition_year.required_if' => 'Tahun BOS wajib diisi ketika sumber perolehan BOS dipilih.',
+            'acquisition_year.integer' => 'Tahun BOS harus berupa angka tahun.',
+            'acquisition_year.digits' => 'Tahun BOS harus terdiri dari 4 angka.',
+            'acquisition_year.min' => 'Tahun BOS minimal 2000.',
+            'acquisition_year.max' => 'Tahun BOS tidak boleh melebihi tahun berikutnya.',
         ];
     }
 

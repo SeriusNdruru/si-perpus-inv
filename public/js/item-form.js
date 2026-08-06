@@ -15,6 +15,9 @@
     const trackingHelp = document.getElementById('tracking-help');
     const quantityHelp = document.getElementById('quantity-help');
     const bookNotice = document.getElementById('book-notice');
+    const acquisitionSource = document.getElementById('acquisition_source');
+    const acquisitionYearField = document.getElementById('acquisition-year-field');
+    const acquisitionYear = document.getElementById('acquisition_year');
     let nextItemCodes = {};
 
     const trackingByItemType = {
@@ -38,6 +41,25 @@
             nextItemCodes = {};
         }
     }
+
+
+    const syncAcquisitionSource = () => {
+        const isBos = acquisitionSource?.value === 'bos';
+
+        if (acquisitionYearField) {
+            acquisitionYearField.hidden = !isBos;
+        }
+
+        if (acquisitionYear) {
+            acquisitionYear.required = isBos;
+
+            if (!isBos) {
+                acquisitionYear.value = '';
+            } else if (acquisitionYear.value === '') {
+                acquisitionYear.value = String(new Date().getFullYear());
+            }
+        }
+    };
 
     const syncFields = () => {
         const selectedItemType = itemType?.value ?? '';
@@ -84,5 +106,7 @@
     };
 
     itemType?.addEventListener('change', syncFields);
+    acquisitionSource?.addEventListener('change', syncAcquisitionSource);
     syncFields();
+    syncAcquisitionSource();
 })();

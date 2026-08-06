@@ -166,6 +166,9 @@
                                 <td><span class="badge badge-neutral">{{ str_replace('_', ' ', ucfirst($asset->asset_status)) }}</span></td>
                                 <td>
                                     <div class="table-primary">{{ $asset->acquisition_date?->format('d-m-Y') ?? '-' }}</div>
+                                    <div class="table-secondary">
+                                        {{ $acquisitionSources[$asset->acquisition_source] ?? ucfirst((string) $asset->acquisition_source) }}{{ $asset->acquisition_source === 'bos' && $asset->acquisition_year ? ' '.$asset->acquisition_year : '' }}
+                                    </div>
                                     <div class="table-secondary">{{ $asset->supplier?->supplier_name ?? 'Tanpa supplier' }}</div>
                                 </td>
                                 <td>

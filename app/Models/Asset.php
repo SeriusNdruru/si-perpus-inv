@@ -15,6 +15,7 @@ class Asset extends Model
     {
         return [
             'acquisition_date' => 'date',
+            'acquisition_year' => 'integer',
             'acquisition_price' => 'decimal:2',
         ];
     }

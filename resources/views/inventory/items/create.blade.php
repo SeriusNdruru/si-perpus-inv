@@ -18,6 +18,6 @@
         </form>
     </section>
 
-    <script src="{{ asset('js/item-form.js') }}" defer></script>
+    <script src="{{ asset('js/item-form.js') }}?v=121" defer></script>
     <script src="{{ asset('js/item-image-preview.js') }}" defer></script>
 @endsection
