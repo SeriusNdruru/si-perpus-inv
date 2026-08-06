@@ -2267,3 +2267,263 @@ body.member-photo-preview-open {
         border-radius: 11px;
     }
 }
+
+/* Tahap 99: rapikan dashboard siswa pada tablet dan ponsel.
+   Navigasi siswa dipindahkan ke bagian atas tepat di bawah identitas sekolah. */
+@media screen and (max-width: 1000px) {
+    body.member-page {
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    .member-page .member-shell {
+        display: block !important;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .member-page .member-sidebar {
+        position: relative !important;
+        inset: auto !important;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        box-sizing: border-box;
+        padding: 15px 16px 13px;
+    }
+
+    .member-page .member-brand {
+        width: 100%;
+        min-width: 0;
+        padding: 0;
+    }
+
+    .member-page .member-brand > div {
+        min-width: 0;
+    }
+
+    .member-page .member-brand strong,
+    .member-page .member-brand small {
+        overflow-wrap: anywhere;
+    }
+
+    .member-page .member-nav {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 8px;
+        width: 100%;
+        margin-top: 14px;
+        overflow: visible;
+    }
+
+    .member-page .member-nav a {
+        min-width: 0;
+        min-height: 44px;
+        justify-content: center;
+        padding: 9px 10px;
+        text-align: center;
+        line-height: 1.28;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .member-page .member-nav a span {
+        flex: 0 0 auto;
+        margin-left: 4px;
+    }
+
+    .member-page .member-sidebar-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 11px;
+        padding-top: 10px;
+    }
+
+    .member-page .member-sidebar-footer form {
+        width: auto;
+    }
+
+    .member-page .member-sidebar-footer button {
+        width: auto;
+        min-height: 40px;
+        padding: 8px 14px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .member-page .member-main,
+    .member-page .member-content,
+    .member-page .member-welcome,
+    .member-page .member-panel,
+    .member-page .member-table-wrap {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .member-page .member-topbar {
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+
+    .member-page .member-topbar > div,
+    .member-page .member-welcome > div,
+    .member-page .member-panel-heading > div {
+        min-width: 0;
+    }
+
+    .member-page .member-topbar h1,
+    .member-page .member-welcome h2,
+    .member-page .member-welcome p,
+    .member-page .member-card-visual strong,
+    .member-page .member-panel-heading h2 {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .member-page .member-welcome,
+    .member-page .member-dashboard-grid,
+    .member-page .member-detail-grid,
+    .member-page .member-profile-grid {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .member-page .member-card-visual {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .member-page .member-stat-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 680px) {
+    .member-page .member-sidebar {
+        padding: 13px 12px 11px;
+    }
+
+    .member-page .member-brand {
+        gap: 10px;
+    }
+
+    .member-page .member-brand > span {
+        flex: 0 0 44px;
+        width: 44px;
+        height: 44px;
+    }
+
+    .member-page .member-brand strong {
+        font-size: 16px;
+        line-height: 1.25;
+    }
+
+    .member-page .member-brand small {
+        font-size: 11px;
+    }
+
+    .member-page .member-nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 7px;
+        margin-top: 12px;
+    }
+
+    .member-page .member-nav a {
+        min-height: 46px;
+        padding: 9px 8px;
+        font-size: 12px;
+    }
+
+    .member-page .member-sidebar-footer {
+        margin-top: 9px;
+        padding-top: 9px;
+    }
+
+    .member-page .member-topbar {
+        min-height: 0;
+        align-items: flex-start;
+        padding: 14px 13px;
+    }
+
+    .member-page .member-topbar h1 {
+        margin-top: 4px;
+        font-size: clamp(24px, 7.2vw, 30px);
+        line-height: 1.1;
+    }
+
+    .member-page .member-content {
+        padding: 13px 11px 26px;
+    }
+
+    .member-page .member-welcome {
+        gap: 15px;
+        padding: 18px;
+        border-radius: 17px;
+    }
+
+    .member-page .member-welcome h2 {
+        margin: 8px 0;
+        font-size: clamp(28px, 8vw, 34px);
+        line-height: 1.14;
+    }
+
+    .member-page .member-welcome p {
+        font-size: 13px;
+        line-height: 1.55;
+    }
+
+    .member-page .member-welcome .member-button {
+        margin-top: 6px;
+    }
+
+    .member-page .member-card-visual {
+        padding: 16px;
+        border-radius: 15px;
+    }
+
+    .member-page .member-card-visual strong {
+        margin-top: 15px;
+        font-size: 21px;
+    }
+
+    .member-page .member-stat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+        margin: 12px 0;
+    }
+
+    .member-page .member-stat-grid article {
+        min-width: 0;
+        padding: 12px;
+    }
+
+    .member-page .member-stat-grid span {
+        overflow-wrap: anywhere;
+    }
+
+    .member-page .member-panel-heading {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .member-page .member-panel-heading > a {
+        flex: 0 0 auto;
+    }
+
+    .member-page .member-book-grid,
+    .member-page .member-book-grid-catalog {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media screen and (max-width: 390px) {
+    .member-page .member-nav a {
+        font-size: 11px;
+    }
+
+    .member-page .member-stat-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
