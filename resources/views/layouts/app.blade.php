@@ -54,7 +54,7 @@
                     <a href="{{ route('admin.acceptance-tests.index') }}" class="{{ request()->routeIs('admin.acceptance-tests.*') ? 'active' : '' }}">Uji Akses & Alur</a>
                 @endif
 
-                @if ($isSuperAdmin || $isInventoryAdmin)
+                @if ($isInventoryAdmin && ! $isSuperAdmin)
                     <p class="sidebar-section">Master Inventaris</p>
                     <a href="{{ route('categories.index') }}" class="{{ request()->routeIs('categories.*') ? 'active' : '' }}">Kategori</a>
                     <a href="{{ route('units.index') }}" class="{{ request()->routeIs('units.*') ? 'active' : '' }}">Satuan</a>
@@ -84,7 +84,7 @@
                     </a>
                 @endif
 
-                @if ($isSuperAdmin || $isLibraryAdmin)
+                @if ($isLibraryAdmin && ! $isSuperAdmin)
                     <p class="sidebar-section">Perpustakaan</p>
                     <a href="{{ route('library.books.index') }}" class="{{ request()->routeIs('library.books.*') ? 'active' : '' }}">Buku Baru & Katalog</a>
                     <a href="{{ route('library.shelves.index') }}" class="{{ request()->routeIs('library.shelves.*') ? 'active' : '' }}">Rak Perpustakaan</a>
@@ -113,7 +113,7 @@
                     <a href="{{ route('library.contact-messages.index') }}" class="{{ request()->routeIs('library.contact-messages.*') ? 'active' : '' }}">Pesan Kontak</a>
                 @endif
 
-                @if ($isSuperAdmin || $isInventoryAdmin || $isLibraryAdmin || $isManager)
+                @if (! $isSuperAdmin && ($isInventoryAdmin || $isLibraryAdmin || $isManager))
                     <p class="sidebar-section">Informasi</p>
                     <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">Laporan Terpadu</a>
                 @endif
