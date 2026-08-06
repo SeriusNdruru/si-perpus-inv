@@ -2749,12 +2749,9 @@ th, td { padding: 12px 18px; }
         grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
     }
 
-    .app-page .dashboard-stat-count-10 {
-        grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
-    }
-
+    .app-page .dashboard-stat-count-10,
     .app-page .dashboard-stat-count-12 {
-        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
     }
 
     .app-page .dashboard-stat-grid .stat-card {
@@ -2833,5 +2830,35 @@ th, td { padding: 12px 18px; }
         min-height: 37px;
         padding: 2px 3px;
         font-size: 19px;
+    }
+}
+
+/* Tahap 115: maksimal enam box statistik per baris pada dashboard desktop. */
+@media screen and (min-width: 901px) {
+    .app-page .dashboard-stat-count-6,
+    .app-page .dashboard-stat-count-10,
+    .app-page .dashboard-stat-count-12 {
+        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card,
+    .app-page .dashboard-stat-count-12 .stat-card {
+        min-height: 66px;
+        padding: 8px 9px;
+        column-gap: 8px;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card span,
+    .app-page .dashboard-stat-count-12 .stat-card span {
+        font-size: 11px;
+        line-height: 1.18;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card strong,
+    .app-page .dashboard-stat-count-12 .stat-card strong {
+        min-width: 39px;
+        min-height: 43px;
+        padding: 3px 6px;
+        font-size: 25px;
     }
 }
