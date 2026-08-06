@@ -2896,3 +2896,55 @@ th, td { padding: 12px 18px; }
         font-size: 12px;
     }
 }
+
+/* Tahap 117: menu kartu dashboard compact tiga kolom pada desktop. */
+@media screen and (min-width: 901px) {
+    .app-page .quick-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px 18px;
+        margin-top: 24px;
+    }
+
+    .app-page .quick-card {
+        display: grid;
+        grid-template-columns: 64px minmax(0, 1fr);
+        align-items: center;
+        column-gap: 12px;
+        min-width: 0;
+        min-height: 92px;
+        padding: 10px 12px;
+        border-width: 1.5px;
+        border-radius: 14px;
+        box-shadow: none;
+    }
+
+    .app-page .quick-card > span {
+        width: 64px;
+        height: 64px;
+        border: 1.5px solid #b9cbd0;
+        border-radius: 11px;
+        background: #f7fbfb;
+        font-size: 23px;
+        line-height: 1;
+        letter-spacing: -.035em;
+    }
+
+    .app-page .quick-card > div {
+        min-width: 0;
+    }
+
+    .app-page .quick-card strong {
+        margin: 0 0 4px;
+        font-size: clamp(18px, 1.45vw, 23px);
+        line-height: 1.08;
+        letter-spacing: .005em;
+        overflow-wrap: anywhere;
+    }
+
+    .app-page .quick-card small {
+        font-size: 11px;
+        line-height: 1.25;
+        font-weight: 650;
+        overflow-wrap: anywhere;
+    }
+}
