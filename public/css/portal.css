@@ -2489,38 +2489,32 @@ body.member-photo-preview-open {
     }
 
     .member-page .member-stat-grid {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 9px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
         margin: 12px 0;
-        overflow-x: auto;
-        overflow-y: hidden;
-        padding-bottom: 3px;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x proximity;
+        overflow: visible;
+        padding-bottom: 0;
     }
 
     .member-page .member-stat-grid article {
-        flex: 0 0 175px;
-        min-width: 175px;
-        max-width: 175px;
-        min-height: 132px;
-        padding: 12px;
-        scroll-snap-align: start;
-    }
-
-
-    .member-page .member-stat-grid::-webkit-scrollbar {
-        height: 6px;
-    }
-
-    .member-page .member-stat-grid::-webkit-scrollbar-thumb {
-        background: rgba(16, 61, 72, .22);
-        border-radius: 999px;
+        min-width: 0;
+        max-width: none;
+        min-height: 112px;
+        padding: 11px 9px;
     }
 
     .member-page .member-stat-grid span {
+        min-height: 36px;
+        font-size: 10px;
+        line-height: 1.25;
         overflow-wrap: anywhere;
+    }
+
+    .member-page .member-stat-grid strong {
+        margin-top: 5px;
+        font-size: 30px;
+        line-height: 1;
     }
 
     .member-page .member-panel-heading {
@@ -2543,9 +2537,21 @@ body.member-photo-preview-open {
         font-size: 11px;
     }
 
+    .member-page .member-stat-grid {
+        gap: 7px;
+    }
+
     .member-page .member-stat-grid article {
-        flex-basis: 168px;
-        min-width: 168px;
-        max-width: 168px;
+        min-height: 108px;
+        padding: 10px 7px;
+    }
+
+    .member-page .member-stat-grid span {
+        min-height: 34px;
+        font-size: 9.5px;
+    }
+
+    .member-page .member-stat-grid strong {
+        font-size: 28px;
     }
 }

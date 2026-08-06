@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=100">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=101">
 </head>
 <body class="member-page @yield('body-class')">
     @php
