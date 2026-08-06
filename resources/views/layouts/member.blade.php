@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=90">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=91">
 </head>
 <body class="member-page @yield('body-class')">
     @php
@@ -59,7 +59,11 @@
                     <h1>@yield('page-title', 'Dashboard Anggota')</h1>
                 </div>
                 <a href="{{ route('member.profile.show') }}" class="member-profile-chip" title="Buka profil saya">
-                    <span>{{ strtoupper(mb_substr($memberProfile?->member_name ?? auth()->user()->full_name, 0, 1)) }}</span>
+                    @include('shared.member-avatar', [
+                        'member' => $memberProfile,
+                        'class' => 'member-profile-chip-avatar',
+                        'size' => 128,
+                    ])
                     <div>
                         <strong>{{ $memberProfile?->member_name ?? auth()->user()->full_name }}</strong>
                         <small>{{ $memberProfile?->member_code ?? 'Anggota' }}</small>

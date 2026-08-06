@@ -62,6 +62,8 @@ final class AccessMatrix
         ],
 
         'member.profile.show' => ['MEMBER'],
+        'member.profile.edit' => ['MEMBER'],
+        'member.profile.update' => ['MEMBER'],
         'member.books.index' => ['MEMBER'],
         'member.loan-requests.index' => ['MEMBER'],
         'member.history.loans' => ['MEMBER'],

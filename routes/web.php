@@ -164,6 +164,10 @@ Route::middleware(['auth', 'password.session'])->group(function (): void {
 
             Route::get('/profil', [MemberProfileController::class, 'show'])
                 ->name('member.profile.show');
+            Route::get('/profil/edit', [MemberProfileController::class, 'edit'])
+                ->name('member.profile.edit');
+            Route::patch('/profil', [MemberProfileController::class, 'update'])
+                ->name('member.profile.update');
 
             Route::get('/aktivitas-perpustakaan', [MemberLibraryActivityController::class, 'index'])
                 ->name('member.activity.index');

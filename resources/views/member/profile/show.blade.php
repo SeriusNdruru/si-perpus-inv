@@ -17,9 +17,11 @@
 
 <section class="member-profile-hero">
     <div class="member-profile-identity">
-        <div class="member-profile-avatar">
-            {{ mb_strtoupper(mb_substr($member->member_name, 0, 1)) }}
-        </div>
+        @include('shared.member-avatar', [
+            'member' => $member,
+            'class' => 'member-profile-avatar',
+            'size' => 320,
+        ])
 
         <div>
             <span class="member-kicker">Identitas anggota perpustakaan</span>
@@ -44,6 +46,7 @@
         <span>Email login siswa</span>
         <strong>{{ $user->email ?: 'Belum tersedia' }}</strong>
         <small>Email ini digunakan untuk masuk ke dashboard siswa.</small>
+        <a href="{{ route('member.profile.edit') }}" class="member-profile-edit-button">Edit profil</a>
     </div>
 </section>
 
@@ -155,10 +158,10 @@
         </div>
 
         <div class="member-profile-note">
-            <strong>Perlu memperbaiki data?</strong>
+            <strong>Pengaturan profil</strong>
             <p>
-                Hubungi petugas perpustakaan apabila nama, nomor identitas,
-                kelas, email, nomor telepon, atau alamat tidak sesuai.
+                Foto profil, nomor telepon, dan alamat dapat diperbarui sendiri.
+                Hubungi petugas perpustakaan jika nama, NIS/NISN, kelas, atau email tidak sesuai.
             </p>
         </div>
     </div>

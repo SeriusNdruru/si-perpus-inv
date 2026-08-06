@@ -18,6 +18,7 @@ class Member extends Model
         'phone',
         'email',
         'address',
+        'profile_photo_path',
         'join_date',
         'expiry_date',
         'status',

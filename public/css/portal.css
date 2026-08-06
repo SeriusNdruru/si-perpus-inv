@@ -1911,3 +1911,257 @@ body.portal-modal-open {
     .member-page .member-book-grid-catalog > article > small { font-size:10px; }
     .member-page .member-profile-identity h2 { font-size:28px; }
 }
+
+/* Tahap 91: foto profil siswa, avatar default orang kosong, dan form edit profil. */
+.member-profile-chip-avatar,
+.member-profile-avatar,
+.member-profile-edit-avatar {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: #edf2f4;
+}
+.member-profile-chip-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+}
+.member-profile-avatar img,
+.member-profile-chip-avatar img,
+.member-profile-edit-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+.member-profile-avatar.has-photo,
+.member-profile-chip-avatar.has-photo,
+.member-profile-edit-avatar.has-photo {
+    background: #dce7ea;
+}
+.member-profile-avatar.has-photo .member-avatar-person,
+.member-profile-chip-avatar.has-photo .member-avatar-person,
+.member-profile-edit-avatar.has-photo .member-avatar-person {
+    display: none;
+}
+.member-avatar-person {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #f5f8f9, #dce5e8);
+}
+.member-avatar-person::before {
+    content: "";
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    width: 31%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #8fa0a7;
+    transform: translateX(-50%);
+}
+.member-avatar-person::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 14%;
+    width: 62%;
+    height: 38%;
+    border-radius: 55% 55% 18% 18%;
+    background: #8fa0a7;
+    transform: translateX(-50%);
+}
+.member-profile-edit-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 14px;
+    padding: 9px 14px;
+    border: 1px solid rgba(255,255,255,.28);
+    border-radius: 11px;
+    color: #17444d;
+    background: #dff5ed;
+    font-size: 13px;
+    font-weight: 900;
+    text-decoration: none;
+}
+.member-profile-edit-button:hover {
+    background: #eefbf6;
+}
+.member-profile-edit-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(310px, .75fr);
+    gap: 14px;
+    align-items: start;
+}
+.member-profile-edit-body {
+    padding: 18px;
+}
+.member-profile-photo-editor {
+    display: grid;
+    grid-template-columns: 138px minmax(0, 1fr);
+    gap: 18px;
+    align-items: center;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #e3ebed;
+}
+.member-profile-edit-avatar {
+    width: 138px;
+    height: 138px;
+    border: 1px solid #d5e0e3;
+    border-radius: 28px;
+    box-shadow: 0 12px 28px rgba(18, 52, 63, .11);
+}
+.member-profile-photo-copy strong,
+.member-profile-photo-copy p {
+    display: block;
+}
+.member-profile-photo-copy strong {
+    color: #17333d;
+    font-size: 16px;
+}
+.member-profile-photo-copy p {
+    margin: 5px 0 12px;
+    color: #718289;
+    font-size: 12px;
+    line-height: 1.55;
+}
+.member-profile-photo-copy input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+}
+.member-profile-file-button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 14px;
+    border-radius: 11px;
+    color: #fff;
+    background: #0f6670;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 900;
+}
+.member-profile-file-button:hover {
+    background: #0b5962;
+}
+.member-profile-remove-photo {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 12px;
+    color: #7a303c;
+    font-size: 12px;
+    line-height: 1.45;
+    cursor: pointer;
+}
+.member-profile-remove-photo input {
+    margin-top: 2px;
+}
+.member-profile-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+}
+.member-form-field {
+    display: grid;
+    gap: 7px;
+}
+.member-form-field-wide {
+    grid-column: 1 / -1;
+}
+.member-form-field label {
+    color: #435b64;
+    font-size: 13px;
+    font-weight: 850;
+}
+.member-form-field input,
+.member-form-field textarea {
+    width: 100%;
+    border: 1px solid #cfdde1;
+    border-radius: 11px;
+    color: #17333d;
+    background: #fff;
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+}
+.member-form-field input {
+    min-height: 44px;
+    padding: 10px 12px;
+}
+.member-form-field textarea {
+    min-height: 116px;
+    padding: 11px 12px;
+    resize: vertical;
+    line-height: 1.55;
+}
+.member-form-field input:focus,
+.member-form-field textarea:focus {
+    border-color: #4b9ca1;
+    box-shadow: 0 0 0 3px rgba(75, 156, 161, .12);
+}
+.member-field-error {
+    color: #a22d40;
+    font-size: 11px;
+    font-weight: 750;
+}
+.member-profile-photo-error {
+    margin-top: 10px;
+}
+.member-profile-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 9px;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #e3ebed;
+}
+.member-profile-locked-panel {
+    min-width: 0;
+}
+.member-profile-locked-note {
+    margin: 12px;
+    padding: 12px 13px;
+    border-radius: 11px;
+    color: #654c17;
+    background: #fff4d9;
+    font-size: 12px;
+    line-height: 1.55;
+}
+@media (max-width: 920px) {
+    .member-profile-edit-grid {
+        grid-template-columns: 1fr;
+    }
+}
+@media (max-width: 600px) {
+    .member-profile-photo-editor {
+        grid-template-columns: 1fr;
+    }
+    .member-profile-edit-avatar {
+        width: 112px;
+        height: 112px;
+        border-radius: 23px;
+    }
+    .member-profile-form-grid {
+        grid-template-columns: 1fr;
+    }
+    .member-profile-form-actions {
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    .member-profile-form-actions .member-button {
+        width: 100%;
+    }
+}
