@@ -263,7 +263,7 @@ img { max-width: 100%; display: block; }
 .member-brand small { margin-top:3px; color:#8eb0b5; font-size:10px; }
 .member-sidebar-head { display:block; }
 .member-menu-toggle { display:none; }
-.member-sidebar-menu[hidden] { display:none !important; }
+.member-sidebar-menu { display:block; }
 .member-nav { display:grid; gap:5px; margin-top:36px; overflow:auto; }
 .member-nav a { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:12px 13px; border-radius:12px; color:#c4d7da; font-size:12px; font-weight:780; }
 .member-nav a:hover,.member-nav a.active { color:#fff; background:#215966; }
@@ -2271,7 +2271,7 @@ body.member-photo-preview-open {
     }
 }
 
-/* Tahap 102: menu siswa mobile menggunakan tombol hamburger agar tidak memakan banyak ruang. */
+/* Tahap 103: menu siswa mobile menjadi dropdown ringkas yang tidak mendorong konten. */
 @media screen and (max-width: 1000px) {
     body.member-page {
         min-width: 0;
@@ -2287,11 +2287,12 @@ body.member-photo-preview-open {
     .member-page .member-sidebar {
         position: relative !important;
         inset: auto !important;
+        z-index: 80;
         width: 100%;
         height: auto;
         min-height: 0;
         box-sizing: border-box;
-        padding: 15px 16px 13px;
+        padding: 14px 16px;
     }
 
     .member-page .member-sidebar-head {
@@ -2320,12 +2321,13 @@ body.member-photo-preview-open {
     .member-page .member-menu-toggle {
         display: inline-flex;
         flex: 0 0 auto;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        width: 48px;
-        height: 48px;
-        border: 1px solid rgba(255,255,255,.18);
-        border-radius: 14px;
+        width: 46px;
+        height: 46px;
+        border: 1px solid rgba(255,255,255,.22);
+        border-radius: 13px;
         background: rgba(255,255,255,.08);
         color: #fff;
         cursor: pointer;
@@ -2336,6 +2338,7 @@ body.member-photo-preview-open {
         display: block;
         width: 20px;
         height: 2.5px;
+        margin: 0;
         border-radius: 999px;
         background: currentColor;
         transition: transform .18s ease, opacity .18s ease;
@@ -2358,31 +2361,44 @@ body.member-photo-preview-open {
     }
 
     .member-page .member-sidebar-menu {
-        width: 100%;
-        margin-top: 12px;
-        padding: 12px;
-        border-radius: 18px;
-        background: rgba(255,255,255,.06);
-        border: 1px solid rgba(255,255,255,.08);
+        display: none;
+        position: absolute;
+        top: calc(100% - 2px);
+        right: 12px;
+        left: 12px;
+        z-index: 100;
+        width: auto;
+        max-height: min(68vh, 540px);
+        overflow-y: auto;
         box-sizing: border-box;
+        margin: 0;
+        padding: 10px;
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 16px;
+        background: #123f49;
+        box-shadow: 0 20px 45px rgba(3,24,30,.32);
+    }
+
+    .member-page .member-sidebar.is-open .member-sidebar-menu {
+        display: block;
     }
 
     .member-page .member-nav {
         display: grid !important;
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 8px;
+        gap: 7px;
         width: 100%;
-        margin-top: 0;
+        margin: 0;
         overflow: visible;
     }
 
     .member-page .member-nav a {
         min-width: 0;
-        min-height: 44px;
+        min-height: 42px;
         justify-content: center;
-        padding: 10px 10px;
+        padding: 9px 8px;
         text-align: center;
-        line-height: 1.28;
+        line-height: 1.24;
         white-space: normal;
         overflow-wrap: anywhere;
     }
@@ -2395,9 +2411,9 @@ body.member-photo-preview-open {
     .member-page .member-sidebar-footer {
         display: flex;
         justify-content: flex-end;
-        margin-top: 11px;
-        padding-top: 10px;
-        border-top: 1px solid rgba(255,255,255,.08);
+        margin-top: 9px;
+        padding-top: 9px;
+        border-top: 1px solid rgba(255,255,255,.09);
     }
 
     .member-page .member-sidebar-footer form {
@@ -2406,10 +2422,10 @@ body.member-photo-preview-open {
 
     .member-page .member-sidebar-footer button {
         width: auto;
-        min-height: 40px;
-        padding: 8px 14px;
+        min-height: 38px;
+        padding: 7px 13px;
         text-align: center;
-        border: 1px solid rgba(255,255,255,.12);
+        border: 1px solid rgba(255,255,255,.15);
     }
 
     .member-page .member-main,
@@ -2463,7 +2479,7 @@ body.member-photo-preview-open {
 
 @media screen and (max-width: 680px) {
     .member-page .member-sidebar {
-        padding: 13px 12px 11px;
+        padding: 12px;
     }
 
     .member-page .member-brand {
@@ -2486,31 +2502,29 @@ body.member-photo-preview-open {
     }
 
     .member-page .member-menu-toggle {
-        width: 46px;
-        height: 46px;
-        border-radius: 13px;
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
     }
 
     .member-page .member-sidebar-menu {
-        margin-top: 10px;
-        padding: 10px;
-        border-radius: 16px;
+        top: calc(100% - 1px);
+        right: 10px;
+        left: 10px;
+        max-height: 62vh;
+        padding: 9px;
+        border-radius: 15px;
     }
 
     .member-page .member-nav {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        gap: 7px;
+        gap: 6px;
     }
 
     .member-page .member-nav a {
-        min-height: 46px;
-        padding: 9px 8px;
+        min-height: 42px;
+        padding: 8px 7px;
         font-size: 12px;
-    }
-
-    .member-page .member-sidebar-footer {
-        margin-top: 9px;
-        padding-top: 9px;
     }
 
     .member-page .member-topbar {
@@ -2627,4 +2641,3 @@ body.member-photo-preview-open {
         font-size: 28px;
     }
 }
-

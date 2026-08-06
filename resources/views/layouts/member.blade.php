@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=102">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=103">
 </head>
 <body class="member-page @yield('body-class')">
     @php
@@ -135,33 +135,43 @@
             const toggle = document.querySelector('[data-member-menu-toggle]');
             const menu = document.querySelector('[data-member-sidebar-menu]');
             if (!sidebar || !toggle || !menu) return;
+
             const mobileQuery = window.matchMedia('(max-width: 1000px)');
+
+            const closeMenu = function () {
+                sidebar.classList.remove('is-open');
+                toggle.setAttribute('aria-expanded', 'false');
+            };
+
             const syncMenuState = function () {
-                if (mobileQuery.matches) {
-                    const isOpen = sidebar.classList.contains('is-open');
-                    menu.hidden = !isOpen;
-                    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-                } else {
-                    sidebar.classList.remove('is-open');
-                    menu.hidden = false;
-                    toggle.setAttribute('aria-expanded', 'false');
+                if (!mobileQuery.matches) {
+                    closeMenu();
                 }
             };
-            toggle.addEventListener('click', function () {
+
+            toggle.addEventListener('click', function (event) {
                 if (!mobileQuery.matches) return;
+                event.stopPropagation();
                 const isOpen = sidebar.classList.toggle('is-open');
-                menu.hidden = !isOpen;
                 toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
             });
-            menu.querySelectorAll('a').forEach(function (link) {
-                link.addEventListener('click', function () {
-                    if (!mobileQuery.matches) return;
-                    sidebar.classList.remove('is-open');
-                    menu.hidden = true;
-                    toggle.setAttribute('aria-expanded', 'false');
-                });
+
+            menu.addEventListener('click', function (event) {
+                event.stopPropagation();
             });
-            syncMenuState();
+
+            menu.querySelectorAll('a').forEach(function (link) {
+                link.addEventListener('click', closeMenu);
+            });
+
+            document.addEventListener('click', function () {
+                if (mobileQuery.matches) closeMenu();
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') closeMenu();
+            });
+
             if (typeof mobileQuery.addEventListener === 'function') {
                 mobileQuery.addEventListener('change', syncMenuState);
             } else if (typeof mobileQuery.addListener === 'function') {
