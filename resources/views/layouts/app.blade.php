@@ -18,7 +18,7 @@
     @endphp
     <title>@yield('title', 'Dashboard') | {{ $browserSystemName }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=107">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=108">
 </head>
 <body class="app-page">
     @php
@@ -92,16 +92,32 @@
     @endphp
 
     <div class="app-shell">
-        <aside class="sidebar">
-            <a href="{{ route($dashboardRoute) }}" class="sidebar-brand">
+        <aside class="sidebar" data-admin-sidebar>
+            <div class="sidebar-mobile-head">
+                <a href="{{ route($dashboardRoute) }}" class="sidebar-brand">
                 <span class="sidebar-logo">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'alt' => 'sidebar'])</span>
                 <span>
                     <strong>{{ $systemBrand['institution.name'] ?? 'Rius Library' }}</strong>
                     <small>{{ $sidebarContextLabel }}</small>
                 </span>
-            </a>
+                </a>
 
-            <nav class="sidebar-nav" aria-label="Menu utama">
+                <button
+                    type="button"
+                    class="admin-menu-toggle"
+                    aria-label="Buka menu admin"
+                    aria-controls="admin-sidebar-menu"
+                    aria-expanded="false"
+                    data-admin-menu-toggle
+                >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+
+            <div id="admin-sidebar-menu" class="sidebar-menu" data-admin-sidebar-menu>
+                <nav class="sidebar-nav" aria-label="Menu utama">
                 <a href="{{ route($dashboardRoute) }}" class="{{ request()->routeIs($dashboardRoute) ? 'active' : '' }}">Dashboard</a>
 
                 @if ($isSuperAdmin && ! $isSystemArea)
@@ -183,13 +199,14 @@
                     <p class="sidebar-section">Informasi</p>
                     <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">Laporan Terpadu</a>
                 @endif
-            </nav>
+                </nav>
 
-            <div class="sidebar-user">
-                <span class="avatar">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'width' => 38, 'height' => 38, 'alt' => 'profil admin'])</span>
-                <div>
-                    <strong>{{ $currentUser->full_name }}</strong>
-                    <small>{{ $currentUser->primaryRoleLabel() }}</small>
+                <div class="sidebar-user">
+                    <span class="avatar">@include('shared.brand-logo', ['class' => 'brand-logo-image', 'width' => 38, 'height' => 38, 'alt' => 'profil admin'])</span>
+                    <div>
+                        <strong>{{ $currentUser->full_name }}</strong>
+                        <small>{{ $currentUser->primaryRoleLabel() }}</small>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -220,6 +237,7 @@
         </main>
     </div>
     @include('shared.photo-preview-modal')
+    <script src="{{ asset('js/admin-mobile-menu.js') }}?v=108" defer></script>
     <script src="{{ asset('js/portal-photo-preview.js') }}?v=93" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=67" defer></script>
 </body>

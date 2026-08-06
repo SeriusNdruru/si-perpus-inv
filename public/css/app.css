@@ -91,6 +91,9 @@ a { color: inherit; }
 .sidebar-logo .brand-logo-image { width: 100%; height: 100%; object-fit: contain; }
 .sidebar-brand strong, .sidebar-user strong { display: block; font-size: 14px; }
 .sidebar-brand small, .sidebar-user small { display: block; margin-top: 3px; color: rgba(255,255,255,.58); font-size: 11px; line-height: 1.35; }
+.sidebar-mobile-head { flex: 0 0 auto; }
+.sidebar-menu { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.admin-menu-toggle { display: none; }
 .sidebar-nav {
     flex: 1 1 auto;
     min-height: 0;
@@ -2246,3 +2249,227 @@ th, td { padding: 12px 18px; }
     font-kerning: normal;
     text-rendering: optimizeLegibility;
 }
+
+/* Tahap 108: sidebar admin mobile mengikuti pola menu hamburger dashboard siswa. */
+@media screen and (max-width: 900px) {
+    body.app-page {
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    .app-page .app-shell {
+        display: block !important;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .app-page .sidebar {
+        position: relative !important;
+        inset: auto !important;
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        box-sizing: border-box;
+        padding: 14px 16px !important;
+        z-index: 500;
+    }
+
+    .app-page .sidebar-mobile-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    .app-page .sidebar-brand {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 0;
+    }
+
+    .app-page .sidebar-brand > span:last-child {
+        min-width: 0;
+    }
+
+    .app-page .sidebar-brand strong,
+    .app-page .sidebar-brand small {
+        overflow-wrap: anywhere;
+    }
+
+    .app-page .admin-menu-toggle {
+        position: relative;
+        z-index: 503;
+        flex: 0 0 auto;
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        border: 1px solid rgba(255,255,255,.20);
+        border-radius: 14px;
+        background: rgba(255,255,255,.08);
+        color: #fff;
+        cursor: pointer;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .app-page .admin-menu-toggle span {
+        display: block;
+        width: 21px;
+        height: 2.5px;
+        border-radius: 999px;
+        background: currentColor;
+        transition: transform .18s ease, opacity .18s ease;
+        pointer-events: none;
+    }
+
+    .app-page .admin-menu-toggle span + span {
+        margin-top: 4px;
+    }
+
+    .app-page .sidebar.is-open .admin-menu-toggle span:nth-child(1) {
+        transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .app-page .sidebar.is-open .admin-menu-toggle span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .app-page .sidebar.is-open .admin-menu-toggle span:nth-child(3) {
+        transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    .app-page .sidebar-menu {
+        position: absolute;
+        top: calc(100% - 4px);
+        right: 14px;
+        left: 14px;
+        z-index: 502;
+        display: none;
+        max-height: min(72vh, 620px);
+        min-height: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 12px;
+        border: 1px solid rgba(255,255,255,.12);
+        border-radius: 18px;
+        background: #0c3540;
+        box-shadow: 0 22px 48px rgba(5, 28, 35, .34);
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .app-page .sidebar.is-open .sidebar-menu {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .app-page .sidebar-nav {
+        flex: 0 0 auto;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 7px;
+        width: 100%;
+        min-height: 0;
+        margin-top: 0 !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    .app-page .sidebar-nav .sidebar-section {
+        grid-column: 1 / -1;
+        margin: 11px 8px 0;
+    }
+
+    .app-page .sidebar-nav .sidebar-section:first-child {
+        margin-top: 2px;
+    }
+
+    .app-page .sidebar-nav a {
+        min-width: 0;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 8px;
+        text-align: center;
+        line-height: 1.28;
+        white-space: normal;
+        overflow-wrap: anywhere;
+    }
+
+    .app-page .sidebar-nav .sidebar-link-with-badge {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .app-page .sidebar-user {
+        display: flex !important;
+        flex: 0 0 auto;
+        margin-top: 12px;
+        padding: 12px 8px 2px;
+    }
+
+    .app-page .app-main,
+    .app-page .topbar,
+    .app-page .content-area {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .app-page .sidebar {
+        padding: 12px 13px !important;
+    }
+
+    .app-page .sidebar-logo {
+        width: 44px;
+        height: 44px;
+    }
+
+    .app-page .sidebar-brand strong {
+        font-size: 15px;
+        line-height: 1.25;
+    }
+
+    .app-page .sidebar-brand small {
+        font-size: 10px;
+    }
+
+    .app-page .admin-menu-toggle {
+        width: 46px;
+        height: 46px;
+        border-radius: 13px;
+    }
+
+    .app-page .sidebar-menu {
+        top: calc(100% - 3px);
+        right: 10px;
+        left: 10px;
+        max-height: min(74vh, 600px);
+        padding: 10px;
+        border-radius: 16px;
+    }
+
+    .app-page .sidebar-nav {
+        gap: 6px;
+    }
+
+    .app-page .sidebar-nav a {
+        min-height: 43px;
+        padding: 8px 7px;
+        font-size: 12px;
+    }
+
+    .app-page .sidebar-section {
+        font-size: 9px;
+    }
+}
+
