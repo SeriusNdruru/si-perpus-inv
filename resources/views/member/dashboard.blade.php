@@ -12,11 +12,6 @@
         <a href="{{ route('member.books.index') }}" class="member-button member-button-primary">Cari buku</a>
         <a href="{{ route('member.activity.index') }}" class="member-button">Lihat aktivitas saya</a>
     </div>
-    <div class="member-card-visual">
-        <span>{{ $member->member_code }}</span>
-        <strong>{{ $member->member_name }}</strong>
-        <small>{{ $member->department ?: 'Siswa' }}</small>
-    </div>
 </section>
 
 <div class="member-stat-grid">

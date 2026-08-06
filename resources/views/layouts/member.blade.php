@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard Anggota') | Sistem Perpustakaan</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=104">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=105">
 </head>
 <body class="member-page @yield('body-class')">
     @php
@@ -61,6 +61,7 @@
                 </nav>
 
                 <div class="member-sidebar-footer">
+                    <a href="{{ route('member.profile.show') }}" class="{{ request()->routeIs('member.profile.*') ? 'active' : '' }}">Profil</a>
                     <form method="POST" action="{{ route('student.logout') }}">
                         @csrf
                         <button type="submit">Keluar</button>
@@ -129,7 +130,7 @@
         </div>
     </div>
 
-    <script src="{{ asset('js/member-mobile-menu.js') }}?v=104" defer></script>
+    <script src="{{ asset('js/member-mobile-menu.js') }}?v=105" defer></script>
     <script src="{{ asset('js/image-retry.js') }}?v=74" defer></script>
     <script src="{{ asset('js/member-photo-preview.js') }}?v=92" defer></script>
 </body>
