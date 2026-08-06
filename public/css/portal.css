@@ -1602,3 +1602,40 @@ body.portal-modal-open {
 .member-activity-preview-visits tbody tr { height:47px; }
 .member-activity-preview-books tbody tr { height:55px; }
 .member-activity-placeholder-row td { color:transparent; user-select:none; }
+
+
+/* Tahap 88: perbesar seluruh teks pada halaman Aktivitas Perpustakaan Saya. */
+.member-activity-page .member-brand strong { font-size:15px; }
+.member-activity-page .member-brand small { font-size:11px; }
+.member-activity-page .member-nav a { font-size:14px; }
+.member-activity-page .member-nav a span { font-size:11px; }
+.member-activity-page .member-sidebar-footer a,
+.member-activity-page .member-sidebar-footer button { font-size:13px; }
+.member-activity-page .member-topbar small { font-size:12px; }
+.member-activity-page .member-topbar h1 { font-size:28px; }
+.member-activity-page .member-profile-chip strong { font-size:13px; }
+.member-activity-page .member-profile-chip small { font-size:10px; }
+.member-activity-page .member-kicker { font-size:12px; }
+.member-activity-page .member-page-heading h2 { font-size:32px; }
+.member-activity-page .member-page-heading p { font-size:13px; line-height:1.55; }
+.member-activity-page .member-stat-grid span { font-size:12px; }
+.member-activity-page .member-stat-grid strong { font-size:35px; }
+.member-activity-page .member-panel-heading small { font-size:11px; }
+.member-activity-page .member-panel-heading h2 { font-size:20px; }
+.member-activity-page .member-panel-heading > a { font-size:12px; }
+.member-activity-page .member-table th { font-size:11px; }
+.member-activity-page .member-table td { font-size:12px; line-height:1.45; }
+.member-activity-page .member-table td strong { font-size:13px; }
+.member-activity-page .member-table td strong + div { margin-top:3px; font-size:11px; }
+.member-activity-page .member-status { font-size:10px; padding:7px 10px; }
+.member-activity-page .member-activity-preview-visits tbody tr { height:54px; }
+.member-activity-page .member-activity-preview-books tbody tr { height:64px; }
+
+@media (max-width:680px) {
+    .member-activity-page .member-nav a { font-size:13px; }
+    .member-activity-page .member-topbar h1 { font-size:25px; }
+    .member-activity-page .member-page-heading h2 { font-size:28px; }
+    .member-activity-page .member-stat-grid span { font-size:11px; }
+    .member-activity-page .member-table th { font-size:10px; }
+    .member-activity-page .member-table td { font-size:11px; }
+}

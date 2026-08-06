@@ -2,6 +2,7 @@
 
 @section('title', 'Aktivitas Perpustakaan Saya')
 @section('page-title', 'Aktivitas Perpustakaan Saya')
+@section('body-class', 'member-activity-page')
 
 @section('content')
 <div class="member-page-heading">
