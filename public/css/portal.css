@@ -2666,3 +2666,19 @@ body.member-photo-preview-open {
         font-size: 28px;
     }
 }
+
+
+/* Tahap 107: samakan jarak huruf judul besar pada portal, inventaris publik, audit, dan siswa. */
+.portal-page h1,
+.member-page h1 {
+    letter-spacing: .008em;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+}
+
+.portal-page h2,
+.member-page h2 {
+    letter-spacing: .004em;
+    font-kerning: normal;
+    text-rendering: optimizeLegibility;
+}
