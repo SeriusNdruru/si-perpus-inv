@@ -44,10 +44,6 @@
                 <a href="{{ route($dashboardRoute) }}" class="{{ request()->routeIs($dashboardRoute) ? 'active' : '' }}">Dashboard</a>
 
                 @if ($isSuperAdmin)
-                    <p class="sidebar-section">Area Admin</p>
-                    <a href="{{ route('dashboard.inventory') }}" class="{{ request()->routeIs('dashboard.inventory') ? 'active' : '' }}">Dashboard Inventaris</a>
-                    <a href="{{ route('dashboard.library') }}" class="{{ request()->routeIs('dashboard.library') ? 'active' : '' }}">Dashboard Perpustakaan</a>
-
                     <p class="sidebar-section">Administrasi</p>
                     <a href="{{ route('admin.users.index') }}" class="{{ request()->routeIs('admin.users.*') ? 'active' : '' }}">Pengguna Sistem</a>
                     <a href="{{ route('admin.settings.edit') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">Pengaturan Sistem</a>
