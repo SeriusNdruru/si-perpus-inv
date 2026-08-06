@@ -24,7 +24,7 @@ class SystemReadinessController extends Controller
     public function download(): Response
     {
         $report = $this->readinessService->run();
-        $filename = 'laporan_kesiapan_sistem_'.now()->format('Ymd_His').'.txt';
+        $filename = 'laporan_pengujian_sistem_'.now()->format('Ymd_His').'.txt';
 
         return response(
             $this->readinessService->toText($report),

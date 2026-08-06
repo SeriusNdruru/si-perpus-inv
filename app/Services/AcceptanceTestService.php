@@ -865,7 +865,7 @@ class AcceptanceTestService
             [
                 'title' => 'Super Admin',
                 'items' => [
-                    'Login melalui /admin/login dan buka Pengguna Sistem, Pengaturan, Email & Notifikasi, Riwayat Aktivitas, Backup, Kesiapan Sistem, dan Uji Akses & Alur.',
+                    'Login melalui /admin/login dan buka Pengguna Sistem, Pengaturan, Email & Notifikasi, Riwayat Aktivitas, Backup, Pengujian Sistem, dan Uji Akses & Alur.',
                     'Pastikan Super Admin dapat membuka dashboard inventaris dan perpustakaan.',
                     'Uji pembuatan akun percobaan, lalu hapus atau nonaktifkan data percobaan.',
                 ],

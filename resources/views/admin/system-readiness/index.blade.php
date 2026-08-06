@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Kesiapan Sistem')
-@section('page-title', 'Pengujian dan Kesiapan Hosting')
+@section('title', 'Pengujian Sistem')
+@section('page-title', 'Pengujian Sistem')
 
 @section('content')
     @php
@@ -14,7 +14,6 @@
 
     <section class="readiness-hero {{ $heroClass }}">
         <div>
-            <p class="eyebrow">Tahap 22</p>
             <h2>{{ $report['status_label'] }}</h2>
             <p>
                 Pemeriksaan ini membaca konfigurasi, route, struktur database, konsistensi data, folder penyimpanan, dan backup. Tidak ada data transaksi yang diubah.
@@ -22,7 +21,7 @@
             <small>Diperiksa pada {{ $report['generated_at']->format('d/m/Y H:i:s') }}</small>
         </div>
         <div class="readiness-score">
-            <span>Skor kesiapan</span>
+            <span>Skor pengujian</span>
             <strong>{{ $report['score'] }}</strong>
             <small>dari 100</small>
         </div>

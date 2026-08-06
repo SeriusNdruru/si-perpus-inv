@@ -233,7 +233,7 @@ Artisan::command('app:system-check', function (SystemReadinessService $service):
     $report = $service->run();
 
     $this->newLine();
-    $this->info('Pemeriksaan Kesiapan Sistem');
+    $this->info('Pengujian Sistem');
     $this->line('Status: '.$report['status_label']);
     $this->line('Skor: '.$report['score'].'/100');
     $this->line(sprintf(

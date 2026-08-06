@@ -116,7 +116,7 @@
                     <a href="{{ route('admin.email-notifications.index') }}" class="{{ request()->routeIs('admin.email-notifications.*') ? 'active' : '' }}">Email & Notifikasi</a>
                     <a href="{{ route('admin.audit-logs.index') }}" class="{{ request()->routeIs('admin.audit-logs.*') ? 'active' : '' }}">Riwayat Aktivitas</a>
                     <a href="{{ route('admin.database-backups.index') }}" class="{{ request()->routeIs('admin.database-backups.*') ? 'active' : '' }}">Backup Database</a>
-                    <a href="{{ route('admin.system-readiness.index') }}" class="{{ request()->routeIs('admin.system-readiness.*') ? 'active' : '' }}">Kesiapan Sistem</a>
+                    <a href="{{ route('admin.system-readiness.index') }}" class="{{ request()->routeIs('admin.system-readiness.*') ? 'active' : '' }}">Pengujian Sistem</a>
                     <a href="{{ route('admin.acceptance-tests.index') }}" class="{{ request()->routeIs('admin.acceptance-tests.*') ? 'active' : '' }}">Uji Akses & Alur</a>
                 @endif
 

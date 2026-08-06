@@ -193,7 +193,7 @@ class SystemReadinessService
     public function toText(array $report): string
     {
         $lines = [
-            'LAPORAN KESIAPAN SISTEM',
+            'LAPORAN PENGUJIAN SISTEM',
             '========================',
             'Dibuat: '.$report['generated_at']->format('d/m/Y H:i:s'),
             'Status: '.$report['status_label'],
