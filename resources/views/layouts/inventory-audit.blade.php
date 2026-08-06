@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Audit Inventaris') | Sistem Inventaris</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=113">
+    <link rel="stylesheet" href="{{ asset('css/portal.css') }}?v=114">
 </head>
 <body class="portal-page inventory-audit-page">
     <header class="portal-header inventory-audit-header">

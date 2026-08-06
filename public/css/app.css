@@ -2733,3 +2733,105 @@ th, td { padding: 12px 18px; }
         font-size: clamp(16px, 5vw, 21px) !important;
     }
 }
+
+/* Tahap 114: box statistik dashboard admin desktop satu baris dan compact. */
+@media screen and (min-width: 901px) {
+    .app-page .dashboard-stat-grid,
+    .app-page .dashboard-stat-grid.stat-grid-four {
+        display: grid !important;
+        gap: 9px !important;
+        width: 100%;
+        margin: 0;
+        overflow: visible;
+    }
+
+    .app-page .dashboard-stat-count-6 {
+        grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    }
+
+    .app-page .dashboard-stat-count-10 {
+        grid-template-columns: repeat(10, minmax(0, 1fr)) !important;
+    }
+
+    .app-page .dashboard-stat-count-12 {
+        grid-template-columns: repeat(12, minmax(0, 1fr)) !important;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        column-gap: 8px;
+        min-width: 0;
+        min-height: 66px;
+        padding: 8px 9px;
+        border-radius: 11px;
+        box-shadow: none;
+        box-sizing: border-box;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card span {
+        min-width: 0;
+        margin: 0;
+        font-size: 11px;
+        line-height: 1.18;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card strong {
+        display: grid;
+        place-items: center;
+        min-width: 39px;
+        min-height: 43px;
+        margin: 0;
+        padding: 3px 6px;
+        border: 1px solid #aab7bc;
+        border-radius: 8px;
+        background: #f7fafb;
+        color: var(--ink);
+        font-size: 25px;
+        line-height: 1;
+        letter-spacing: -.035em;
+        font-variant-numeric: tabular-nums;
+        box-sizing: border-box;
+        overflow-wrap: anywhere;
+    }
+
+    .app-page .dashboard-stat-grid .stat-card.stat-warning strong {
+        border-color: #d8b86d;
+        background: #fff8e8;
+        color: var(--warning);
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card,
+    .app-page .dashboard-stat-count-12 .stat-card {
+        min-height: 62px;
+        padding: 7px 7px;
+        column-gap: 5px;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card span {
+        font-size: 9.5px;
+        line-height: 1.14;
+    }
+
+    .app-page .dashboard-stat-count-10 .stat-card strong {
+        min-width: 34px;
+        min-height: 39px;
+        padding: 2px 4px;
+        font-size: 21px;
+    }
+
+    .app-page .dashboard-stat-count-12 .stat-card span {
+        font-size: 8.6px;
+        line-height: 1.12;
+    }
+
+    .app-page .dashboard-stat-count-12 .stat-card strong {
+        min-width: 31px;
+        min-height: 37px;
+        padding: 2px 3px;
+        font-size: 19px;
+    }
+}

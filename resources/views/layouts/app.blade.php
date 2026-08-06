@@ -18,7 +18,7 @@
     @endphp
     <title>@yield('title', 'Dashboard') | {{ $browserSystemName }}</title>
     @include('shared.favicon-links')
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=113">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}?v=114">
 </head>
 <body class="app-page">
     @php
